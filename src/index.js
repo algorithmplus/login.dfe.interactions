@@ -10,6 +10,24 @@ app.prepare()
   .then(() => {
     const server = express();
 
+    const options = {
+      key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
+      cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
+      requestCert: false,
+      rejectUnauthorized: false,
+    };
+
+    if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') {
+      const https = require('https');
+      const server = https.createServer(options, app);
+
+      server.listen(port, () => {
+        console.log(`Dev server listening on https://${process.env.HOST}:${process.env.PORT}`);
+      });
+    } else {
+      app.listen(port);
+    }
+
     server.get('/cb', (req, res) => {
         res.set('Content-Type', 'text/html');
         res.send(`<html><body><form id="cbform" action="https://localhost:4430/logincomplete" method="post"><input name="uuid" type="hidden" value=${req.query.uuid} /><input name="uid" type="hidden" value=${req.query.uid} /></form><script>document.getElementById('cbform').submit();</script></body>`);
