@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/DFE-Digital/login.dfe.interactions#readme",
   "dependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0",
     "express": "^4.15.4",
     "next": "^3.2.2",
     "react": "^15.6.1",
