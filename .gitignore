@@ -62,3 +62,6 @@ src/.next
 
 # webstorm
 .idea
+
+# dev stuff
+ssl
