@@ -1,10 +1,9 @@
-const expect = require('chai').expect;
 const sinon = require('sinon');
 const express = require('express');
 
 const routeMounter = require('./../../src/RouteHandlers/RouteMounter');
 const usernamePasswordHandler = require('./../../src/RouteHandlers/UsernamePasswordHandler');
-const interactionCompleteHandler = require('./../../src/RouteHandlers/InteractionComplete');
+const interactionCompleteHandler = require('../../src/RouteHandlers/InteractionCompleteHandler');
 
 describe('When mounting routes', function() {
 

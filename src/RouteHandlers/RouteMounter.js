@@ -1,5 +1,5 @@
 const usernamePasswordHandler = require('./UsernamePasswordHandler');
-const interactionCompleteHandler = require('./InteractionComplete');
+const interactionCompleteHandler = require('./InteractionCompleteHandler');
 
 class RouteMounter {
     static init(app) {
