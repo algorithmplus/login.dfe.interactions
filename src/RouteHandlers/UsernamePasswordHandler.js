@@ -4,7 +4,9 @@ const cache = new cacheProvider();
 class UsernamePasswordHandler {
     static async  handle(req, res) {
         const uuid = req.query.uuid;
-        const uid = await _authenticate(req.body.username, req.body.password);
+        const username = !req.body.username ? '' : req.body.username;
+        const password = !req.body.password ? '' : req.body.password;
+        const uid = await _authenticate(username, password);
 
         if (uid != null) {
             await cache.set(uuid, {uid: uid});
@@ -21,7 +23,7 @@ module.exports = UsernamePasswordHandler;
 
 
 async function _authenticate(username, password) {
-    if (username.toLowerCase() != 'foo@example.com') {
+    if (username.toLowerCase() != 'foo@example.com' || password.length == 0) {
         return Promise.resolve(null);
     }
     return Promise.resolve('23121d3c-84df-44ac-b458-3d63a9a05497');
