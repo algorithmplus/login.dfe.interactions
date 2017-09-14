@@ -24,7 +24,8 @@
     "express": "^4.15.4",
     "next": "^3.2.2",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

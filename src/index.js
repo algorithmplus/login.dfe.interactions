@@ -9,20 +9,22 @@ const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev, dir: './src'});
 const handle = nextApp.getRequestHandler();
 
+const isDevEnv = (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev');
+
 nextApp.prepare()
     .then(() => {
         const app = express();
 
-        app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(bodyParser.urlencoded({extended: true}));
 
         const options = {
-            key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
-            cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
+            key: isDevEnv ? fs.readFileSync('./ssl/localhost.key') : null,
+            cert: isDevEnv ? fs.readFileSync('./ssl/localhost.cert') : null,
             requestCert: false,
             rejectUnauthorized: false,
         };
 
-        if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') {
+        if (isDevEnv) {
             const https = require('https');
             const server = https.createServer(options, app);
 
@@ -37,6 +39,17 @@ nextApp.prepare()
         }
 
         routerMounter.init(app);
+
+        if (!isDevEnv) {
+            app.get('/', (req, res) => {
+                res.status(404);
+                res.send('');
+            });
+            app.get('/index', (req, res) => {
+                res.status(404);
+                res.send('');
+            });
+        }
 
         app.get('*', (req, res) => {
             return handle(req, res)
