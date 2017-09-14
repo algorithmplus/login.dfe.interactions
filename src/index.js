@@ -1,16 +1,19 @@
 const express = require('express');
 const next = require('next');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const routerMounter = require('./RouteHandlers/RouteMounter');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
-const app = next({dev, dir: './src'});
-const handle = app.getRequestHandler();
+const nextApp = next({dev, dir: './src'});
+const handle = nextApp.getRequestHandler();
 
-app.prepare()
+nextApp.prepare()
     .then(() => {
         const app = express();
+
+        app.use(bodyParser.urlencoded({ extended: true }));
 
         const options = {
             key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
@@ -33,7 +36,7 @@ app.prepare()
             });
         }
 
-        routerMounter.init(app);
+        routerMounter.init(app, nextApp);
 
         app.get('*', (req, res) => {
             return handle(req, res)
