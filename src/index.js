@@ -36,7 +36,7 @@ nextApp.prepare()
             });
         }
 
-        routerMounter.init(app, nextApp);
+        routerMounter.init(app);
 
         app.get('*', (req, res) => {
             return handle(req, res)
