@@ -1,7 +1,14 @@
+const cacheProvider = require('./../Caching/MemoryCache');
+const cache = new cacheProvider();
+
 class UsernamePasswordHandler {
-    static handle(req, res) {
+    static async handle(req, res) {
         const uuid = req.query.uuid;
-        res.redirect(`/interactioncomplete?uuid=${uuid}&uid=abc`);
+        const uid = 'zsh';
+
+        await cache.set(uuid, {uid: uid});
+
+        res.redirect(`/interactioncomplete?uuid=${uuid}`);
     }
 }
 
