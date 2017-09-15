@@ -18,7 +18,11 @@ module.exports = InteractionCompleteHandler;
 
 
 function _getPostbackUrl(uuid) {
-    return `https://localhost:4430/interaction/${uuid}/complete`;
+    let oidcBaseUrl = 'https://localhost:4430';
+    if(process && process.env && process.env.OIDC_BASE_URL) {
+        oidcBaseUrl = process.env.OIDC_BASE_URL;
+    }
+    return `${oidcBaseUrl}/interaction/${uuid}/complete`;
 }
 
 function _getUuidField(uuid) {

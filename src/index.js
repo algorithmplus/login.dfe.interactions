@@ -49,6 +49,15 @@ nextApp.prepare()
                 res.status(404);
                 res.send('');
             });
+            app.get('/interactioncomplete', (req, res) => {
+                res.status(404);
+                res.send('');
+            });
+        }
+        else {
+            app.post('/interaction/:uuid/complete', (req, res) => {
+                nextApp.render(req, res, '/interactioncomplete', req.query);
+            });
         }
 
         app.get('*', (req, res) => {
