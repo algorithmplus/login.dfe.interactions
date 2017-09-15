@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "setup": "./generate-certs.sh",
     "dev": "PORT=4431 node src/index.js"
   },
   "repository": {
@@ -18,12 +20,21 @@
   },
   "homepage": "https://github.com/DFE-Digital/login.dfe.interactions#readme",
   "dependencies": {
-    "eslint": "^4.6.1",
-    "eslint-config-airbnb-base": "^12.0.0",
-    "eslint-plugin-import": "^2.7.0",
+    "async-lock": "^1.0.0",
+    "body-parser": "^1.18.1",
     "express": "^4.15.4",
     "next": "^3.2.2",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0",
+    "mocha": "^3.5.3",
+    "proxyquire": "^1.8.0",
+    "sinon": "^3.2.1"
   }
 }
