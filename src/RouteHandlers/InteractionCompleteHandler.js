@@ -1,13 +1,18 @@
 const cacheProvider = require('./../Caching/MemoryCache');
 const cache = new cacheProvider();
 
+const crypto = require('crypto');
+const fs = require('fs');
+const privateKey = _readPrivateKey();
+
+
 class InteractionCompleteHandler {
     static async handle(req, res) {
         const uuid = req.query.uuid;
 
         const postbackUrl = _getPostbackUrl(uuid);
-        const fields = _getUuidField(uuid)
-            + await _getInteractionFields(uuid);
+        const postbackData = await _getPostbackData(uuid);
+        const fields = _getFormFields(postbackData);
 
         res.set('Content-Type', 'text/html');
         res.send(`<html><body><form id="cbform" action="${postbackUrl}" method="post">${fields}</form><script>document.getElementById("cbform").submit();</script></body></html>`);
@@ -24,20 +29,39 @@ function _getPostbackUrl(uuid) {
     }
     return `${oidcBaseUrl}/interaction/${uuid}/complete`;
 }
+async function _getPostbackData(uuid) {
+    let postbackData = {uuid};
 
-function _getUuidField(uuid) {
-    return `<input name="uuid" type="hidden" value="${uuid}" />`;
-}
-
-async function _getInteractionFields(uuid) {
-    var data = await cache.get(uuid);
-    var fields = '';
-    if (data) {
-        Object.keys(data).forEach((key) => {
-            var value = data[key];
-            fields += `<input name="${key}" type="hidden" value="${value}" />`;
+    var cacheData = await cache.get(uuid);
+    if (cacheData) {
+        Object.keys(cacheData).forEach((key) => {
+            var value = cacheData[key];
+            postbackData[key]=value;
         });
     }
 
+    var sig = _signData(postbackData);
+    postbackData['sig'] = sig;
+
+    return postbackData;
+}
+function _signData(postbackData) {
+    const sign = crypto.createSign('RSA-SHA256');
+
+    sign.write(JSON.stringify(postbackData));
+    sign.end();
+
+    var sig = sign.sign(privateKey, 'base64');
+    return sig;
+}
+function _readPrivateKey() {
+    return fs.readFileSync('./ssl/localhost.key', 'utf8');
+}
+function _getFormFields(postbackData) {
+    var fields = '';
+    Object.keys(postbackData).forEach((key) => {
+        var value = postbackData[key];
+        fields += `<input name="${key}" type="hidden" value="${value}" />`;
+    });
     return fields;
 }

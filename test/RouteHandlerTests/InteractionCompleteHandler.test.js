@@ -58,4 +58,10 @@ describe('When handling interaction complete', function () {
             expect(res.lastContent).to.match(/\<input\sname=\"uid\"\stype=\"hidden\"\svalue=\"123456\"\s\/\>/);
         });
     });
+
+    it('then it include a signature field in the form', function () {
+        return interactionCompleteHandler.handle(req, res).then(function () {
+            expect(res.lastContent).to.match(/\<input\sname=\"sig\"\stype=\"hidden\"\svalue=\".*\"\s\/\>/);
+        });
+    });
 });
