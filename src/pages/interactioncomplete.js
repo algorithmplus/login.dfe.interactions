@@ -12,7 +12,7 @@ export default class extends React.Component {
 
     render() {
         var stationComponents = this.props.body.map(function(field) {
-            return <li>{field.key} = {field.value}</li>;
+            return <li key={field.keys}>{field.key} = {field.value}</li>;
         });
         return (
             <div>
