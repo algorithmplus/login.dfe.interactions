@@ -65,3 +65,4 @@ src/.next
 
 # dev stuff
 ssl
+.DS_Store
