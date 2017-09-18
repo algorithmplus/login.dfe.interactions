@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const express = require('express');
 
 const routeMounter = require('./../../src/RouteHandlers/RouteMounter');
-const usernamePasswordHandler = require('./../../src/RouteHandlers/UsernamePasswordHandler');
+const usernamePasswordHandler = require('../../src/RouteHandlers/LoginHandler');
 const interactionCompleteHandler = require('../../src/RouteHandlers/InteractionCompleteHandler');
 
 describe('When mounting routes', function() {

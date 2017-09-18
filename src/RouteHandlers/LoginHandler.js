@@ -1,7 +1,7 @@
 const cacheProvider = require('./../Caching/MemoryCache');
 const cache = new cacheProvider();
 
-class UsernamePasswordHandler {
+class LoginHandler {
     static async  handle(req, res) {
         const uuid = req.query.uuid;
         const username = !req.body.username ? '' : req.body.username;
@@ -14,12 +14,12 @@ class UsernamePasswordHandler {
             res.redirect(`/interactioncomplete?uuid=${uuid}`);
         }
         else {
-            res.redirect(`/usernamepassword?uuid=${uuid}&message=invalid%20username%20or%20password`)
+            res.redirect(`/login?uuid=${uuid}&message=invalid%20username%20or%20password`)
         }
     }
 }
 
-module.exports = UsernamePasswordHandler;
+module.exports = LoginHandler;
 
 
 async function _authenticate(username, password) {

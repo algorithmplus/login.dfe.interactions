@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 
-const usernamePasswordHandler = require('./../../src/RouteHandlers/UsernamePasswordHandler');
+const loginHandler = require('../../src/RouteHandlers/LoginHandler');
 
 describe('When handling a usernamepassword postback', function () {
     let sandbox;
@@ -33,7 +33,7 @@ describe('When handling a usernamepassword postback', function () {
             const mock = sinon.mock(res);
             mock.expects('redirect').withArgs('/interactioncomplete?uuid=123').once();
 
-            return usernamePasswordHandler.handle(req, res).then(function () {
+            return loginHandler.handle(req, res).then(function () {
                 mock.verify();
             });
         });
@@ -44,11 +44,11 @@ describe('When handling a usernamepassword postback', function () {
             req.body.username = 'bar@example.com';
         });
 
-        it('then it should return the usernamepassword view', function () {
+        it('then it should return the login view', function () {
             const mock = sinon.mock(res);
-            mock.expects('redirect').withArgs('/usernamepassword?uuid=123&message=invalid%20username%20or%20password').once();
+            mock.expects('redirect').withArgs('/login?uuid=123&message=invalid%20username%20or%20password').once();
 
-            return usernamePasswordHandler.handle(req, res).then(function () {
+            return loginHandler.handle(req, res).then(function () {
                 mock.verify();
             });
         });

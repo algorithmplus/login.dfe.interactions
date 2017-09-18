@@ -13,11 +13,11 @@ export default class extends React.Component {
                 <div>{this.props.message}</div>
                 <form method="post">
                     <div>
-                        <label for="username">Username</label>
+                        <label htmlFor="username">Username</label>
                         <input type="text" name="username" id="username"/>
                     </div>
                     <div>
-                        <label for="password">Password</label>
+                        <label htmlFor="password">Password</label>
                         <input type="password" name="password" id="password" />
                     </div>
                     <button type="submit">Sign In</button>

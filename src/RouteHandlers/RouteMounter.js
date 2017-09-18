@@ -1,11 +1,11 @@
-const usernamePasswordHandler = require('./UsernamePasswordHandler');
+const loginHandler = require('./LoginHandler');
 const interactionCompleteHandler = require('./InteractionCompleteHandler');
 
 class RouteMounter {
     static init(app) {
         app.get('/interactioncomplete', interactionCompleteHandler.handle);
 
-        app.post('/usernamepassword', usernamePasswordHandler.handle);
+        app.post('/login', loginHandler.handle);
     }
 }
 
