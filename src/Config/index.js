@@ -9,7 +9,7 @@ module.exports = {
     protocol: (process.env.NODE_ENV ? process.env.NODE_ENV : 'dev') == 'dev' ? 'https' : 'http'
   },
   oidcService: {
-    url: process.env.OIDC_URL ? process.env.OIDC_URL : 'https://localhost:4430'
+    url: process.env.OIDC_BASE_URL ? process.env.OIDC_BASE_URL : 'https://localhost:4430'
   },
   crypto: {
     signing: {

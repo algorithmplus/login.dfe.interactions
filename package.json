@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "test": "./node_modules/.bin/mocha --reporter spec",
     "setup": "./generate-certs.sh",
-    "dev": "PORT=4431 node src/index.js"
+    "dev": "PORT=4431;NODE_ENV=dev;OIDC_BASE_URL=https://localhost:4431/dev node src/index.js"
   },
   "repository": {
     "type": "git",
