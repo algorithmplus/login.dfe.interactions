@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+</head>
+<body>
+    <p>Redirecting you...</p>
+    <form method="post" action="<%=destination%>">
+        <% Object.keys(postbackData).forEach(function(key){ %>
+        <span><%=key%></span><input type="text" name="<%=key%>" value="<%=postbackData[key]%>" /><br/>
+        <% }); %>
+        <button type="submit">Continue</button>
+    </form>
+</body>
+</html>

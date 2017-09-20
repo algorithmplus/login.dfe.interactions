@@ -5,7 +5,7 @@ class UserService {
     }
 
     return {
-      uid: '23121d3c-84df-44ac-b458-3d63a9a05497'
+      id: '23121d3c-84df-44ac-b458-3d63a9a05497'
     }
   }
 }
