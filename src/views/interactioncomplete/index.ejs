@@ -1,18 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Redirecting...</title>
-</head>
-<body>
-    <p>Redirecting you...</p>
-    <form id="main" method="post" action="<%=destination%>">
+<main id="content" role="main" tabindex="-1">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <p class="lede">
+                Redirecting you...
+            </p>
+        </div>
+    </div>
+
+    <form id="main" method="post" action="<%= destination %>">
         <% Object.keys(postbackData).forEach(function(key){ %>
-        <input type="hidden" name="<%=key%>" value="<%=postbackData[key]%>" />
+        <input type="hidden" name="<%= key %>" value="<%= postbackData[key] %>"/>
         <% }); %>
-        <button type="submit">Continue</button>
+        <button class="button" type="submit">Continue</button>
+
     </form>
     <script>
+        <% if (locals.noredirect != 'true') { %>
         document.getElementById('main').submit();
+        <% } %>
     </script>
-</body>
-</html>
+</main>

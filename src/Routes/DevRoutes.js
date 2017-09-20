@@ -4,6 +4,7 @@ class DevRoutes {
   static register(app) {
     app.get('/', DevRoutes.launchPad);
     app.post('/dev/:uuid/complete', DevRoutes.completeCallback);
+    app.get('/dev/complete', DevRoutes.completeCallback);
   }
 
   static launchPad(req, res) {
@@ -13,7 +14,7 @@ class DevRoutes {
   }
 
   static completeCallback(req, res) {
-    res.render('dev/complete', { data: req.body });
+    res.render('interactioncomplete/index', {noredirect: 'true', destination: '', postbackData: [], data: req.body });
   }
 }
 

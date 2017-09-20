@@ -1,6 +1,21 @@
 <main id="content" role="main" tabindex="-1">
 
-    <p>UUID is <%=uuid%></p>
+    <div class="row">
+        <div class="col-12">
+            <div class="notification">
+                UUID is <%= uuid %>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4"><a class="button" href="/<%= uuid %>/usernamepassword">Start username/password</a></div>
+        <div class="col-8">
+            <p>Start the default username and password login journey</p>
+        </div>
+        <div class="col-4"><a class="button" href="interactioncomplete/index?nojs">Interaction Complete</a></div>
+        <div class="col-8">
+            <p>Show the Interaction Complete page</p>
+        </div>
+    </div>
 
-    <a href="/<%=uuid%>/usernamepassword">Start username/password</a>
 </main>
