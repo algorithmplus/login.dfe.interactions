@@ -8,12 +8,12 @@ class DevRoutes {
 
   static launchPad(req, res) {
     res.render('dev/launchpad', {
-      uuid: uuid()
+      uuid: uuid(),
     });
   }
 
   static completeCallback(req, res) {
-    res.render('dev/complete', {data: req.body});
+    res.render('dev/complete', { data: req.body });
   }
 }
 
