@@ -5,11 +5,14 @@
 </head>
 <body>
     <p>Redirecting you...</p>
-    <form method="post" action="<%=destination%>">
+    <form id="main" method="post" action="<%=destination%>">
         <% Object.keys(postbackData).forEach(function(key){ %>
-        <span><%=key%></span><input type="text" name="<%=key%>" value="<%=postbackData[key]%>" /><br/>
+        <input type="hidden" name="<%=key%>" value="<%=postbackData[key]%>" />
         <% }); %>
         <button type="submit">Continue</button>
     </form>
+    <script>
+        document.getElementById('main').submit();
+    </script>
 </body>
 </html>
