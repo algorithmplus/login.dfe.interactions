@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+</head>
+<body>
+    <p>Redirecting you...</p>
+    <form id="main" method="post" action="<%=destination%>">
+        <% Object.keys(postbackData).forEach(function(key){ %>
+        <input type="hidden" name="<%=key%>" value="<%=postbackData[key]%>" />
+        <% }); %>
+        <button type="submit">Continue</button>
+    </form>
+    <script>
+        document.getElementById('main').submit();
+    </script>
+</body>
+</html>

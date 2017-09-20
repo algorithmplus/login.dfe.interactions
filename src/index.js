@@ -1,68 +1,40 @@
 const express = require('express');
-const next = require('next');
-const fs = require('fs');
 const bodyParser = require('body-parser');
-const routerMounter = require('./RouteHandlers/RouteMounter');
+const fs = require('fs');
+const path = require('path');
+const routes = require('./Routes');
+const config = require('./Config');
 
-const port = parseInt(process.env.PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== 'production';
-const nextApp = next({dev, dir: './src'});
-const handle = nextApp.getRequestHandler();
+const app = express();
 
-const isDevEnv = (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev');
+// Add middleware
+app.use(bodyParser.urlencoded({extended: true}));
 
-nextApp.prepare()
-    .then(() => {
-        const app = express();
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.resolve(__dirname, 'views'));
 
-        app.use(bodyParser.urlencoded({extended: true}));
+// Setup routes
+routes.register(app);
 
-        const options = {
-            key: isDevEnv ? fs.readFileSync('./ssl/localhost.key') : null,
-            cert: isDevEnv ? fs.readFileSync('./ssl/localhost.cert') : null,
-            requestCert: false,
-            rejectUnauthorized: false,
-        };
+// Setup server
+if (config.hostingEnvironment.env == 'dev') {
+  app.proxy = true;
 
-        if (isDevEnv) {
-            const https = require('https');
-            const server = https.createServer(options, app);
+  const https = require('https');
+  const options = {
+    key: fs.readFileSync('./ssl/localhost.key'),
+    cert: fs.readFileSync('./ssl/localhost.cert'),
+    requestCert: false,
+    rejectUnauthorized: false
+  };
+  const server = https.createServer(options, app);
 
-            server.listen(port, () => {
-                console.log(`Dev server listening on https://localhost:${process.env.PORT}`);
-            });
-        } else {
-            app.listen(port, (err) => {
-                if (err) throw err;
-                console.log(`> Ready on http://localhost:${port}`);
-            });
-        }
-
-        routerMounter.init(app);
-
-        if (!isDevEnv) {
-            app.get('/', (req, res) => {
-                res.status(404);
-                res.send('');
-            });
-            app.get('/index', (req, res) => {
-                res.status(404);
-                res.send('');
-            });
-            app.get('/interactioncomplete', (req, res) => {
-                res.status(404);
-                res.send('');
-            });
-        }
-        else {
-            app.post('/interaction/:uuid/complete', (req, res) => {
-                nextApp.render(req, res, '/interactioncomplete', req.query);
-            });
-        }
-
-        app.get('*', (req, res) => {
-            return handle(req, res)
-        });
-
-
-    });
+  server.listen(config.hostingEnvironment.port, function () {
+    console.log(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
+  })
+} else {
+  app.listen(config.hostingEnvironment.port, function() {
+    console.log(`Dev server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
+  });
+}
