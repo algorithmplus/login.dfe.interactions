@@ -17,7 +17,6 @@ app.set('views', path.resolve(__dirname, 'views'));
 
 // Setup express layouts
 app.use(expressLayouts);
-app.set('layout extractScripts', true);
 app.set('layout', 'layouts/layout');
 
 // Setup routes
