@@ -30,7 +30,7 @@ describe('When post for interaction complete callback received', function() {
     DevRoutes.completeCallback(req, res);
 
     expect(res.render.called).to.be.true;
-    expect(res.render.getCall(0).args[0]).to.equal('dev/complete');
+    expect(res.render.getCall(0).args[0]).to.equal('interactioncomplete/index');
   });
 
   it('then it should include body data as model', function() {

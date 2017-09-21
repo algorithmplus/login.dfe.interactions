@@ -29,7 +29,7 @@ describe('When getting interaction', function() {
 
   it('then it should not be a failed login', function() {
     const mock = sinon.mock(res);
-    mock.expects('render').withArgs('usernamepassword/index', {isFailedLogin: false}).once();
+    mock.expects('render').withArgs('usernamepassword/index', {isFailedLogin: false, message: ''}).once();
 
     UsernamePasswordRoutes.get(req, res);
 
