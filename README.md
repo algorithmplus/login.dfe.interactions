@@ -25,3 +25,5 @@ Visit
 ```
 https://localhost:4431/
 ```
+
+In 'dev mode' you should see a page listing all the availible interactions
