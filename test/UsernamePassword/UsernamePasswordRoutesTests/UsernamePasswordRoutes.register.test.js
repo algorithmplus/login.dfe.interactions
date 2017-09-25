@@ -6,6 +6,7 @@ const app = {
   get: function(template, action){},
   post: function(template, action){}
 };
+const csrf = {};
 
 describe('When registering username password routes', function() {
   let sandbox;
@@ -19,18 +20,18 @@ describe('When registering username password routes', function() {
 
   it('then it should register get route', function() {
     const mock = sinon.mock(app);
-    mock.expects('get').withArgs('/:uuid/usernamepassword', UsernamePasswordRoutes.get).once();
+    mock.expects('get').withArgs('/:uuid/usernamepassword', csrf, UsernamePasswordRoutes.get).once();
 
-    UsernamePasswordRoutes.register(app);
+    UsernamePasswordRoutes.register(app, csrf);
 
     mock.verify();
   });
 
   it('then it should register post route', function() {
     const mock = sinon.mock(app);
-    mock.expects('post').withArgs('/:uuid/usernamepassword', UsernamePasswordRoutes.post).once();
+    mock.expects('post').withArgs('/:uuid/usernamepassword', csrf, UsernamePasswordRoutes.post).once();
 
-    UsernamePasswordRoutes.register(app);
+    UsernamePasswordRoutes.register(app, csrf);
 
     mock.verify();
   });
