@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "test": "./generate-certs.sh; ./node_modules/.bin/mocha --reporter spec",
     "setup": "./generate-certs.sh",
-    "dev": "PORT=4431;NODE_ENV=dev;OIDC_BASE_URL=https://localhost:4431/dev node src/index.js"
+    "dev": "PORT=4431;NODE_ENV=dev;OIDC_BASE_URL=https://localhost:4431/dev node src/index.js",
+    "heroku": "PORT=$PORT;NODE_ENV=$NODE_ENV;OIDC_BASE_URL=$OIDC_BASE_URL node src/index.js"
   },
   "repository": {
     "type": "git",
