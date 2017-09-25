@@ -8,6 +8,9 @@ const csurf = require('csurf')
 const routes = require('./Routes');
 const config = require('./Config');
 
+const usernamePassword = require('./UsernamePassword');
+const devLauncher = require('./DevLauncher');
+
 const app = express();
 const csrf = csurf({ cookie: true });
 
@@ -24,7 +27,8 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 
 // Setup routes
-routes.register(app, csrf);
+app.use('/', devLauncher(csrf));
+app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
