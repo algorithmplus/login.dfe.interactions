@@ -14,7 +14,8 @@ class DevRoutes {
   }
 
   static completeCallback(req, res) {
-    res.render('interactioncomplete/index', {noredirect: 'true', destination: '', postbackData: [], data: req.body });
+    // res.render('interactioncomplete/index', {noredirect: 'true', destination: '', postbackData: [], data: req.body });
+    res.render('dev/complete', {data: req.body});
   }
 }
 

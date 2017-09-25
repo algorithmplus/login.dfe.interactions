@@ -7,7 +7,8 @@ class InteractionComplete {
 
     res.render('interactioncomplete/index', {
       destination: `${Config.oidcService.url}/${uuid}/complete`,
-      postbackData: postbackData
+      postbackData: postbackData,
+      noredirect: (Config.hostingEnvironment.env == 'dev').toString()
     });
   }
 }
