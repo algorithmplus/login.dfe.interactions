@@ -12,6 +12,7 @@ const req = {
     username: 'user@unit.tests',
     password: 'secure_password',
   },
+  csrfToken: function() {return 'csrf-token';}
 };
 const res = {
   render(view) {},
@@ -107,7 +108,7 @@ describe('When posting back interaction', () => {
 
     it('then it should be a failed login', () => {
       const mock = sinon.mock(res);
-      mock.expects('render').withArgs('usernamepassword/index', { isFailedLogin: true, message: 'Login failed' }).once();
+      mock.expects('render').withArgs('usernamepassword/index', { isFailedLogin: true, message: 'Login failed', csrfToken: 'csrf-token' }).once();
 
       UsernamePasswordRoutes.post(req, res);
 

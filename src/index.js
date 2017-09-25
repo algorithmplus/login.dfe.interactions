@@ -1,15 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const fs = require('fs');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
+const csurf = require('csurf')
 const routes = require('./Routes');
 const config = require('./Config');
 
 const app = express();
+const csrf = csurf({ cookie: true });
 
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -20,7 +24,7 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 
 // Setup routes
-routes.register(app);
+routes.register(app, csrf);
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
