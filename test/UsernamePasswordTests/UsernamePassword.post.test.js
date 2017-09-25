@@ -64,7 +64,7 @@ describe('When user submits username/password', function () {
     it('then it should render interaction complete', function () {
       postHandler(req, res);
 
-      expect(renderViewPath).to.equal('usernamepassword/index')
+      expect(renderViewPath).to.equal('usernamepassword/index2')
     });
 
     it('then it should be a failed login', function () {
