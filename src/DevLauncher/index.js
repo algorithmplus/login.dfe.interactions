@@ -3,22 +3,24 @@
 const express = require('express');
 const uuid = require('uuid/v4');
 
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
 
-module.exports = (csrf) => {
+module.exports = (csrf, logger) => {
+  logger.info('Mounting dev routed');
 
-  router.get('/', function (req, res) {
+  router.get('/', (req, res) => {
     res.render('dev/launchpad', {
       uuid: uuid(),
     });
   });
-  router.post('/dev/:uuid/complete', function (req, res) {
-    res.render('dev/complete', {data: req.body});
+  router.post('/dev/:uuid/complete', (req, res) => {
+    res.render('dev/complete', { data: req.body });
   });
-  router.get('/dev/complete', function (req, res) {
-    res.render('interactioncomplete/index', {noredirect: 'true', destination: '', postbackData: [], data: req.body });
+  router.get('/dev/complete', (req, res) => {
+    res.render('interactioncomplete/index', {
+      noredirect: 'true', destination: '', postbackData: [], data: req.body,
+    });
   });
 
   return router;
-
 };
