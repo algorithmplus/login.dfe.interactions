@@ -9,8 +9,8 @@ const post = require('./postUsernamePassword');
 
 const router = express.Router({mergeParams: true});
 
-module.exports = (csrf) => {
-
+module.exports = (csrf, logger) => {
+  logger.info('Mounting UsernamePassword routes')
   router.get('/', csrf, get);
   router.post('/', csrf, post);
 

@@ -2,6 +2,18 @@ const userService = require('./../Users/UserService');
 const fs = require('fs');
 
 module.exports = {
+  loggerSettings: {
+    levels: {
+      info: 0,
+      ok: 1,
+      error: 2
+    },
+    colors: {
+      info: 'red',
+      ok: 'green',
+      error: 'yellow'
+    }
+  },
   hostingEnvironment: {
     env: process.env.NODE_ENV ? process.env.NODE_ENV : 'dev',
     host: process.env.HOST ? process.env.HOST : 'localhost',
