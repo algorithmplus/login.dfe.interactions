@@ -1,17 +1,18 @@
+'use strict';
+
+const express = require('express');
 const Config = require('./../Config');
 const InteractionComplete = require('./../InteractionComplete');
 
-class UsernamePasswordRoutes {
-  static register(app, csrf) {
-    app.get('/:uuid/usernamepassword', csrf, UsernamePasswordRoutes.get);
-    app.post('/:uuid/usernamepassword', csrf, UsernamePasswordRoutes.post);
-  }
+const router = express.Router({mergeParams: true});
 
-  static get(req, res) {
+module.exports = (csrf) => {
+
+  router.get('/', csrf, function get(req, res) {
     res.render('usernamepassword/index', { isFailedLogin: false, message: '', csrfToken: req.csrfToken() });
-  }
+  });
 
-  static post(req, res) {
+  router.post('/', csrf, function(req, res) {
     const user = Config.services.user.authenticate(req.body.username, req.body.password);
 
     if (user == null) {
@@ -20,7 +21,8 @@ class UsernamePasswordRoutes {
     }
 
     InteractionComplete.process(req.params.uuid, { uid: user.id }, res);
-  }
-}
+  });
 
-module.exports = UsernamePasswordRoutes;
+  return router;
+
+};
