@@ -4,24 +4,15 @@ const express = require('express');
 const Config = require('./../Config');
 const InteractionComplete = require('./../InteractionComplete');
 
+const get = require('./getUsernamePassword');
+const post = require('./postUsernamePassword');
+
 const router = express.Router({mergeParams: true});
 
 module.exports = (csrf) => {
 
-  router.get('/', csrf, function get(req, res) {
-    res.render('usernamepassword/index', { isFailedLogin: false, message: '', csrfToken: req.csrfToken() });
-  });
-
-  router.post('/', csrf, function(req, res) {
-    const user = Config.services.user.authenticate(req.body.username, req.body.password);
-
-    if (user == null) {
-      res.render('usernamepassword/index', { isFailedLogin: true, message: 'Login failed', csrfToken: req.csrfToken() });
-      return;
-    }
-
-    InteractionComplete.process(req.params.uuid, { uid: user.id }, res);
-  });
+  router.get('/', csrf, get);
+  router.post('/', csrf, post);
 
   return router;
 
