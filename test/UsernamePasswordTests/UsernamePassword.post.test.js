@@ -71,7 +71,7 @@ describe('When user submits username/password', function () {
       postHandler(req, res);
 
       expect(renderModel.isFailedLogin).to.equal(true);
-      expect(renderModel.message).to.equal('Login failed');
+      expect(renderModel.message).to.equal('Invalid email address or password. Try again.');
     });
 
     it('then it should include the csrf token', function () {
