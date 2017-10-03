@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "dev": "settings='./config/login.dfe.interactions.dev.json' node src/index.js",
-    "heroku": "PORT=$PORT;NODE_ENV=$NODE_ENV;OIDC_BASE_URL=$OIDC_BASE_URL node src/index.js"
+    "dev": "settings='./config/login.dfe.interactions.dev.json' node src/index.js"
   },
   "repository": {
     "type": "git",
