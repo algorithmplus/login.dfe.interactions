@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const Path = require('path');
-const userService = require('./../Users/UserService');
+const userService = require('../Users/index');
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
 const isDev = env === 'dev';
@@ -46,17 +46,4 @@ const fetchConfig = () => {
   return null;
 };
 
-const fetchConfigWithServices = () => {
-  const config = fetchConfig();
-  if (config == null) {
-    return null;
-  }
-
-  config['services'] = {
-    user: new userService()
-  };
-
-  return config;
-}
-
-module.exports = fetchConfigWithServices();
+module.exports = fetchConfig();
