@@ -1,4 +1,13 @@
 <main id="content" role="main" tabindex="-1">
+    <% if (locals.isFailedLogin) { %>
+    <div class="row">
+        <div class="col-12">
+            <div class="notification notification-error">
+                <%= locals.message || 'error!' %>
+            </div>
+        </div>
+    </div>
+    <% } %>
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-xlarge">
@@ -7,29 +16,19 @@
             <p class="lede">Sign in using the form below to access DfE services.</p>
         </div>
     </div>
-    <% if (locals.isFailedLogin) { %>
     <div class="row">
-        <div class="notification">
-            <%= locals.message || 'error!' %>
-        </div>
-    </div>
-    <% } %>
-    <div class="row">
-
         <div class="col-6">
-
             <h2 class="heading-medium">Existing user</h2>
-            <h2><%= message %></h2>
             <form method="post">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <fieldset class="highlight">
                     <legend class="vh">Sign in form</legend>
                     <div class="form-group">
-                        <label class="form-label-bold" for="first-name-2">Email address</label>
+                        <label class="form-label-bold" for="username">Email address</label>
                         <input class="form-control" id="username" name="username" type="text">
                     </div>
                     <div class="form-group">
-                        <label class="form-label-bold" for="last-name-2">Password</label>
+                        <label class="form-label-bold" for="password">Password</label>
                         <input class="form-control" id="password" name="password" type="password">
                     </div>
                     <div class="panel">
