@@ -1,40 +1,62 @@
-const userService = require('./../Users/UserService');
-const fs = require('fs');
+'use strict';
 
-const createConfig = (env) => {
-  const isDev = (env || 'dev') === 'dev';
-  return {
-    loggerSettings: {
-      levels: {
-        info: 0,
-        ok: 1,
-        error: 2,
-      },
-      colors: {
-        info: 'red',
-        ok: 'green',
-        error: 'yellow',
-      },
-    },
-    hostingEnvironment: {
-      env: env || 'dev',
-      host: process.env.HOST ? process.env.HOST : 'localhost',
-      port: process.env.PORT ? process.env.PORT : 4431,
-      protocol: isDev ? 'https' : 'http',
-    },
-    oidcService: {
-      url: process.env.OIDC_BASE_URL ? process.env.OIDC_BASE_URL : 'https://localhost:4430',
-    },
-    crypto: {
-      signing: {
-        publicKey: isDev ? fs.readFileSync('./ssl/localhost.cert', 'utf8') : '',
-        privateKey: isDev ? fs.readFileSync('./ssl/localhost.key', 'utf8') : '',
-      },
-    },
-    services: {
-      user: new userService(),
-    },
-  };
+const fs = require('fs');
+const Path = require('path');
+const userService = require('./../Users/UserService');
+
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
+const isDev = env === 'dev';
+
+const getSettingsObject = (settings) => {
+  try {
+    return JSON.parse(settings);
+  } catch (e) {
+    return null;
+  }
 };
 
-module.exports = createConfig(process.env.NODE_ENV);
+const getSettingsFromFile = (settingsPath) => {
+  if (fs.existsSync(settingsPath)) {
+    const file = fs.readFileSync(settingsPath, 'utf8');
+    try {
+      return JSON.parse(file);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+};
+
+const fetchConfig = () => {
+  if (process.env.settings) {
+    const settings = process.env.settings;
+    let settingsObject = getSettingsObject(settings);
+    if (settingsObject !== null) {
+      return settingsObject;
+    }
+    const settingsPath = Path.resolve(settings);
+    if (fs.existsSync(settingsPath)) {
+      settingsObject = getSettingsFromFile(settingsPath);
+      if (settingsObject !== null) {
+        return settingsObject;
+      }
+    }
+  }
+
+  return null;
+};
+
+const fetchConfigWithServices = () => {
+  const config = fetchConfig();
+  if (config == null) {
+    return null;
+  }
+
+  config['services'] = {
+    user: new userService()
+  };
+
+  return config;
+}
+
+module.exports = fetchConfigWithServices();
