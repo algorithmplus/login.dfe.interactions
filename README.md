@@ -11,11 +11,6 @@ Install deps
 npm i
 ```
 
-Setup Keystore & devlopment ssl certs
-```
-npm run setup
-```
-
 Run
 ```
 npm run dev
@@ -26,4 +21,4 @@ Visit
 https://localhost:4431/
 ```
 
-In 'dev mode' you should see a page listing all the availible interactions
+In 'dev mode' you should see a page listing all the available interactions

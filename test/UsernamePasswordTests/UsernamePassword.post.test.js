@@ -26,13 +26,9 @@ const res = {
 };
 
 let user = null;
-const config = {
-  services: {
-    user: {
-      authenticate(username, password) {
-        return user;
-      }
-    }
+const userService = {
+  authenticate(username, password) {
+    return user;
   }
 };
 
@@ -50,8 +46,8 @@ describe('When user submits username/password', function () {
 
   beforeEach(function () {
     postHandler = proxyquire('./../../src/UsernamePassword/postUsernamePassword', {
-      './../Config': config,
-      './../InteractionComplete': interactionComplete
+      './../InteractionComplete': interactionComplete,
+      './../Users': userService
     })
   });
 
