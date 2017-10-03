@@ -1,12 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><%=locals.title || 'Login.DfE'%></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/fonts.css">
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/govuk-template.css">
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/screen.css">
 </head>
-<body class="">
+<body>
 
 <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
@@ -17,13 +19,12 @@
 </div>
 
 <div id="global-cookie-message">
-    <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about
-            cookies</a></p>
+    <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a></p>
 </div>
 
 <div class="wrapper">
 
-    <header role="banner" id="global-header" class="with-proposition">
+    <header id="global-header" class="with-proposition">
         <div class="header-wrapper">
             <div class="identity">Department for Education</div>
         </div>
@@ -31,14 +32,13 @@
 
     <div id="global-header-bar"></div>
 
-    <%-body%>
-
-
+    <main id="content" tabindex="-1">
+        <%-body%>
     </main>
 
 </div>
 
-<footer id="footer" role="contentinfo">
+<footer id="footer">
     <div class="footer-wrapper">
         <nav>
             <ul>
