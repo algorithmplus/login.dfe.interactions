@@ -44,11 +44,12 @@ const interactionComplete = {
   }
 };
 
+let client = {
+  client_id: 'test'
+};
 const clients = {
   get(clientId) {
-    return Promise.resolve({
-      client_id: clientId
-    });
+    return Promise.resolve(client);
   }
 };
 
@@ -109,6 +110,36 @@ describe('When user submits username/password', function () {
 
       expect(completeData).to.not.be.null;
       expect(completeData.uid).to.equal('user1');
+    });
+
+    it('then it should return success', async function() {
+      await postHandler(req, res);
+
+      expect(completeData).to.not.be.null;
+      expect(completeData.status).to.equal('success');
+
+    });
+
+  })
+
+  describe('with an invalid client id', function() {
+
+    beforeEach(function() {
+      client = null;
+    });
+
+    it('then is should complete interaction', async function() {
+      await postHandler(req, res);
+
+      expect(completeUuid).to.equal('some-uuid');
+    });
+
+    it('then it should return a failure', async function() {
+      await postHandler(req, res);
+
+      expect(completeData).to.not.be.null;
+      expect(completeData.status).to.equal('failed');
+      expect(completeData.reason).to.equal('invalid clientid');
     });
 
   })
