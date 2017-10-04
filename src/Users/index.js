@@ -1,13 +1,16 @@
-class UserService {
-  authenticate(username, password){
-    if(username.toLowerCase() != 'foo@example.com' || !password || password.length < 1) {
-      return null;
-    }
+const config = require('./../Config/index');
+const StaticUserAdapter = require('./StaticUserAdapter');
 
-    return {
-      id: '23121d3c-84df-44ac-b458-3d63a9a05497'
-    }
-  }
+const directoryType = config.directories.type;
+
+let adapter;
+switch(directoryType.toLowerCase())
+{
+  case 'static':
+    adapter = new StaticUserAdapter();
+    break;
+  default:
+    throw new Error(`Unsupported directory type ${directoryType}. Supported types are static or directoriesapi`)
 }
 
-module.exports = new UserService();
+module.exports = adapter;
