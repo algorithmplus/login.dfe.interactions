@@ -2,7 +2,7 @@ const config = require('./../Config/index');
 const StaticUserAdapter = require('./StaticUserAdapter');
 const DirectoriesApiUserAdapter = require('./DirectoriesApiUserAdapter');
 
-const directoryType = config.directories.type;
+const directoryType = (config && config.directories && config.directories.type) ? config.directories.type : 'static';
 
 let adapter;
 switch(directoryType.toLowerCase())
