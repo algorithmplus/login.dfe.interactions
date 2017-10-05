@@ -68,3 +68,7 @@ ssl
 .DS_Store
 
 access.log
+
+#config
+/config/
+!/config/login.dfe.interactions.dev.json

@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const Path = require('path');
-const userService = require('../Users/index');
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
 const isDev = env === 'dev';
