@@ -10,7 +10,7 @@ class DirectoriesApiUserAdapter {
       const userId = await rp({
         method: 'POST',
         uri: `${config.directories.service.url}/${client.params.directoryId}/user/authenticate`,
-        headers:{
+        headers: {
           authorization: `bearer ${token}`
         },
         body: {
@@ -25,6 +25,10 @@ class DirectoriesApiUserAdapter {
       };
     }
     catch (e) {
+      const status = e.statusCode ? e.statusCode : 500;
+      if (status == 401) {
+        return null;
+      }
       throw new Error(e);
     }
   }
