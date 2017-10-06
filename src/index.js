@@ -15,12 +15,15 @@ const devLauncher = require('./DevLauncher');
 
 const csrf = csurf({ cookie: true });
 
+const logLevel = config.loggerSettings.logLevel ? 'info';
+
 const logger = new (winston.Logger)({
   colors: config.loggerSettings.colors,
   transports: [
-    new (winston.transports.Console)({ level: 'info', colorize: true }),
+    new (winston.transports.Console)({ level: logLevel, colorize: true }),
   ],
 });
+
 
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,3 +65,8 @@ if (config.hostingEnvironment.env === 'dev') {
     logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
   });
 }
+
+
+process.on('unhandledRejection', (reason, p) => {
+  logger.error('Unhandled Rejection at:', p, 'reason:', reason);
+});
