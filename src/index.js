@@ -15,7 +15,7 @@ const devLauncher = require('./DevLauncher');
 
 const csrf = csurf({ cookie: true });
 
-const logLevel = config.loggerSettings.logLevel ? 'info';
+const logLevel = config.loggerSettings.logLevel || 'info';
 
 const logger = new (winston.Logger)({
   colors: config.loggerSettings.colors,
