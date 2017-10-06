@@ -1,6 +1,6 @@
 {
   "loggerSettings": {
-    logLevel: 'info',
+    "logLevel": "info",
     "colors": {
       "info": "red",
       "ok": "green",
