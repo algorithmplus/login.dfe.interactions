@@ -6,7 +6,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 class HotConfigClientAdapter extends ClientAdapter {
   async get(id) {
     const clients = await allClients();
-    return clients.find(async c => await c.client_id.toLowerCase() === id.toLowerCase());
+    return clients.find(c => c.client_id.toLowerCase() === id.toLowerCase());
   }
 }
 
