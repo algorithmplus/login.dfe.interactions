@@ -11,22 +11,21 @@ class DirectoriesApiUserAdapter {
         method: 'POST',
         uri: `${config.directories.service.url}/${client.params.directoryId}/user/authenticate`,
         headers: {
-          authorization: `bearer ${token}`
+          authorization: `bearer ${token}`,
         },
         body: {
-          username: username,
-          password: password
+          username,
+          password,
         },
-        json: true
+        json: true,
       });
 
       return {
-        id: userId
+        id: userId,
       };
-    }
-    catch (e) {
+    } catch (e) {
       const status = e.statusCode ? e.statusCode : 500;
-      if (status == 401) {
+      if (status === 401) {
         return null;
       }
       throw new Error(e);

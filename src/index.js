@@ -6,7 +6,7 @@ const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
-const winston = require('winston');
+const logger = require('./logger');
 
 const app = express();
 const config = require('./Config');
@@ -14,15 +14,6 @@ const usernamePassword = require('./UsernamePassword');
 const devLauncher = require('./DevLauncher');
 
 const csrf = csurf({ cookie: true });
-
-const logLevel = config.loggerSettings.logLevel || 'info';
-
-const logger = new (winston.Logger)({
-  colors: config.loggerSettings.colors,
-  transports: [
-    new (winston.transports.Console)({ level: logLevel, colorize: true }),
-  ],
-});
 
 
 // Add middleware
@@ -41,8 +32,8 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 
 // Setup routes
-app.use('/', devLauncher(csrf, logger));
-app.use('/:uuid/usernamepassword', usernamePassword(csrf, logger));
+app.use('/', devLauncher(csrf));
+app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
@@ -65,8 +56,3 @@ if (config.hostingEnvironment.env === 'dev') {
     logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
   });
 }
-
-
-process.on('unhandledRejection', (reason, p) => {
-  logger.error('Unhandled Rejection at:', p, 'reason:', reason);
-});
