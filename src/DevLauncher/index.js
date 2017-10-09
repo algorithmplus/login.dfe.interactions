@@ -2,10 +2,11 @@
 
 const express = require('express');
 const uuid = require('uuid/v4');
+const logger = require('../logger');
 
 const router = express.Router({ mergeParams: true });
 
-module.exports = (csrf, logger) => {
+module.exports = (csrf) => {
   logger.info('Mounting dev routed');
 
   router.get('/', (req, res) => {
@@ -18,7 +19,10 @@ module.exports = (csrf, logger) => {
   });
   router.get('/dev/complete', (req, res) => {
     res.render('interactioncomplete/index', {
-      noredirect: 'true', destination: '', postbackData: [], data: req.body,
+      noredirect: 'true',
+      destination: '',
+      postbackData: [],
+      data: req.body,
     });
   });
 

@@ -1,7 +1,7 @@
 class ClientAdapter {
   constructor() {
     if (new.target === ClientAdapter) {
-      throw new TypeError("Cannot construct ClientAdapter instances directly");
+      throw new TypeError('Cannot construct ClientAdapter instances directly');
     }
   }
 

@@ -12,8 +12,8 @@ const logger = new (winston.Logger)({
   ],
 });
 
-module.exports = logger;
-
 process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at:', p, 'reason:', reason);
 });
+
+module.exports = logger;

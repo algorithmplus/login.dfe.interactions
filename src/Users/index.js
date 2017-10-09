@@ -5,8 +5,7 @@ const DirectoriesApiUserAdapter = require('./DirectoriesApiUserAdapter');
 const directoryType = (config && config.directories && config.directories.type) ? config.directories.type : 'static';
 
 let adapter;
-switch(directoryType.toLowerCase())
-{
+switch (directoryType.toLowerCase()) {
   case 'static':
     adapter = new StaticUserAdapter();
     break;
@@ -14,7 +13,7 @@ switch(directoryType.toLowerCase())
     adapter = new DirectoriesApiUserAdapter();
     break;
   default:
-    throw new Error(`Unsupported directory type ${directoryType}. Supported types are static or directoriesapi`)
+    throw new Error(`Unsupported directory type ${directoryType}. Supported types are static or directoriesapi`);
 }
 
 module.exports = adapter;

@@ -32,8 +32,8 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 
 // Setup routes
-app.use('/', devLauncher(csrf, logger));
-app.use('/:uuid/usernamepassword', usernamePassword(csrf, logger));
+app.use('/', devLauncher(csrf));
+app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
@@ -56,5 +56,3 @@ if (config.hostingEnvironment.env === 'dev') {
     logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
   });
 }
-
-
