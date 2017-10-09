@@ -32,4 +32,3 @@ class HotConfigClientAdapter extends ClientAdapter {
 module.exports = HotConfigClientAdapter;
 
 
-
