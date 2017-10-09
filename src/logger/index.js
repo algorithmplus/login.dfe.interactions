@@ -3,10 +3,10 @@
 const winston = require('winston');
 const config = require('./../Config');
 
-const logLevel = config.loggerSettings.logLevel || 'info';
+const logLevel = (config && config.loggerSettings && config.loggerSettings.logLevel) ? config.loggerSettings.logLevel : 'info';
 
 const logger = new (winston.Logger)({
-  colors: config.loggerSettings.colors,
+  colors: (config && config.loggerSettings && config.loggerSettings.colors) ? config.loggerSettings.colors : null,
   transports: [
     new (winston.transports.Console)({ level: logLevel, colorize: true }),
   ],
