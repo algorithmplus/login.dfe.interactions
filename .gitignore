@@ -72,3 +72,4 @@ access.log
 #config
 /config/
 !/config/login.dfe.interactions.dev.json
+/config/login.dfe.interactions.dev.json
