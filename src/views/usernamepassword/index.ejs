@@ -23,11 +23,17 @@
                     <legend class="vh">Sign in form</legend>
                     <div class="form-group">
                         <label class="form-label-bold" for="username">Email address</label>
-                        <input class="form-control" id="username" name="username" type="email" required>
+                        <% if(locals.emailValidationMessage!== undefined || locals.emailValidationMessage !== '') { %>
+                            <label class="form-label-bold" for="username_error"><%=locals.emailValidationMessage %></label>
+                        <% } %>
+                        <input class="form-control" id="username" name="username" type="email">
                     </div>
                     <div class="form-group">
                         <label class="form-label-bold" for="password">Password</label>
-                        <input class="form-control" id="password" name="password" type="password" required>
+                        <% if(locals.passwordValidationMessage !== undefined || locals.passwordValidationMessage !== '') { %>
+                        <label class="form-label-bold" for="password_error"><%=locals.passwordValidationMessage%></label>
+                        <% } %>
+                        <input class="form-control" id="password" name="password" type="password">
                     </div>
                     <div class="panel">
                         <p>By continuing you accept the <a href="#">terms and conditions</a>.</p>
