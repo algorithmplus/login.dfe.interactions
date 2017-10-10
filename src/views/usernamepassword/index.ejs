@@ -21,17 +21,17 @@
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <fieldset>
                     <legend class="vh">Sign in form</legend>
-                    <div class="form-group">
+                    <div class="form-group <%= locals.emailValidationMessage !== undefined ? 'form-group-error' : '' %>">
                         <label class="form-label-bold" for="username">Email address</label>
-                        <% if(locals.emailValidationMessage!== undefined || locals.emailValidationMessage !== '') { %>
-                            <label class="form-label-bold" for="username_error"><%=locals.emailValidationMessage %></label>
+                        <% if (locals.emailValidationMessage!== undefined) { %>
+                            <p class="error-message"><%=locals.emailValidationMessage %></p>
                         <% } %>
                         <input class="form-control" id="username" name="username" type="email">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group <%= locals.passwordValidationMessage !== undefined ? 'form-group-error' : '' %>">
                         <label class="form-label-bold" for="password">Password</label>
-                        <% if(locals.passwordValidationMessage !== undefined || locals.passwordValidationMessage !== '') { %>
-                        <label class="form-label-bold" for="password_error"><%=locals.passwordValidationMessage%></label>
+                        <% if(locals.passwordValidationMessage !== undefined) { %>
+                            <p class="error-message"><%=locals.passwordValidationMessage%></p>
                         <% } %>
                         <input class="form-control" id="password" name="password" type="password">
                     </div>
