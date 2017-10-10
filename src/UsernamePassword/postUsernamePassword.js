@@ -38,7 +38,7 @@ const post = async (req, res) => {
 
   if (user === null) {
     res.render('usernamepassword/index', {
-      email_validationMessage: validation.username_validationMessage, password_validationMessage: validation.password_validationMessage, isFailedLogin: true, message: 'Invalid email address or password. Try again.', csrfToken: req.csrfToken(),
+      emailValidationMessage: validation.username_validationMessage, passwordValidationMessage: validation.password_validationMessage, isFailedLogin: true, message: 'Invalid email address or password. Try again.', csrfToken: req.csrfToken(),
     });
     return;
   }
