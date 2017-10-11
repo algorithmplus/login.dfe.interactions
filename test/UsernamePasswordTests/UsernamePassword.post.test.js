@@ -43,10 +43,10 @@ describe('When user submits username/password', () => {
   let postHandler;
 
   beforeEach(() => {
-    postHandler = proxyquire('./../../src/UsernamePassword/postUsernamePassword', {
-      './../InteractionComplete': interactionComplete,
-      './../Users': userService,
-      './../Clients': clients,
+    postHandler = proxyquire('./../../src/app/UsernamePassword/postUsernamePassword', {
+      '../InteractionComplete': interactionComplete,
+      '../../Users': userService,
+      '../../Clients': clients,
     });
     req = {
       query: {
@@ -110,7 +110,7 @@ describe('When user submits username/password', () => {
     it('then it should render usernamepassword view', async () => {
       await postHandler(req, res);
 
-      expect(renderViewPath).to.equal('usernamepassword/index');
+      expect(renderViewPath).to.equal('UsernamePassword/views/index');
     });
 
     it('then it should be a failed login', async () => {
