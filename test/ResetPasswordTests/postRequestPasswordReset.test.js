@@ -30,7 +30,7 @@ describe('when handling the posting of a password reset request', () => {
     it('then it should render the codesent view', () => {
       postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('resetpassword/codesent');
+      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/codesent');
     });
 
   });
@@ -46,7 +46,7 @@ describe('when handling the posting of a password reset request', () => {
     it('then it should render the request view', () => {
       postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('resetpassword/request');
+      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/request');
     });
 
     it('then it should include the csrf token on the model', () => {
@@ -80,7 +80,7 @@ describe('when handling the posting of a password reset request', () => {
     it('then it should render the request view', () => {
       postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('resetpassword/request');
+      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/request');
     });
 
     it('then it should include the csrf token on the model', () => {

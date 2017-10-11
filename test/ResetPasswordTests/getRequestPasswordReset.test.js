@@ -22,7 +22,7 @@ describe('When getting the request password reset view', () => {
   it('then it should render the request view', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.getCall(0).args[0]).to.equal('resetpassword/request');
+    expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/request');
   });
 
   it('then it should include the csrf token on the model', () => {
