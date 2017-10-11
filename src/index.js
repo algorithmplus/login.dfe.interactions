@@ -11,6 +11,7 @@ const logger = require('./logger');
 const app = express();
 const config = require('./Config');
 const usernamePassword = require('./UsernamePassword');
+const resetPassword = require('./ResetPassword');
 const devLauncher = require('./DevLauncher');
 
 const csrf = csurf({ cookie: true });
@@ -34,6 +35,7 @@ app.set('layout', 'layouts/layout');
 // Setup routes
 app.use('/', devLauncher(csrf));
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
+app.use('/:uuid/resetpassword', resetPassword(csrf));
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
