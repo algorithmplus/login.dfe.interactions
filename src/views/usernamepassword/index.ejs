@@ -1,5 +1,5 @@
 
-    <% if (locals.isFailedLogin) { %>
+<% if (locals.isFailedLogin) { %>
     <div class="row">
         <div class="col-12">
             <div class="notification notification-error">
@@ -9,41 +9,50 @@
     </div>
     <% } %>
     <div class="grid-row">
-        <div class="column-two-thirds">
+        <div class="col-9">
             <h1 class="heading-xlarge">
-                Sign in
+                Sign in to access DfE services
             </h1>
-            <p class="lede">Sign in using the form below to access DfE services.</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <h2 class="heading-medium">Existing user</h2>
-            <form method="post">
+        <div class="col-8">
+            <form method="post" id="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-                <fieldset class="highlight">
+                <fieldset>
                     <legend class="vh">Sign in form</legend>
-                    <div class="form-group">
+                    <div class="form-group <%= locals.emailValidationMessage !== undefined ? 'form-group-error' : '' %>">
                         <label class="form-label-bold" for="username">Email address</label>
-                        <input class="form-control" id="username" name="username" type="text">
+                        <% if (locals.emailValidationMessage!== undefined) { %>
+                            <p class="error-message" id="validation-email"><%=locals.emailValidationMessage %></p>
+                        <% } %>
+                        <input class="form-control" id="username" name="username" type="email" <% if (locals.emailValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group <%= locals.passwordValidationMessage !== undefined ? 'form-group-error' : '' %>">
                         <label class="form-label-bold" for="password">Password</label>
-                        <input class="form-control" id="password" name="password" type="password">
+                        <% if(locals.passwordValidationMessage !== undefined) { %>
+                            <p class="error-message" id="validation-password"><%=locals.passwordValidationMessage%></p>
+                        <% } %>
+                        <input class="form-control" id="password" name="password" type="password" <% if (locals.passwordValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
                     </div>
                     <div class="panel">
                         <p>By continuing you accept the <a href="#">terms and conditions</a>.</p>
                     </div>
-
                     <div class="form-submit">
                         <button type="submit" class="button">Sign in</button>
                     </div>
                 </fieldset>
             </form>
         </div>
-        <div class="col-6">
-            <h2 class="heading-medium">New user</h2>
-            <p>If you are a new user...</p>
+        <div class="col-4">
+            <aside>
+                <h2 class="heading-medium">Problems signing in?</h2>
+                <nav class="subnav">
+                    <ul>
+                        <li><a href="#">Forgotten your password?</a></li>
+                    </ul>
+                </nav>
+            </aside>
         </div>
     </div>
 

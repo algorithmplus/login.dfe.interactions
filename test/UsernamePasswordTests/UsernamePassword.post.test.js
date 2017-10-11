@@ -3,19 +3,7 @@
 const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
 
-const req = {
-  query: {
-    clientid: 'test',
-  },
-  body: {
-    username: 'TonyStark',
-    password: 'IAmIronman!',
-  },
-  params: {
-    uuid: 'some-uuid',
-  },
-  csrfToken: () => 'my-secure-token',
-};
+let req;
 
 let renderViewPath;
 let renderModel;
@@ -60,6 +48,19 @@ describe('When user submits username/password', () => {
       './../Users': userService,
       './../Clients': clients,
     });
+    req = {
+      query: {
+        clientid: 'test',
+      },
+      body: {
+        username: 'Tony@Stark.com',
+        password: 'IAmIronman!',
+      },
+      params: {
+        uuid: 'some-uuid',
+      },
+      csrfToken: () => 'my-secure-token',
+    };
   });
 
   describe('with a invalid username/password', () => {
@@ -67,6 +68,45 @@ describe('When user submits username/password', () => {
       user = null;
     });
 
+    it('then a validation message will appear if the email is not present', async () => {
+      req.body.username = '';
+
+      await postHandler(req, res);
+
+      expect(renderModel.emailValidationMessage).to.equal('Enter your email address');
+    });
+    it('then a validation message will appear if the email is not in the correct format', async () => {
+      req.body.username = 'Tony';
+
+      await postHandler(req, res);
+
+      expect(renderModel.emailValidationMessage).to.equal('Enter a valid email address');
+    });
+    it('then a validation message will appear if the password is not present', async () => {
+      req.body.password = '';
+
+      await postHandler(req, res);
+
+      expect(renderModel.passwordValidationMessage).to.equal('Enter your password');
+    });
+    it('then a validation message will appear if the email and password is not present', async () => {
+      req.body.password = '';
+      req.body.username = '';
+
+      await postHandler(req, res);
+
+      expect(renderModel.passwordValidationMessage).to.equal('Enter your password');
+      expect(renderModel.emailValidationMessage).to.equal('Enter your email address');
+    });
+    it('then a validation message will appear if the email and password is not present', async () => {
+      req.body.password = '';
+      req.body.username = 'Tony';
+
+      await postHandler(req, res);
+
+      expect(renderModel.passwordValidationMessage).to.equal('Enter your password');
+      expect(renderModel.emailValidationMessage).to.equal('Enter a valid email address');
+    });
     it('then it should render usernamepassword view', async () => {
       await postHandler(req, res);
 
