@@ -36,7 +36,7 @@ describe('When posting the confirm password reset view', () => {
     it('then it should redirect to newpassword', () => {
       postRequestPasswordReset(req, res);
 
-      expect(res.redirect.getCall(0).args[0]).to.equal('123-abc/resetpassword/newpassword');
+      expect(res.redirect.getCall(0).args[0]).to.equal('/123-abc/resetpassword/newpassword');
     });
 
   });

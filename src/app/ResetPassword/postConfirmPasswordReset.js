@@ -41,7 +41,7 @@ const action = (req, res) => {
       validationMessages: validationResult.messages
     });
   } else {
-    res.redirect(`${req.params.uuid}/resetpassword/newpassword`);
+    res.redirect(`/${req.params.uuid}/resetpassword/newpassword`);
   }
 };
 

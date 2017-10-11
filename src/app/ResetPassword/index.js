@@ -6,6 +6,9 @@ const logger = require('../../logger/index');
 const getRequestPasswordReset = require('./getRequestPasswordReset');
 const postRequestPasswordReset = require('./postRequestPasswordReset');
 const getConfirmPasswordReset = require('./getConfirmPasswordReset');
+const postConfirmPasswordReset = require('./postConfirmPasswordReset');
+const getNewPassword = require('./getNewPassword');
+const postNewPassword = require('./postNewPassword');
 
 const router = express.Router({ mergeParams: true });
 
@@ -16,10 +19,13 @@ const registerRoutes = (csrf) => {
   router.post('/request', csrf, postRequestPasswordReset);
 
   router.get('/confirm', csrf, getConfirmPasswordReset);
-  // router.port('/confirm', csrf, null);
+  router.post('/confirm', csrf, postConfirmPasswordReset);
+
+  router.get('/newpassword', csrf, getNewPassword);
+  router.post('/newpassword', csrf, postNewPassword);
 
   // router.get('/complete', csrf, null);
-  // router.port('/complete', csrf, null);
+  // router.post('/complete', csrf, null);
 
   return router;
 };
