@@ -73,21 +73,21 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(renderModel.emailValidationMessage).to.equal('Email address must be supplied');
+      expect(renderModel.emailValidationMessage).to.equal('Enter your email address');
     });
     it('then a validation message will appear if the email is not in the correct format', async () => {
       req.body.username = 'Tony';
 
       await postHandler(req, res);
 
-      expect(renderModel.emailValidationMessage).to.equal('Email address must be supplied in the correct format');
+      expect(renderModel.emailValidationMessage).to.equal('Enter a valid email address');
     });
     it('then a validation message will appear if the password is not present', async () => {
       req.body.password = '';
 
       await postHandler(req, res);
 
-      expect(renderModel.passwordValidationMessage).to.equal('Password must be supplied');
+      expect(renderModel.passwordValidationMessage).to.equal('Enter your password');
     });
     it('then a validation message will appear if the email and password is not present', async () => {
       req.body.password = '';
@@ -95,8 +95,8 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(renderModel.passwordValidationMessage).to.equal('Password must be supplied');
-      expect(renderModel.emailValidationMessage).to.equal('Email address must be supplied');
+      expect(renderModel.passwordValidationMessage).to.equal('Enter your password');
+      expect(renderModel.emailValidationMessage).to.equal('Enter your email address');
     });
     it('then a validation message will appear if the email and password is not present', async () => {
       req.body.password = '';
@@ -104,8 +104,8 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(renderModel.passwordValidationMessage).to.equal('Password must be supplied');
-      expect(renderModel.emailValidationMessage).to.equal('Email address must be supplied in the correct format');
+      expect(renderModel.passwordValidationMessage).to.equal('Enter your password');
+      expect(renderModel.emailValidationMessage).to.equal('Enter a valid email address');
     });
     it('then it should render usernamepassword view', async () => {
       await postHandler(req, res);
