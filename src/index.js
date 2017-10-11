@@ -10,9 +10,9 @@ const logger = require('./logger');
 
 const app = express();
 const config = require('./Config');
-const usernamePassword = require('./UsernamePassword');
-const resetPassword = require('./ResetPassword');
-const devLauncher = require('./DevLauncher');
+const usernamePassword = require('./app/UsernamePassword');
+const resetPassword = require('./app/ResetPassword');
+const devLauncher = require('./app/DevLauncher');
 
 const csrf = csurf({ cookie: true });
 
@@ -25,7 +25,7 @@ app.use(morgan('dev'));
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', path.resolve(__dirname, 'views'));
+app.set('views', path.resolve(__dirname, 'app'));
 app.set('logger', logger);
 
 // Setup express layouts

@@ -1,7 +1,7 @@
 'use strict';
 
 const action = (req, res) => {
-  res.render('resetpassword/request', {
+  res.render('ResetPassword/views/request', {
     csrfToken: req.csrfToken(),
     email: '',
     validationFailed: false,

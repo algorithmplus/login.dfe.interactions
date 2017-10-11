@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const sinon = require('sinon');
-const postRequestPasswordReset = require('./../../src/ResetPassword/postRequestPasswordReset');
+const postRequestPasswordReset = require('../../src/app/ResetPassword/postRequestPasswordReset');
 
 const req = {
   csrfToken: () => { return 'token' }

@@ -27,7 +27,7 @@ const action = (req, res) => {
   const validationResult = validate(email);
 
   if (validationResult.failed) {
-    res.render('resetpassword/request', {
+    res.render('ResetPassword/views/request', {
       csrfToken: req.csrfToken(),
       email,
       validationFailed: validationResult.failed,
@@ -35,7 +35,7 @@ const action = (req, res) => {
     });
   }
   else {
-    res.render('resetpassword/codesent');
+    res.render('ResetPassword/views/codesent');
   }
 };
 
