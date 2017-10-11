@@ -1,7 +1,7 @@
 'use strict';
 
 const get = (req, res) => {
-  res.render('usernamepassword/index', {
+  res.render('UsernamePassword/views/index', {
     isFailedLogin: false,
     message: '',
     title: 'Sign in',

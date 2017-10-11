@@ -1,6 +1,6 @@
-const InteractionComplete = require('./../InteractionComplete');
-const clients = require('./../Clients');
-const Users = require('./../Users');
+const InteractionComplete = require('../InteractionComplete');
+const clients = require('../../Clients/index');
+const Users = require('../../Users/index');
 const emailValidator = require('email-validator');
 
 
@@ -36,7 +36,7 @@ const post = async (req, res) => {
   }
 
   if (user === null) {
-    res.render('usernamepassword/index', {
+    res.render('UsernamePassword/views/index', {
       emailValidationMessage: validation.username_validationMessage,
       passwordValidationMessage: validation.password_validationMessage,
       isFailedLogin: true,
