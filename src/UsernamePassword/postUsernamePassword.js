@@ -10,8 +10,7 @@ const validateBody = (body) => {
   if (body.username === '') {
     validationMessages.username_validationMessage = 'Enter your email address';
     validationMessages.failedValidation = true;
-  }
-  else if (!emailValidator.validate(body.username)){
+  } else if (!emailValidator.validate(body.username)) {
     validationMessages.username_validationMessage = 'Enter a valid email address';
     validationMessages.failedValidation = true;
   }
@@ -38,7 +37,12 @@ const post = async (req, res) => {
 
   if (user === null) {
     res.render('usernamepassword/index', {
-      emailValidationMessage: validation.username_validationMessage, passwordValidationMessage: validation.password_validationMessage, isFailedLogin: true, message: 'Invalid email address or password. Try again.', csrfToken: req.csrfToken(),
+      emailValidationMessage: validation.username_validationMessage,
+      passwordValidationMessage: validation.password_validationMessage,
+      isFailedLogin: true,
+      title: 'Sign in',
+      message: 'Invalid email address or password. Try again.',
+      csrfToken: req.csrfToken(),
     });
     return;
   }

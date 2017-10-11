@@ -1,5 +1,5 @@
 
-    <% if (locals.isFailedLogin) { %>
+<% if (locals.isFailedLogin) { %>
     <div class="row">
         <div class="col-12">
             <div class="notification notification-error">
@@ -17,7 +17,7 @@
     </div>
     <div class="row">
         <div class="col-8">
-            <form method="post">
+            <form method="post" id="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <fieldset>
                     <legend class="vh">Sign in form</legend>
