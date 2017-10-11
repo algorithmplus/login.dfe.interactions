@@ -24,16 +24,16 @@
                     <div class="form-group <%= locals.emailValidationMessage !== undefined ? 'form-group-error' : '' %>">
                         <label class="form-label-bold" for="username">Email address</label>
                         <% if (locals.emailValidationMessage!== undefined) { %>
-                            <p class="error-message"><%=locals.emailValidationMessage %></p>
+                            <p class="error-message" id="validation-email"><%=locals.emailValidationMessage %></p>
                         <% } %>
-                        <input class="form-control" id="username" name="username" type="email">
+                        <input class="form-control" id="username" name="username" type="email" <% if (locals.emailValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                     </div>
                     <div class="form-group <%= locals.passwordValidationMessage !== undefined ? 'form-group-error' : '' %>">
                         <label class="form-label-bold" for="password">Password</label>
                         <% if(locals.passwordValidationMessage !== undefined) { %>
-                            <p class="error-message"><%=locals.passwordValidationMessage%></p>
+                            <p class="error-message" id="validation-password"><%=locals.passwordValidationMessage%></p>
                         <% } %>
-                        <input class="form-control" id="password" name="password" type="password">
+                        <input class="form-control" id="password" name="password" type="password" <% if (locals.passwordValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
                     </div>
                     <div class="panel">
                         <p>By continuing you accept the <a href="#">terms and conditions</a>.</p>
