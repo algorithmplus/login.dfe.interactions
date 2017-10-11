@@ -8,16 +8,16 @@ const validateBody = (body) => {
   const validationMessages = {};
   validationMessages.failedValidation = false;
   if (body.username === '') {
-    validationMessages.username_validationMessage = 'Email address must be supplied';
+    validationMessages.username_validationMessage = 'Enter your email address';
     validationMessages.failedValidation = true;
   }
   else if (!emailValidator.validate(body.username)){
-    validationMessages.username_validationMessage = 'Email address must be supplied in the correct format';
+    validationMessages.username_validationMessage = 'Enter a valid email address';
     validationMessages.failedValidation = true;
   }
 
   if (body.password === '') {
-    validationMessages.password_validationMessage = 'Password must be supplied';
+    validationMessages.password_validationMessage = 'Enter your password';
     validationMessages.failedValidation = true;
   }
   return validationMessages;
