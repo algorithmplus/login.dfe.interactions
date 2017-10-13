@@ -6,19 +6,20 @@
         <p class="lede">Enter your email address. We'll send you a link to reset your password. If you don't get a link, check that you have entered the correct email address.</p>
     </div>
 </div>
-<div>
-    <form method="post">
-        <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-        <fieldset class="highlight">
-            <legend class="vh">Reset password form</legend>
-            <div class="form-group">
-                <label class="form-label-bold" for="email">Email address</label>
-                <input class="form-control" id="email" name="email" type="text" value="<%=email%>">
-            </div>
 
-            <div class="form-submit">
-                <button type="submit" class="button">Sign in</button>
-            </div>
-        </fieldset>
-    </form>
-</div>
+<form method="post">
+    <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+    <fieldset>
+        <legend class="vh">Reset password</legend>
+        <div class="form-group <%=  locals.validationMessages.email !== undefined ? "form-group-error" : "" %>">
+            <label class="form-label-bold" for="email">Email address</label>
+            <% if (locals.validationMessages.email !== undefined) { %>
+            <p class="error-message" id="validation-email"><%= locals.validationMessages.email %></p>
+            <% } %>
+            <input class="form-control" id="email" name="email" type="email" value="<%=email%>" required  <% if (locals.validationMessages.email !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
+        </div>
+        <div class="form-submit">
+            <button type="submit" class="button">Submit</button>
+        </div>
+    </fieldset>
+</form>

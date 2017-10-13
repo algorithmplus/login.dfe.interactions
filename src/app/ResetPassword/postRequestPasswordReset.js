@@ -1,26 +1,26 @@
 'use strict';
-var emailValidator = require("email-validator");
+
+const emailValidator = require('email-validator');
 
 const validate = (email) => {
   const messages = {
-    email: ''
+    email: '',
   };
   let failed = false;
 
   if (email.length === 0) {
     messages.email = 'Please enter a valid email address';
     failed = true;
-  }
-  else if(!emailValidator.validate(email)) {
+  } else if (!emailValidator.validate(email)) {
     messages.email = 'Please enter a valid email address';
     failed = true;
   }
 
   return {
     messages,
-    failed
+    failed,
   };
-}
+};
 
 const action = (req, res) => {
   const email = req.body.email;
@@ -31,10 +31,9 @@ const action = (req, res) => {
       csrfToken: req.csrfToken(),
       email,
       validationFailed: validationResult.failed,
-      validationMessages: validationResult.messages
+      validationMessages: validationResult.messages,
     });
-  }
-  else {
+  } else {
     res.render('ResetPassword/views/codesent');
   }
 };

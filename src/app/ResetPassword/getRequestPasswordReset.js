@@ -5,9 +5,6 @@ const action = (req, res) => {
     csrfToken: req.csrfToken(),
     email: '',
     validationFailed: false,
-    validationMessages: {
-      email: ''
-    }
   });
 };
 
