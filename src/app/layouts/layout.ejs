@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><%=locals.title || 'Login.DfE'%></title>
+    <title><%=locals.app.title || locals.title || 'Login.DfE'%></title>
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/fonts.css">
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/govuk-template.css">
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/screen.css">
@@ -55,7 +55,7 @@
             <ul>
                 <li><a href="cookies.html">Cookies</a></li>
                 <li><a href="privacy.html">Privacy policy</a></li>
-                <li><a href="terms.html">Terms and conditions</a></li>
+                <li><a href="<%= locals.portal.url %>/terms">Terms and conditions</a></li>
             </ul>
         </nav>
     </div>
