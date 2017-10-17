@@ -1,19 +1,15 @@
 'use strict';
 
-var emailValidator = require("email-validator");
+const emailValidator = require('email-validator');
 
 const validate = (email, code) => {
-  const messages = {
-    email: '',
-    code: ''
-  };
+  const messages = {};
   let failed = false;
 
   if (email.length === 0) {
     messages.email = 'Please enter a valid email address';
     failed = true;
-  }
-  else if (!emailValidator.validate(email)) {
+  } else if (!emailValidator.validate(email)) {
     messages.email = 'Please enter a valid email address';
     failed = true;
   }
@@ -25,20 +21,20 @@ const validate = (email, code) => {
 
   return {
     failed,
-    messages
-  }
+    messages,
+  };
 };
 
 const action = (req, res) => {
   const validationResult = validate(req.body.email, req.body.code);
 
-  if(validationResult.failed) {
+  if (validationResult.failed) {
     res.render('ResetPassword/views/confirm', {
       csrfToken: req.csrfToken(),
       email: req.body.email,
       code: req.body.code,
       validationFailed: true,
-      validationMessages: validationResult.messages
+      validationMessages: validationResult.messages,
     });
   } else {
     res.redirect(`/${req.params.uuid}/resetpassword/newpassword`);

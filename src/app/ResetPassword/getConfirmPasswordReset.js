@@ -6,10 +6,7 @@ const action = (req, res) => {
     email: '',
     code: '',
     validationFailed: false,
-    validationMessages: {
-      email: '',
-      code: ''
-    }
+    validationMessages: {},
   });
 };
 

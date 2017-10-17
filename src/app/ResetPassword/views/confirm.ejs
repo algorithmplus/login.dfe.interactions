@@ -8,13 +8,19 @@
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
             <fieldset>
                 <legend class="vh">Reset password form</legend>
-                <div class="form-group">
+                <div class="form-group <%= locals.validationMessages.email !== undefined ? "form-group-error" : "" %>">
                     <label class="form-label-bold" for="email">Email address</label>
+                    <% if (locals.validationMessages.email !== undefined) { %>
+                    <p class="error-message" id="validation-email"><%= locals.validationMessages.email %></p>
+                    <% } %>
                     <input class="form-control" id="email" name="email" type="email" value="<%=email%>" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
                     <label class="form-label-bold" for="code">Code</label>
-                    <input class="form-control" id="code" name="code" type="text" value="<%=code%>" maxlength="8" required>
+                    <% if (locals.validationMessages.code !== undefined) { %>
+                    <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
+                    <% } %>
+                    <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" required>
                 </div>
                 <div class="form-submit">
                     <button type="submit" class="button">Continue</button>
