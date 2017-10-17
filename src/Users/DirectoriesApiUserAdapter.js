@@ -57,8 +57,24 @@ class DirectoriesApiUserAdapter {
     }
   }
 
-  async changePassword(username, password, client) {
+  async changePassword(uid, password, client) {
+    const token = await jwtStrategy(config.directories.service).getBearerToken();
 
+    try {
+      const user = await rp({
+        method: 'POST',
+        uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/changepassword`,
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+        body: {
+          password,
+        },
+        json: true,
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 }
 
