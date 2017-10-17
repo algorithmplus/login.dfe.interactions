@@ -6,10 +6,7 @@ const action = (req, res) => {
     newPassword: '',
     confirmPassword: '',
     validationFailed: false,
-    validationMessages: {
-      newPassword: '',
-      confirmPassword: ''
-    }
+    validationMessages: {},
   });
 };
 
