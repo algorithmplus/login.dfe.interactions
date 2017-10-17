@@ -35,14 +35,13 @@ const action = async (req, res) => {
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
     });
-    return;
-  // Do call to directories api
-  const client = await clients.get(req.query.clientid);
-  const user = await directoriesApi.find(email,client);
-  // Call to create password reset
-  else {
 
-  res.render('ResetPassword/views/codesent');
+    // Do call to directories api
+    const client = await clients.get(req.query.clientid);
+    const user = await directoriesApi.find(email, client);
+  } else {
+    res.render('ResetPassword/views/codesent');
+  }
 };
 
 module.exports = action;
