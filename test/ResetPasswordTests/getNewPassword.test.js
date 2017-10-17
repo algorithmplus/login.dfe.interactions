@@ -49,11 +49,4 @@ describe('When getting the new password view', () => {
     expect(res.render.getCall(0).args[1].validationFailed).to.equal(false);
   });
 
-  it('then it should not be a validation messages should be blank', () => {
-    getRequestPasswordReset(req, res);
-
-    expect(res.render.getCall(0).args[1].validationMessages.newPassword).to.equal('');
-    expect(res.render.getCall(0).args[1].validationMessages.confirmPassword).to.equal('');
-  });
-
 });

@@ -43,10 +43,4 @@ describe('When getting the request password reset view', () => {
     expect(res.render.getCall(0).args[1].validationFailed).to.equal(false);
   });
 
-  it('then it should not be a validation messages should be blank', () => {
-    getRequestPasswordReset(req, res);
-
-    expect(res.render.getCall(0).args[1].validationMessages.email).to.equal('');
-  });
-
 });
