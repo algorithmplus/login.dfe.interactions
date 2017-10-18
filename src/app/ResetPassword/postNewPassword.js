@@ -2,6 +2,7 @@
 
 const clients = require('../../Clients');
 const users = require('../../Users');
+const userCodes = require('../../UserCodes');
 
 const validate = (newPassword, confirmPassword) => {
   const messages = {};
@@ -43,6 +44,8 @@ const action = async (req, res) => {
   const client = await clients.get(req.session.clientId);
 
   users.changePassword(req.session.uid, req.body.newPassword, client);
+
+  userCodes.deleteCode(req.session.uid);
 
   res.redirect(`/${req.params.uuid}/resetpassword/complete`);
 };

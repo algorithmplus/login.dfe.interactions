@@ -1,5 +1,6 @@
 jest.mock('./../../src/Clients');
 jest.mock('./../../src/Users');
+jest.mock('./../../src/UserCodes');
 
 describe('when posting new password', () => {
 
@@ -7,6 +8,8 @@ describe('when posting new password', () => {
   let clientsGet;
 
   let userAdapterChangePassword;
+
+  let userCodesDeleteCode;
 
   const req = {
     params: {
@@ -36,6 +39,10 @@ describe('when posting new password', () => {
     userAdapterChangePassword = jest.fn();
     const userAdapter = require('./../../src/Users');
     userAdapter.changePassword = userAdapterChangePassword;
+
+    userCodesDeleteCode = jest.fn().mockReturnValue(true);
+    const userCodes = require('./../../src/UserCodes');
+    userCodes.deleteCode = userCodesDeleteCode;
 
     render = jest.fn();
     redirect = jest.fn();
@@ -70,6 +77,13 @@ describe('when posting new password', () => {
       expect(userAdapterChangePassword.mock.calls[0][0]).toBe(req.session.uid);
       expect(userAdapterChangePassword.mock.calls[0][1]).toBe(req.body.newPassword);
       expect(userAdapterChangePassword.mock.calls[0][2]).toBe(client);
+    });
+
+    it('then it should delete the users reset codes', async () => {
+      await postNewPassword(req, res);
+
+      expect(userCodesDeleteCode.mock.calls.length).toBe(1);
+      expect(userCodesDeleteCode.mock.calls[0][0]).toBe(req.session.uid);
     });
 
   });
