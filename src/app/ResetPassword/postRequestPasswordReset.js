@@ -1,6 +1,8 @@
 'use strict';
 
 const emailValidator = require('email-validator');
+const directoriesApi = require('./../../Users');
+const clients = require('./../../Clients');
 
 const validate = (email) => {
   const messages = {
@@ -22,7 +24,7 @@ const validate = (email) => {
   };
 };
 
-const action = (req, res) => {
+const action = async (req, res) => {
   const email = req.body.email;
   const validationResult = validate(email);
 
@@ -33,6 +35,10 @@ const action = (req, res) => {
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
     });
+
+    // Do call to directories api
+    const client = await clients.get(req.query.clientid);
+    const user = await directoriesApi.find(email, client);
   } else {
     res.render('ResetPassword/views/codesent');
   }

@@ -8,6 +8,7 @@
     }
   },
   "hostingEnvironment": {
+    "portalUrl": "https://login-dfe-portal.herokuapp.com",
     "env": "dev",
     "host": "localhost",
     "port": 4431,

@@ -36,7 +36,7 @@
                         <input class="form-control" id="password" name="password" type="password" <% if (locals.passwordValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
                     </div>
                     <div class="panel">
-                        <p>By continuing you accept the <a href="#">terms and conditions</a>.</p>
+                        <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
                     </div>
                     <div class="form-submit">
                         <button type="submit" class="button">Sign in</button>

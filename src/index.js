@@ -37,6 +37,16 @@ app.use('/', devLauncher(csrf));
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 
+// Setup global locals for layouts and views
+Object.assign(app.locals, {
+  portal: {
+    url: config.hostingEnvironment.portalUrl,
+  },
+  app: {
+    title: 'Login.Dfe',
+  },
+});
+
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
   app.proxy = true;
