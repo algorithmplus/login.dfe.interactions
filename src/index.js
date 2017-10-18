@@ -7,6 +7,7 @@ const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
 const logger = require('./logger');
+const session = require('express-session');
 
 const app = express();
 const config = require('./Config');
@@ -16,6 +17,18 @@ const devLauncher = require('./app/DevLauncher');
 
 const csrf = csurf({ cookie: true });
 
+
+const sess = {
+  secret: config.session.secret,
+  cookie: {},
+};
+
+if (app.get('env') !== 'dev') {
+  app.set('trust proxy', 1);
+  sess.cookie.secure = true;
+}
+
+app.use(session(sess));
 
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));

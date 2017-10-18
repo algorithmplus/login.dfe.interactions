@@ -30,6 +30,7 @@
     "email-validator": "^1.1.1",
     "express": "^4.15.5",
     "express-ejs-layouts": "^2.3.1",
+    "express-session": "^1.15.6",
     "login.dfe.jwt-strategies": "github:DFE-Digital/login.dfe.jwt-strategies#master",
     "morgan": "^1.8.2",
     "request-promise": "^4.2.2",
