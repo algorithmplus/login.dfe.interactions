@@ -1,15 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Interaction complete</title>
-</head>
-<body>
-    <h1>Interaction complete</h1>
-    <p>Received the following data from interaction</p>
-    <% Object.keys(data).forEach(function(key){ %>
-    <div><%=key%> = <%=data[key]%></div>
-    <% }); %>
+<div class="row">
+    <div class="col-8">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">DfE sign-in</span>
+            Front-end styles and examples
+        </h1>
+    </div>
+</div>
 
-    <a href="/">Return to launchpad</a>
-</body>
-</html>
+<div class="row">
+    <div class="col-8">
+        <h2 class="heading-small">Contents</h2>
+        <ol class="list list-number">
+            <li><a href="#grid">Grid</a></li>
+        </ol>
+    </div>
+</div>
+
+<h2 class="heading-medium" id="grid">Grid</h2>
+
+<div class="row">
+    <div class="col-1">
+        <span>1</span>
+    </div>
+    <div class="col-1">
+        <span>1</span>
+    </div>
+    <div class="col-1">
+        <span>1</span>
+    </div>
+    <div class="col-2">
+        <span>2</span>
+    </div>
+    <div class="col-3">
+        <span>3</span>
+    </div>
+    <div class="col-4">
+        <span>4</span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+        <span>1</span>
+    </div>
+    <div class="col-5">
+        <span>5</span>
+    </div>
+    <div class="col-6">
+        <span>6</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <span>4</span>
+    </div>
+    <div class="col-8">
+        <span>8</span>
+    </div>
+</div>
+
+<pre>
+    <strong>Test</strong>
+</pre>
+<div class="example example-images">
+    <div class="grid-row">
+        <div class="column-one-half">
+            <img src="/public/images/examples/15px-gutter-example.png" alt="15px gutter example">
+        </div>
+        <div class="column-one-half">
+            <img src="/public/images/examples/30px-gutter-example.png" alt="30px gutter example">
+        </div>
+    </div>
+</div>
