@@ -36,7 +36,7 @@ class DirectoriesApiUserAdapter {
     const token = await jwtStrategy(config.directories.service).getBearerToken();
 
     try {
-      const user = await rp({
+      const res = await rp({
         method: 'GET',
         uri: `${config.directories.service.url}/${client.params.directoryId}/user/${username}`,
         headers: {
@@ -46,7 +46,10 @@ class DirectoriesApiUserAdapter {
       });
 
       return {
-        user,
+        sub: res.sub,
+        email: res.email,
+        given_name: res.given_name,
+        family_name: res.family_name,
       };
     } catch (e) {
       const status = e.statusCode ? e.statusCode : 500;
