@@ -7,14 +7,28 @@ const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
 const logger = require('./logger');
+const session = require('express-session');
 
 const app = express();
 const config = require('./Config');
 const usernamePassword = require('./app/UsernamePassword');
+const resetPassword = require('./app/ResetPassword');
 const devLauncher = require('./app/DevLauncher');
 
 const csrf = csurf({ cookie: true });
 
+
+const sess = {
+  secret: config.session.secret,
+  cookie: {},
+};
+
+if (app.get('env') !== 'dev') {
+  app.set('trust proxy', 1);
+  sess.cookie.secure = true;
+}
+
+app.use(session(sess));
 
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,6 +48,17 @@ app.set('layout', 'layouts/layout');
 // Setup routes
 app.use('/', devLauncher(csrf));
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
+app.use('/:uuid/resetpassword', resetPassword(csrf));
+
+// Setup global locals for layouts and views
+Object.assign(app.locals, {
+  portal: {
+    url: config.hostingEnvironment.portalUrl,
+  },
+  app: {
+    title: 'Login.Dfe',
+  },
+});
 
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
