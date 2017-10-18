@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "./node_modules/.bin/mocha --reporter spec; ./nodule_modules/.bin/jest",
+    "test": "./node_modules/.bin/mocha --reporter spec; ./node_modules/.bin/jest",
     "dev": "settings='./config/login.dfe.interactions.dev.json' node src/index.js"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0",
     "jest": "^21.2.1",
+    "jest-cli": "^21.2.1",
     "mocha": "^3.5.3",
     "proxyquire": "^1.8.0",
     "sinon": "^3.3.0"
