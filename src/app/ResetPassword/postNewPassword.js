@@ -1,5 +1,8 @@
 'use strict';
 
+const clients = require('../../Clients');
+const users = require('../../Users');
+
 const validate = (newPassword, confirmPassword) => {
   const messages = {};
   let failed = false;
@@ -23,7 +26,7 @@ const validate = (newPassword, confirmPassword) => {
   };
 };
 
-const action = (req, res) => {
+const action = async (req, res) => {
   const validationResult = validate(req.body.newPassword, req.body.confirmPassword);
 
   if (validationResult.failed) {
@@ -34,9 +37,14 @@ const action = (req, res) => {
       validationFailed: true,
       validationMessages: validationResult.messages,
     });
-  } else {
-    res.redirect(`/${req.params.uuid}/resetpassword/complete`);
+    return;
   }
+
+  const client = await clients.get(req.session.clientId);
+
+  users.changePassword(req.session.uid, req.body.newPassword, client);
+
+  res.redirect(`/${req.params.uuid}/resetpassword/complete`);
 };
 
 module.exports = action;
