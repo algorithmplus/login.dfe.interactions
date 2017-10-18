@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interaction complete</title>
+</head>
+<body>
+    <h1>Interaction complete</h1>
+    <p>Received the following data from interaction</p>
+    <% Object.keys(data).forEach(function(key){ %>
+    <div><%=key%> = <%=data[key]%></div>
+    <% }); %>
+
+    <a href="/">Return to launchpad</a>
+</body>
+</html>
