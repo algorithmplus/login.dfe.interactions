@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "./node_modules/.bin/mocha --reporter spec",
+    "test": "./node_modules/.bin/mocha --reporter spec; ./node_modules/.bin/jest",
     "dev": "settings='./config/login.dfe.interactions.dev.json' node src/index.js"
   },
   "repository": {
@@ -30,6 +30,7 @@
     "email-validator": "^1.1.1",
     "express": "^4.15.5",
     "express-ejs-layouts": "^2.3.1",
+    "express-session": "^1.15.6",
     "login.dfe.jwt-strategies": "github:DFE-Digital/login.dfe.jwt-strategies#master",
     "morgan": "^1.8.2",
     "request-promise": "^4.2.2",
@@ -41,8 +42,16 @@
     "eslint": "^4.7.2",
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0",
+    "jest": "^21.2.1",
+    "jest-cli": "^21.2.1",
     "mocha": "^3.5.3",
     "proxyquire": "^1.8.0",
     "sinon": "^3.3.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": false,
+    "clearMocks": true,
+    "testRegex": ".*\\.spec.js$"
   }
 }
