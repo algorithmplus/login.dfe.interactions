@@ -1,7 +1,7 @@
 'use strict';
 
 const ClientAdapter = require('./ClientAdapter');
-const config = require('./../Config');
+const config = require('./../Config')();
 const request = require('request-promise');
 const jwtStrategy = require('login.dfe.jwt-strategies');
 const assert = require('assert');
