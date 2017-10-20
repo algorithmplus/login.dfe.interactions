@@ -9,7 +9,7 @@
     </div>
 
     <form id="main" method="post" action="<%= destination %>">
-        <% Object.keys(postbackData).forEach(function(key){ %>
+        <% Object.keys(postbackData).forEach((key) => { %>
         <input type="hidden" name="<%= key %>" value="<%= postbackData[key] %>"/>
         <% }); %>
         <button class="button" type="submit">Continue</button>
