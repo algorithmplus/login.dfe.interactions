@@ -64,7 +64,7 @@ class DirectoriesApiUserAdapter {
     const token = await jwtStrategy(config.directories.service).getBearerToken();
 
     try {
-      const user = await rp({
+      await rp({
         method: 'POST',
         uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/changepassword`,
         headers: {

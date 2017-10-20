@@ -45,11 +45,11 @@ const action = async (req, res) => {
 
   let userCode;
   let user;
-  try{
+  try {
     const client = await clients.get(req.query.clientid);
     user = await directoriesApi.find(req.body.email, client);
     userCode = await userCodes.validateCode(user.sub, req.body.code);
-  } catch(e) {
+  } catch (e) {
     logger.info(`Error confirming password reset for ${req.body.email}`);
     logger.info(e);
   }

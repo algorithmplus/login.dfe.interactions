@@ -46,7 +46,7 @@ const action = async (req, res) => {
     const client = await clients.get(req.query.clientid);
     const user = await directoriesApi.find(email, client);
     await userCodes.upsertCode(user.sub);
-  } catch (e){
+  } catch (e) {
     logger.info(`Password reset requested for ${email} and failed`);
     logger.info(e);
   }
