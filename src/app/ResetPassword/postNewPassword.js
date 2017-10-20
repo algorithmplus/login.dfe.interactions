@@ -1,8 +1,8 @@
 'use strict';
 
-const clients = require('../../infrastructure/Clients');
-const users = require('../../infrastructure/Users');
-const userCodes = require('../../infrastructure/UserCodes');
+const clients = require('./../../infrastructure/Clients');
+const users = require('./../../infrastructure/Users');
+const userCodes = require('./../../infrastructure/UserCodes');
 
 const validate = (newPassword, confirmPassword) => {
   const messages = {};

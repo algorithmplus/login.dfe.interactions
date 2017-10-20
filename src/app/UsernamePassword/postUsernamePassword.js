@@ -1,6 +1,6 @@
-const InteractionComplete = require('../InteractionComplete');
-const clients = require('../../infrastructure/Clients');
-const Users = require('../../infrastructure/Users');
+const InteractionComplete = require('./../InteractionComplete');
+const clients = require('./../../infrastructure/Clients');
+const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
 
 

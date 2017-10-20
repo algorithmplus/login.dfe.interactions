@@ -1,8 +1,8 @@
-const utils = require('../utils');
+const utils = require('./../utils');
 
-jest.mock('../../src/infrastructure/Clients');
-jest.mock('../../src/infrastructure/UserCodes');
-jest.mock('../../src/infrastructure/Users');
+jest.mock('./../../src/infrastructure/Clients');
+jest.mock('./../../src/infrastructure/UserCodes');
+jest.mock('./../../src/infrastructure/Users');
 
 describe('when handling the posting of a password reset request', () => {
 
@@ -19,18 +19,18 @@ describe('when handling the posting of a password reset request', () => {
     res = utils.mockResponse();
 
     clientsGet = jest.fn();
-    const clients = require('../../src/infrastructure/Clients');
+    const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
 
     userCodesUpsertCode = jest.fn();
-    const userCodes = require('../../src/infrastructure/UserCodes');
+    const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.upsertCode = userCodesUpsertCode;
 
     usersFind = jest.fn().mockReturnValue({ sub: '12345' });
-    const users = require('../../src/infrastructure/Users');
+    const users = require('./../../src/infrastructure/Users');
     users.find = usersFind;
 
-    postRequestPasswordReset = require('../../src/app/ResetPassword/postRequestPasswordReset');
+    postRequestPasswordReset = require('./../../src/app/ResetPassword/postRequestPasswordReset');
   });
 
   describe('and the details are valid', () => {

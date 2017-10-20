@@ -29,7 +29,7 @@ describe('When finding a user with the api', () => {
       }
     });
 
-    const config = require('../../src/infrastructure/Config');
+    const config = require('./../../src/infrastructure/Config');
     config.mockImplementation(() =>{
       return {
         directories: {

@@ -1,11 +1,11 @@
 'use strict';
 
 const ClientAdapter = require('./ClientAdapter');
-const config = require('../Config/index');
+const config = require('./../Config');
 const request = require('request-promise');
 const jwtStrategy = require('login.dfe.jwt-strategies');
 const assert = require('assert');
-const logger = require('../logger/index');
+const logger = require('./../logger');
 
 const allClients = async () => {
   const token = await jwtStrategy(config.hotConfig).getBearerToken();

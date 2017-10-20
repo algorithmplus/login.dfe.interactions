@@ -20,7 +20,7 @@ describe('When upserting a reset code through the api', () => {
       };
     });
 
-    const config = require('../../src/infrastructure/Config');
+    const config = require('./../../src/infrastructure/Config');
     config.mockImplementation(() => {
       return {
         directories: {
@@ -31,7 +31,7 @@ describe('When upserting a reset code through the api', () => {
       }
     });
 
-    const DirectoriesApiUserAdapter = require('../../src/infrastructure/UserCodes/UserCodesApiAdapter');
+    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
     adapter = new DirectoriesApiUserAdapter();
   });
 

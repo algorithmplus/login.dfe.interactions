@@ -33,15 +33,15 @@ describe('when posting new password', () => {
   beforeEach(() => {
     clientsGet = jest.fn().mockReturnValue(client);
 
-    const clients = require('../../src/infrastructure/Clients');
+    const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
 
     userAdapterChangePassword = jest.fn();
-    const userAdapter = require('../../src/infrastructure/Users');
+    const userAdapter = require('./../../src/infrastructure/Users');
     userAdapter.changePassword = userAdapterChangePassword;
 
     userCodesDeleteCode = jest.fn().mockReturnValue(true);
-    const userCodes = require('../../src/infrastructure/UserCodes');
+    const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.deleteCode = userCodesDeleteCode;
 
     render = jest.fn();
@@ -51,7 +51,7 @@ describe('when posting new password', () => {
       redirect
     };
 
-    postNewPassword = require('../../src/app/ResetPassword/postNewPassword');
+    postNewPassword = require('./../../src/app/ResetPassword/postNewPassword');
   });
 
   describe('and the details are valid', () => {

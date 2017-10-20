@@ -29,7 +29,7 @@ describe('When changing password for a user with the api', () => {
       }
     });
 
-    const config = require('../../src/infrastructure/Config');
+    const config = require('./../../src/infrastructure/Config');
     config.mockImplementation(() =>{
       return {
         directories: {

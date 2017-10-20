@@ -1,10 +1,10 @@
 'use strict';
 
 const emailValidator = require('email-validator');
-const directoriesApi = require('../../infrastructure/Users');
-const clients = require('../../infrastructure/Clients');
-const userCodes = require('../../infrastructure/UserCodes');
-const logger = require('../../infrastructure/logger');
+const directoriesApi = require('./../../infrastructure/Users');
+const clients = require('./../../infrastructure/Clients');
+const userCodes = require('./../../infrastructure/UserCodes');
+const logger = require('./../../infrastructure/logger');
 
 const validate = (email, code) => {
   const messages = {};

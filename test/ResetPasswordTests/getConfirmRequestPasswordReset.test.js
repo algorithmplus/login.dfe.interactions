@@ -1,5 +1,5 @@
-const utils = require('../utils');
-const getRequestPasswordReset = require('../../src/app/ResetPassword/getConfirmPasswordReset');
+const utils = require('./../utils');
+const getRequestPasswordReset = require('./../../src/app/ResetPassword/getConfirmPasswordReset');
 
 describe('When getting the confirm password reset view', () => {
 

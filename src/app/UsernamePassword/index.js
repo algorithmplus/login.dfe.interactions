@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const logger = require('../../infrastructure/logger');
+const logger = require('./../../infrastructure/logger');
 
 const get = require('./getUsernamePassword');
 const post = require('./postUsernamePassword');

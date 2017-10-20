@@ -1,5 +1,5 @@
 // const usernamePassword = require('./../../src/UsernamePassword/postUsernamePassword');
-const utils = require('../utils');
+const utils = require('./../utils');
 
 describe('When user submits username/password', () => {
   let req;
@@ -21,17 +21,17 @@ describe('When user submits username/password', () => {
     res = utils.mockResponse();
 
     interactionCompleteProcess = jest.fn();
-    const interactionComplete = require('../../src/app/InteractionComplete');
+    const interactionComplete = require('./../../src/app/InteractionComplete');
     interactionComplete.process = interactionCompleteProcess;
 
     usersAuthenticate = jest.fn();
-    const users = require('../../src/infrastructure/Users');
+    const users = require('./../../src/infrastructure/Users');
     users.authenticate = usersAuthenticate;
 
     clientsGet = jest.fn().mockReturnValue({
       client_id: 'test',
     });
-    const clients = require('../../src/infrastructure/Clients');
+    const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
     
     postHandler = require('./../../src/app/UsernamePassword/postUsernamePassword');

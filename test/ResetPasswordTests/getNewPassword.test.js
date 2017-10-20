@@ -1,5 +1,5 @@
-const utils = require('../utils');
-const getRequestPasswordReset = require('../../src/app/ResetPassword/getNewPassword');
+const utils = require('./../utils');
+const getRequestPasswordReset = require('./../../src/app/ResetPassword/getNewPassword');
 
 describe('When getting the new password view', () => {
 

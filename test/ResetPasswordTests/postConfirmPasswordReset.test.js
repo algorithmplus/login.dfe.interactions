@@ -1,8 +1,8 @@
-const utils = require('../utils');
+const utils = require('./../utils');
 
-jest.mock('../../src/infrastructure/Clients');
-jest.mock('../../src/infrastructure/UserCodes');
-jest.mock('../../src/infrastructure/Users');
+jest.mock('./../../src/infrastructure/Clients');
+jest.mock('./../../src/infrastructure/UserCodes');
+jest.mock('./../../src/infrastructure/Users');
 
 describe('When posting the confirm password reset view', () => {
 
@@ -19,18 +19,18 @@ describe('When posting the confirm password reset view', () => {
     res = utils.mockResponse();
 
     clientsGet = jest.fn();
-    const clients = require('../../src/infrastructure/Clients');
+    const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
 
     userCodesValidateCode = jest.fn().mockReturnValue({ code: '' });
-    const userCodes = require('../../src/infrastructure/UserCodes');
+    const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.validateCode = userCodesValidateCode;
 
     usersFind = jest.fn().mockReturnValue({ sub: '12345' });
-    const users = require('../../src/infrastructure/Users');
+    const users = require('./../../src/infrastructure/Users');
     users.find = usersFind;
 
-    postConfirmPasswordReset = require('../../src/app/ResetPassword/postConfirmPasswordReset');
+    postConfirmPasswordReset = require('./../../src/app/ResetPassword/postConfirmPasswordReset');
   });
 
   describe('and the details are valid', () => {
