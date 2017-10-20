@@ -128,7 +128,7 @@ describe('When posting the confirm password reset view', () => {
     it('then it should render the confirm view', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.mock.calls.length).toBe(1)
+      expect(res.render.mock.calls.length).toBe(1);
       expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/confirm');
     });
 

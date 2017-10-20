@@ -31,7 +31,7 @@ describe('When deleting a reset code through the api', () => {
       }
     });
 
-    const DirectoriesApiUserAdapter = require('../../src/infrastructure/UserCodes/UserCodesApiAdapter')
+    const DirectoriesApiUserAdapter = require('../../src/infrastructure/UserCodes/UserCodesApiAdapter');
     adapter = new DirectoriesApiUserAdapter();
   });
 
