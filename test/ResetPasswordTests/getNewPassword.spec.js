@@ -1,52 +1,45 @@
-const {expect} = require('chai');
-const sinon = require('sinon');
+const utils = require('../utils');
 const getRequestPasswordReset = require('../../src/app/ResetPassword/getNewPassword');
-
-const req = {
-  csrfToken: () => { return 'token' }
-};
-const res = {
-  render: (view, model) => {
-  }
-};
 
 describe('When getting the new password view', () => {
 
+  let req;
+  let res;
+
   beforeEach(() => {
-    sinon.spy(res, 'render');
-  });
-  afterEach(() => {
-    res.render.restore();
+    req = utils.mockRequest();
+    res = utils.mockResponse();
   });
 
   it('then it should render the newpassword view', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/newpassword');
+    expect(res.render.mock.calls.length).toBe(1);
+    expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/newpassword');
   });
 
   it('then it should include the csrf token on the model', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.getCall(0).args[1].csrfToken).to.equal('token');
+    expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
   });
 
   it('then it should include a blank new password', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.getCall(0).args[1].newPassword).to.equal('');
+    expect(res.render.mock.calls[0][1].newPassword).toBe('');
   });
 
   it('then it should include a blank confirm password', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.getCall(0).args[1].confirmPassword).to.equal('');
+    expect(res.render.mock.calls[0][1].confirmPassword).toBe('');
   });
 
   it('then it should not be a validation failure', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.getCall(0).args[1].validationFailed).to.equal(false);
+    expect(res.render.mock.calls[0][1].validationFailed).toBe(false);
   });
 
 });
