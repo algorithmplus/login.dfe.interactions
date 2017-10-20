@@ -28,7 +28,7 @@ class DirectoriesApiUserAdapter {
       if (status === 401) {
         return null;
       }
-      throw new Error(e);
+      throw e;
     }
   }
 
