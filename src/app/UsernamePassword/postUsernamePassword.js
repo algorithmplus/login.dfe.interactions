@@ -41,6 +41,8 @@ const post = async (req, res) => {
       passwordValidationMessage: validation.password_validationMessage,
       isFailedLogin: true,
       title: 'Sign in',
+      clientId: req.query.clientid,
+      uuid: req.params.uuid,
       message: 'Invalid email address or password. Try again.',
       csrfToken: req.csrfToken(),
     });
