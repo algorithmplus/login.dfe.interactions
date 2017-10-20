@@ -47,7 +47,6 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverage": false,
-    "clearMocks": true,
-    "testRegex": ".*\\.spec.js$"
+    "clearMocks": true
   }
 }
