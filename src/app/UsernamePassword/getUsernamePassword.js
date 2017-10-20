@@ -5,6 +5,7 @@ const get = (req, res) => {
     isFailedLogin: false,
     message: '',
     title: 'Sign in',
+    uuid: req.params.uuid,
     csrfToken: req.csrfToken(),
   });
 };
