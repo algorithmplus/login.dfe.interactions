@@ -6,11 +6,11 @@ const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
-const logger = require('./logger');
+const logger = require('./infrastructure/logger');
 const session = require('express-session');
 
 const app = express();
-const config = require('./Config');
+const config = require('./infrastructure/Config');
 const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const devLauncher = require('./app/DevLauncher');

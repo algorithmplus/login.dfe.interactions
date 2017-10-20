@@ -41,15 +41,15 @@ describe('When posting the confirm password reset view', () => {
       let expectedClientReceived = false;
 
       const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get(client) {
             if (client === 'client1') {
               expectedClientReceived = true;
             }
           },
         },
-        './../../UserCodes': { validateCode() { return { code: '' }; } },
-        './../../Users': { find() { return { sub: '12345' }; } },
+        '../../infrastructure/UserCodes': { validateCode() { return { code: '' }; } },
+        '../../infrastructure/Users': { find() { return { sub: '12345' }; } },
       });
 
       await postConfirmPasswordResetProxy(req, res);
@@ -60,11 +60,11 @@ describe('When posting the confirm password reset view', () => {
       let expectedEmailReceived = false;
 
       const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get() { },
         },
-        './../../UserCodes': { validateCode() { return { code: '' }; } },
-        './../../Users': { find(email) { if (email === 'user.one@unit.test') { expectedEmailReceived = true; } return { sub: '12345' }; } },
+        '../../infrastructure/UserCodes': { validateCode() { return { code: '' }; } },
+        '../../infrastructure/Users': { find(email) { if (email === 'user.one@unit.test') { expectedEmailReceived = true; } return { sub: '12345' }; } },
       });
 
       await postConfirmPasswordResetProxy(req, res);
@@ -76,10 +76,10 @@ describe('When posting the confirm password reset view', () => {
       let expectedCodeReceived = false;
 
       const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get() { },
         },
-        './../../UserCodes': {
+        '../../infrastructure/UserCodes': {
           validateCode(userId, code) {
             if (userId === '12345EDC') {
               expectedUidReceived = true;
@@ -90,7 +90,7 @@ describe('When posting the confirm password reset view', () => {
             return { code: '' };
           },
         },
-        './../../Users': { find() { return { sub: '12345EDC' }; } },
+        '../../infrastructure/Users': { find() { return { sub: '12345EDC' }; } },
       });
 
       await postConfirmPasswordResetProxy(req, res);
@@ -100,9 +100,9 @@ describe('When posting the confirm password reset view', () => {
     });
     it('then it should redirect to newpassword view', async () => {
       const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': { get() { } },
-        './../../UserCodes': { validateCode() { return { code: '' }; } },
-        './../../Users': { find() { return { sub: '12345' }; } },
+        '../../infrastructure/Clients': { get() { } },
+        '../../infrastructure/UserCodes': { validateCode() { return { code: '' }; } },
+        '../../infrastructure/Users': { find() { return { sub: '12345' }; } },
       });
 
       await postConfirmPasswordResetProxy(req, res);

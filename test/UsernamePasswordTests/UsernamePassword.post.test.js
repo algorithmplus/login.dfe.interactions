@@ -45,8 +45,8 @@ describe('When user submits username/password', () => {
   beforeEach(() => {
     postHandler = proxyquire('./../../src/app/UsernamePassword/postUsernamePassword', {
       '../InteractionComplete': interactionComplete,
-      '../../Users': userService,
-      '../../Clients': clients,
+      '../../infrastructure/Users': userService,
+      '../../infrastructure/Clients': clients,
     });
     req = {
       query: {

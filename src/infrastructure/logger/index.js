@@ -1,7 +1,7 @@
 'use strict';
 
 const winston = require('winston');
-const config = require('./../Config');
+const config = require('../Config');
 
 const logLevel = (config && config.loggerSettings && config.loggerSettings.logLevel) ? config.loggerSettings.logLevel : 'info';
 

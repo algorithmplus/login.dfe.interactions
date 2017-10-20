@@ -1,4 +1,4 @@
-const config = require('./../Config/index');
+const config = require('../Config');
 const StaticUserAdapter = require('./StaticUserAdapter');
 const DirectoriesApiUserAdapter = require('./DirectoriesApiUserAdapter');
 

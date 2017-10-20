@@ -2,7 +2,7 @@
 
 const express = require('express');
 const uuid = require('uuid/v4');
-const logger = require('../../logger/index');
+const logger = require('../../infrastructure/logger/index');
 
 const router = express.Router({ mergeParams: true });
 

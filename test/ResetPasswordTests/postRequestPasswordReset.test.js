@@ -32,15 +32,15 @@ describe('when handling the posting of a password reset request', () => {
       let expectedClientReceived = false;
 
       const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get(client) {
             if (client === 'client1') {
               expectedClientReceived = true;
             }
           },
         },
-        './../../UserCodes':{ upsertCode() { } },
-        './../../Users': { find() {return { sub: '12345' };} },
+        '../../infrastructure/UserCodes':{ upsertCode() { } },
+        '../../infrastructure/Users': { find() {return { sub: '12345' };} },
       });
 
       await postRequestPasswordResetProxy(req,res);
@@ -52,11 +52,11 @@ describe('when handling the posting of a password reset request', () => {
       let expectedEmailReceived = false;
 
       const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get() { },
         },
-        './../../UserCodes':{ upsertCode() {  } },
-        './../../Users': { find(email) { if (email === 'user.one@unit.tests') { expectedEmailReceived = true; }; return { sub: '12345' };} },
+        '../../infrastructure/UserCodes':{ upsertCode() {  } },
+        '../../infrastructure/Users': { find(email) { if (email === 'user.one@unit.tests') { expectedEmailReceived = true; }; return { sub: '12345' };} },
       });
 
       await postRequestPasswordResetProxy(req,res);
@@ -68,11 +68,11 @@ describe('when handling the posting of a password reset request', () => {
       let expectedUidReceived = false;
 
       const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get() { },
         },
-        './../../UserCodes':{ upsertCode(id) { if (id === '12345') {expectedUidReceived = true; } } },
-        './../../Users': { find() { return { sub: '12345' };} },
+        '../../infrastructure/UserCodes':{ upsertCode(id) { if (id === '12345') {expectedUidReceived = true; } } },
+        '../../infrastructure/Users': { find() { return { sub: '12345' };} },
       });
 
       await postRequestPasswordResetProxy(req,res);
@@ -82,11 +82,11 @@ describe('when handling the posting of a password reset request', () => {
     });
     it('then it should render the codesent view', async () => {
       const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
+        '../../infrastructure/Clients': {
           get() { },
         },
-        './../../UserCodes':{ upsertCode() {  } },
-        './../../Users': { find() { return { sub: '12345' };} },
+        '../../infrastructure/UserCodes':{ upsertCode() {  } },
+        '../../infrastructure/Users': { find() { return { sub: '12345' };} },
       });
 
       await postRequestPasswordResetProxy(req,res);

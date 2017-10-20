@@ -23,7 +23,7 @@ describe('When changing password for a user with the api', () => {
     };
     rpOpts = null;
 
-    const DirectoriesApiUserAdapter = proxyquire('./../../src/Users/DirectoriesApiUserAdapter', {
+    const DirectoriesApiUserAdapter = proxyquire('./../../src/infrastructure/Users/DirectoriesApiUserAdapter', {
       'request-promise': function (opts) {
         rpOpts = opts;
         return rpAction();
@@ -35,7 +35,7 @@ describe('When changing password for a user with the api', () => {
           },
         };
       },
-      './../Config': {
+      '../Config': {
         directories: {
           service: {
             url: 'https://directories.login.dfe.test',

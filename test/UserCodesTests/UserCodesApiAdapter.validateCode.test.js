@@ -15,7 +15,7 @@ describe('When validating a reset code through the api', () => {
     };
     rpOpts = null;
 
-    const DirectoriesApiUserAdapter = proxyquire('./../../src/UserCodes/UserCodesApiAdapter', {
+    const DirectoriesApiUserAdapter = proxyquire('./../../src/infrastructure/UserCodes/UserCodesApiAdapter', {
       'request-promise': function (opts) {
         rpOpts = opts;
         return rpAction();
@@ -27,7 +27,7 @@ describe('When validating a reset code through the api', () => {
           },
         };
       },
-      './../Config': {
+      '../Config': {
         directories: {
           service: {
             url: 'https://directories.login.dfe.test',
