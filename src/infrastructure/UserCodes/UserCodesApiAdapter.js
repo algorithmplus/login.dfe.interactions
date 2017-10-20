@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 
 class UserCodesApiAdapter {
-  async upsertCode(userId) {
+  async upsertCode(userId, clientId) {
     const token = await jwtStrategy(config.directories.service).getBearerToken();
 
     try {
@@ -15,6 +15,7 @@ class UserCodesApiAdapter {
         },
         body: {
           uid: userId,
+          clientId,
         },
         json: true,
       });
