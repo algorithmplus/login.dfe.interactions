@@ -1,97 +1,73 @@
-const { expect } = require('chai');
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const postRequestPasswordReset = require('../../src/app/ResetPassword/postRequestPasswordReset');
+const utils = require('./../utils');
 
-const req = {
-  csrfToken: () => 'token',
-};
-const res = {
-  render: (view, model) => {
-  },
-};
+jest.mock('./../../src/infrastructure/Clients');
+jest.mock('./../../src/infrastructure/UserCodes');
+jest.mock('./../../src/infrastructure/Users');
 
 describe('when handling the posting of a password reset request', () => {
+
+  let req;
+  let res;
+  let clientsGet;
+  let userCodesUpsertCode;
+  let usersFind;
+
+  let postRequestPasswordReset;
+
   beforeEach(() => {
-    sinon.spy(res, 'render');
-  });
-  afterEach(() => {
-    res.render.restore();
+    req = utils.mockRequest();
+    res = utils.mockResponse();
+
+    clientsGet = jest.fn();
+    const clients = require('./../../src/infrastructure/Clients');
+    clients.get = clientsGet;
+
+    userCodesUpsertCode = jest.fn();
+    const userCodes = require('./../../src/infrastructure/UserCodes');
+    userCodes.upsertCode = userCodesUpsertCode;
+
+    usersFind = jest.fn().mockReturnValue({ sub: '12345' });
+    const users = require('./../../src/infrastructure/Users');
+    users.find = usersFind;
+
+    postRequestPasswordReset = require('./../../src/app/ResetPassword/postRequestPasswordReset');
   });
 
   describe('and the details are valid', () => {
     beforeEach(() => {
       req.body = {
-        email: 'user.one@unit.tests',
+        email: 'user.one@unit.test',
       };
       req.query = {
         clientid: 'client1',
       };
     });
+
     it('then the client is retrieved from the hotconfig adapter', async () => {
-      let expectedClientReceived = false;
+      await postRequestPasswordReset(req, res);
 
-      const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
-          get(client) {
-            if (client === 'client1') {
-              expectedClientReceived = true;
-            }
-          },
-        },
-        './../../UserCodes':{ upsertCode() { } },
-        './../../Users': { find() {return { sub: '12345' };} },
-      });
-
-      await postRequestPasswordResetProxy(req,res);
-
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/codesent');
-      expect(expectedClientReceived).to.equal(true);
+      expect(clientsGet.mock.calls.length).toBe(1);
     });
+
     it('then the user is retrieved from the directories api', async () => {
-      let expectedEmailReceived = false;
+      await postRequestPasswordReset(req,res);
 
-      const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
-          get() { },
-        },
-        './../../UserCodes':{ upsertCode() {  } },
-        './../../Users': { find(email) { if (email === 'user.one@unit.tests') { expectedEmailReceived = true; }; return { sub: '12345' };} },
-      });
-
-      await postRequestPasswordResetProxy(req,res);
-
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/codesent');
-      expect(expectedEmailReceived).to.equal(true);
+      expect(usersFind.mock.calls.length).toBe(1);
+      expect(usersFind.mock.calls[0][0]).toBe('user.one@unit.test');
     });
+
     it('then a user code is requested for that user id', async ()=> {
-      let expectedUidReceived = false;
+      await postRequestPasswordReset(req,res);
 
-      const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
-          get() { },
-        },
-        './../../UserCodes':{ upsertCode(id) { if (id === '12345') {expectedUidReceived = true; } } },
-        './../../Users': { find() { return { sub: '12345' };} },
-      });
-
-      await postRequestPasswordResetProxy(req,res);
-
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/codesent');
-      expect(expectedUidReceived).to.equal(true);
+      expect(userCodesUpsertCode.mock.calls.length).toBe(1);
+      expect(userCodesUpsertCode.mock.calls[0][0]).toBe('12345');
     });
+
     it('then it should render the codesent view', async () => {
-      const postRequestPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postRequestPasswordReset', {
-        './../../Clients': {
-          get() { },
-        },
-        './../../UserCodes':{ upsertCode() {  } },
-        './../../Users': { find() { return { sub: '12345' };} },
-      });
+      await postRequestPasswordReset(req,res);
 
-      await postRequestPasswordResetProxy(req,res);
-
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/codesent');
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/codesent');
     });
   });
 
@@ -105,25 +81,26 @@ describe('when handling the posting of a password reset request', () => {
     it('then it should render the request view',async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/request');
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/request');
     });
 
     it('then it should include the csrf token on the model', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].csrfToken).to.equal('token');
+      expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
     });
 
     it('then it should be a validation failure', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationFailed).to.equal(true);
+      expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
     });
 
     it('then it should include a validation message',async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationMessages.email).to.equal('Please enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.email).toBe('Please enter a valid email address');
     });
   });
 
@@ -137,31 +114,33 @@ describe('when handling the posting of a password reset request', () => {
     it('then it should render the request view', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/request');
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/request');
     });
 
     it('then it should include the csrf token on the model', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].csrfToken).to.equal('token');
+      expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
     });
 
     it('then it should include the posted email', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].email).to.equal('not-a-valid-email-address');
+      expect(res.render.mock.calls[0][1].email).toBe('not-a-valid-email-address');
     });
 
     it('then it should be a validation failure', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationFailed).to.equal(true);
+      expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
     });
 
     it('then it should include a validation message', async () => {
       await postRequestPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationMessages.email).to.equal('Please enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.email).toBe('Please enter a valid email address');
     });
   });
+
 });

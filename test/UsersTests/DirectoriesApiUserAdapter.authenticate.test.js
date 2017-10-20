@@ -1,5 +1,6 @@
-const proxyquire = require('proxyquire');
-const { expect } = require('chai');
+jest.mock('request-promise');
+jest.mock('login.dfe.jwt-strategies');
+jest.mock('../../src/infrastructure/Config');
 
 describe('When authenticating a user with the api', () => {
   const username = 'user.one@unit.tests';
@@ -9,99 +10,100 @@ describe('When authenticating a user with the api', () => {
       directoryId: 'directory1',
     },
   };
+  const bearerToken = 'some-token';
+  
+  let rp;
+  let jwtGetBearerToken;
 
   let adapter;
-  let bearerToken;
-  let rpAction;
-
-  let rpOpts;
 
   beforeEach(() => {
-    bearerToken = 'some-token';
-    rpAction = function () {
-      return 'user1';
-    };
-    rpOpts = null;
+    rp = require('request-promise');
+    rp.mockReturnValue('user1');
 
-    const DirectoriesApiUserAdapter = proxyquire('./../../src/Users/DirectoriesApiUserAdapter', {
-      'request-promise': function (opts) {
-        rpOpts = opts;
-        return rpAction();
-      },
-      'login.dfe.jwt-strategies': function (config) {
-        return {
-          getBearerToken() {
-            return bearerToken;
-          },
-        };
-      },
-      './../Config': {
+    jwtGetBearerToken = jest.fn().mockReturnValue(bearerToken);
+    const jwt = require('login.dfe.jwt-strategies');
+    jwt.mockImplementation((jwtConfig) => {
+      return {
+        getBearerToken: jwtGetBearerToken
+      }
+    });
+    
+    const config = require('./../../src/infrastructure/Config');
+    config.mockImplementation(() =>{
+      return {
         directories: {
           service: {
             url: 'https://directories.login.dfe.test',
           },
         },
-      },
+      };
     });
+
+    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
     adapter = new DirectoriesApiUserAdapter();
   });
 
   it('it should post to the clients directory', async () => {
     await adapter.authenticate(username, password, client);
 
-    expect(rpOpts.method).to.equal('POST');
-    expect(rpOpts.uri).to.equal('https://directories.login.dfe.test/directory1/user/authenticate');
+    expect(rp.mock.calls[0][0].method).toBe('POST');
+    expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/directory1/user/authenticate');
   });
 
   it('it should send entered username and password', async () => {
     await adapter.authenticate(username, password, client);
 
-    expect(rpOpts.body.username).to.equal(username);
-    expect(rpOpts.body.password).to.equal(password);
+    expect(rp.mock.calls[0][0].body.username).toBe(username);
+    expect(rp.mock.calls[0][0].body.password).toBe(password);
   });
 
   it('it should user the jwt token for authorization', async () => {
     await adapter.authenticate(username, password, client);
 
-    expect(rpOpts.headers.authorization).to.equal(`bearer ${bearerToken}`);
+    expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
   });
 
   it('then it should throw an error if the api call failed', async () => {
-    rpAction = () => {
-      throw new Error(); // TODO: throw right error to simulate 500
-    };
+    rp.mockImplementation(() => {
+      const error = new Error();
+      error.statusCode = 500;
+      throw error;
+    });
 
-    adapter.authenticate(username, password, client)
-      .then(() => {
-        const err = new Error();
-        err.statusCode = 500;
-        throw err;
-      })
-      .catch(() => {}); // all good
+    try{
+      await adapter.authenticate(username, password, client);
+      throw new Error('No error thrown!');
+    }
+    catch (e) {
+      if(e.message==='No error thrown!') {
+        throw e;
+      }
+    }
   });
 
   describe('with valid credentials', () => {
     it('then it should return the user id', async () => {
       const userId = await adapter.authenticate(username, password, client);
 
-      expect(userId).to.not.be.null;
-      expect(userId.id).to.equal('user1');
+      expect(userId).not.toBeNull();
+      expect(userId.id).toBe('user1');
     });
   });
 
   describe('with invalid credentials', () => {
     beforeEach(() => {
-      rpAction = () => {
-        const err = new Error();
-        err.statusCode = 401;
-        throw err;
-      };
+      rp.mockImplementation(() => {
+        const error = new Error();
+        error.statusCode = 401;
+        throw error;
+      });
     });
 
     it('then it should return null', async () => {
       const userId = await adapter.authenticate(username, password, client);
 
-      expect(userId).to.be.null;
+      expect(userId).toBeNull();
     });
   });
 });

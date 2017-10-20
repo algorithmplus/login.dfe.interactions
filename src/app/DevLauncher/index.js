@@ -2,11 +2,11 @@
 
 const express = require('express');
 const uuid = require('uuid/v4');
-const logger = require('../../logger/index');
+const logger = require('./../../infrastructure/logger');
 
 const router = express.Router({ mergeParams: true });
 
-module.exports = (csrf) => {
+module.exports = () => {
   logger.info('Mounting dev routed');
 
   router.get('/', (req, res) => {

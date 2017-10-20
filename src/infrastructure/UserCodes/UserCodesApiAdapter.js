@@ -1,44 +1,39 @@
 const rp = require('request-promise');
 const jwtStrategy = require('login.dfe.jwt-strategies');
-const config = require('./../Config');
+const config = require('./../Config')();
 
-class DirectoriesApiUserAdapter {
-  async authenticate(username, password, client) {
+class UserCodesApiAdapter {
+  async upsertCode(userId) {
     const token = await jwtStrategy(config.directories.service).getBearerToken();
 
     try {
-      const userId = await rp({
-        method: 'POST',
-        uri: `${config.directories.service.url}/${client.params.directoryId}/user/authenticate`,
+      const user = await rp({
+        method: 'PUT',
+        uri: `${config.directories.service.url}/userCodes/upsert`,
         headers: {
           authorization: `bearer ${token}`,
         },
         body: {
-          username,
-          password,
+          uid: userId,
         },
         json: true,
       });
 
       return {
-        id: userId,
+        user,
       };
     } catch (e) {
-      const status = e.statusCode ? e.statusCode : 500;
-      if (status === 401) {
-        return null;
-      }
       throw new Error(e);
     }
   }
 
-  async find(username, client) {
+  async deleteCode(userId) {
     const token = await jwtStrategy(config.directories.service).getBearerToken();
 
     try {
-      const res = await rp({
-        method: 'GET',
-        uri: `${config.directories.service.url}/${client.params.directoryId}/user/${username}`,
+      const user = await rp({
+        method: 'DELETE',
+        uri: `${config.directories.service.url}/userCodes/${userId}`,
         headers: {
           authorization: `bearer ${token}`,
         },
@@ -46,10 +41,7 @@ class DirectoriesApiUserAdapter {
       });
 
       return {
-        sub: res.sub,
-        email: res.email,
-        given_name: res.given_name,
-        family_name: res.family_name,
+        user,
       };
     } catch (e) {
       const status = e.statusCode ? e.statusCode : 500;
@@ -60,25 +52,33 @@ class DirectoriesApiUserAdapter {
     }
   }
 
-  async changePassword(uid, password, client) {
+  async validateCode(userId, code) {
     const token = await jwtStrategy(config.directories.service).getBearerToken();
 
     try {
-      const user = await rp({
-        method: 'POST',
-        uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/changepassword`,
+      const userCode = await rp({
+        method: 'GET',
+        uri: `${config.directories.service.url}/userCodes/validate/${userId}/${code}`,
         headers: {
           authorization: `bearer ${token}`,
         },
         body: {
-          password,
+          uid: userId,
         },
         json: true,
       });
+
+      return {
+        userCode,
+      };
     } catch (e) {
+      const status = e.statusCode ? e.statusCode : 500;
+      if (status === 404) {
+        return null;
+      }
       throw new Error(e);
     }
   }
 }
 
-module.exports = DirectoriesApiUserAdapter;
+module.exports = UserCodesApiAdapter;

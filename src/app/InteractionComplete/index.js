@@ -1,4 +1,4 @@
-const Config = require('./../../Config');
+const Config = require('./../../infrastructure/Config')();
 const crypto = require('crypto');
 
 const signData = (data) => {

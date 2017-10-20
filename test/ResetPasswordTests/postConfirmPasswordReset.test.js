@@ -1,33 +1,40 @@
-const { expect } = require('chai');
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const postConfirmPasswordReset = require('../../src/app/ResetPassword/postConfirmPasswordReset');
+const utils = require('./../utils');
 
-const req = {
-  params: {
-    uuid: '123-abc',
-  },
-  session: {
-
-  },
-  csrfToken: () => 'token',
-};
-const res = {
-  render: (view, model) => {},
-  redirect: (url) => {},
-};
+jest.mock('./../../src/infrastructure/Clients');
+jest.mock('./../../src/infrastructure/UserCodes');
+jest.mock('./../../src/infrastructure/Users');
 
 describe('When posting the confirm password reset view', () => {
+
+  let req;
+  let res;
+  let clientsGet;
+  let userCodesValidateCode;
+  let usersFind;
+
+  let postConfirmPasswordReset;
+
   beforeEach(() => {
-    sinon.spy(res, 'render');
-    sinon.spy(res, 'redirect');
-  });
-  afterEach(() => {
-    res.render.restore();
-    res.redirect.restore();
+    req = utils.mockRequest();
+    res = utils.mockResponse();
+
+    clientsGet = jest.fn();
+    const clients = require('./../../src/infrastructure/Clients');
+    clients.get = clientsGet;
+
+    userCodesValidateCode = jest.fn().mockReturnValue({ code: '' });
+    const userCodes = require('./../../src/infrastructure/UserCodes');
+    userCodes.validateCode = userCodesValidateCode;
+
+    usersFind = jest.fn().mockReturnValue({ sub: '12345' });
+    const users = require('./../../src/infrastructure/Users');
+    users.find = usersFind;
+
+    postConfirmPasswordReset = require('./../../src/app/ResetPassword/postConfirmPasswordReset');
   });
 
   describe('and the details are valid', () => {
+
     beforeEach(() => {
       req.body = {
         email: 'user.one@unit.test',
@@ -36,78 +43,37 @@ describe('When posting the confirm password reset view', () => {
       req.query = {
         clientid: 'client1',
       };
+
+
     });
+
     it('then the client is retrieved from the hotconfig adapter', async () => {
-      let expectedClientReceived = false;
+      await postConfirmPasswordReset(req, res);
 
-      const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': {
-          get(client) {
-            if (client === 'client1') {
-              expectedClientReceived = true;
-            }
-          },
-        },
-        './../../UserCodes': { validateCode() { return { code: '' }; } },
-        './../../Users': { find() { return { sub: '12345' }; } },
-      });
-
-      await postConfirmPasswordResetProxy(req, res);
-
-      expect(expectedClientReceived).to.equal(true);
+      expect(clientsGet.mock.calls.length).toBe(1);
     });
+
     it('then the user is retrieved from the directories api', async () => {
-      let expectedEmailReceived = false;
+      await postConfirmPasswordReset(req, res);
 
-      const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': {
-          get() { },
-        },
-        './../../UserCodes': { validateCode() { return { code: '' }; } },
-        './../../Users': { find(email) { if (email === 'user.one@unit.test') { expectedEmailReceived = true; } return { sub: '12345' }; } },
-      });
-
-      await postConfirmPasswordResetProxy(req, res);
-
-      expect(expectedEmailReceived).to.equal(true);
+      expect(usersFind.mock.calls.length).toBe(1);
+      expect(usersFind.mock.calls[0][0]).toBe('user.one@unit.test');
     });
+
     it('then a user code is validated for that user id', async () => {
-      let expectedUidReceived = false;
-      let expectedCodeReceived = false;
+      usersFind.mockReturnValue({ sub: '12345EDC' });
 
-      const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': {
-          get() { },
-        },
-        './../../UserCodes': {
-          validateCode(userId, code) {
-            if (userId === '12345EDC') {
-              expectedUidReceived = true;
-            }
-            if (code === '123456') {
-              expectedCodeReceived = true;
-            }
-            return { code: '' };
-          },
-        },
-        './../../Users': { find() { return { sub: '12345EDC' }; } },
-      });
+      await postConfirmPasswordReset(req, res);
 
-      await postConfirmPasswordResetProxy(req, res);
-
-      expect(expectedUidReceived).to.equal(true);
-      expect(expectedCodeReceived).to.equal(true);
+      expect(userCodesValidateCode.mock.calls.length).toBe(1);
+      expect(userCodesValidateCode.mock.calls[0][0]).toBe('12345EDC');
+      expect(userCodesValidateCode.mock.calls[0][1]).toBe('123456');
     });
+
     it('then it should redirect to newpassword view', async () => {
-      const postConfirmPasswordResetProxy = proxyquire('../../src/app/ResetPassword/postConfirmPasswordReset', {
-        './../../Clients': { get() { } },
-        './../../UserCodes': { validateCode() { return { code: '' }; } },
-        './../../Users': { find() { return { sub: '12345' }; } },
-      });
+      await postConfirmPasswordReset(req, res);
 
-      await postConfirmPasswordResetProxy(req, res);
-
-      expect(res.redirect.getCall(0).args[0]).to.equal('/123-abc/resetpassword/newpassword');
+      expect(res.redirect.mock.calls[0][0]).toBe('/123-abc/resetpassword/newpassword');
     });
   });
 
@@ -122,31 +88,32 @@ describe('When posting the confirm password reset view', () => {
     it('then it should render the confirm view', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/confirm');
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/confirm');
     });
 
     it('then it should include the csrf token on the model', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].csrfToken).to.equal('token');
+      expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
     });
 
     it('then it should include the posted code', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].code).to.equal('123456');
+      expect(res.render.mock.calls[0][1].code).toBe('123456');
     });
 
     it('then it should be a validation failure', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationFailed).to.equal(true);
+      expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
     });
 
     it('then it should include a validation message for email', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationMessages.email).to.equal('Please enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.email).toBe('Please enter a valid email address');
     });
   });
 
@@ -161,31 +128,32 @@ describe('When posting the confirm password reset view', () => {
     it('then it should render the confirm view', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/confirm');
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/confirm');
     });
 
     it('then it should include the csrf token on the model', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].csrfToken).to.equal('token');
+      expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
     });
 
     it('then it should include the posted email', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].email).to.equal('user.one@unit.test');
+      expect(res.render.mock.calls[0][1].email).toBe('user.one@unit.test');
     });
 
     it('then it should be a validation failure', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationFailed).to.equal(true);
+      expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
     });
 
     it('then it should include a validation message for code', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationMessages.code).to.equal('Please enter the code that was emailed to you');
+      expect(res.render.mock.calls[0][1].validationMessages.code).toBe('Please enter the code that was emailed to you');
     });
   });
 
@@ -200,37 +168,39 @@ describe('When posting the confirm password reset view', () => {
     it('then it should render the confirm view', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[0]).to.equal('ResetPassword/views/confirm');
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/confirm');
     });
 
     it('then it should include the csrf token on the model', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].csrfToken).to.equal('token');
+      expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
     });
 
     it('then it should include the posted email', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].email).to.equal('not-a-valid-email-address');
+      expect(res.render.mock.calls[0][1].email).toBe('not-a-valid-email-address');
     });
 
     it('then it should include the posted code', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].code).to.equal('123456');
+      expect(res.render.mock.calls[0][1].code).toBe('123456');
     });
 
     it('then it should be a validation failure', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationFailed).to.equal(true);
+      expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
     });
 
     it('then it should include a validation message for email', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.getCall(0).args[1].validationMessages.email).to.equal('Please enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.email).toBe('Please enter a valid email address');
     });
   });
+
 });

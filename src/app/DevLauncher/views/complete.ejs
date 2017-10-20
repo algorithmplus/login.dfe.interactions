@@ -6,7 +6,7 @@
 <body>
     <h1>Interaction complete</h1>
     <p>Received the following data from interaction</p>
-    <% Object.keys(data).forEach(function(key){ %>
+    <% Object.keys(data).forEach((key) => { %>
     <div><%=key%> = <%=data[key]%></div>
     <% }); %>
 

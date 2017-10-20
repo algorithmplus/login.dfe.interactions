@@ -1,6 +1,6 @@
-jest.mock('./../../src/Clients');
-jest.mock('./../../src/Users');
-jest.mock('./../../src/UserCodes');
+jest.mock('./../../src/infrastructure/Clients');
+jest.mock('./../../src/infrastructure/Users');
+jest.mock('./../../src/infrastructure/UserCodes');
 
 describe('when posting new password', () => {
 
@@ -33,15 +33,15 @@ describe('when posting new password', () => {
   beforeEach(() => {
     clientsGet = jest.fn().mockReturnValue(client);
 
-    const clients = require('./../../src/Clients');
+    const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
 
     userAdapterChangePassword = jest.fn();
-    const userAdapter = require('./../../src/Users');
+    const userAdapter = require('./../../src/infrastructure/Users');
     userAdapter.changePassword = userAdapterChangePassword;
 
     userCodesDeleteCode = jest.fn().mockReturnValue(true);
-    const userCodes = require('./../../src/UserCodes');
+    const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.deleteCode = userCodesDeleteCode;
 
     render = jest.fn();
@@ -51,7 +51,7 @@ describe('when posting new password', () => {
       redirect
     };
 
-    postNewPassword = require('../../src/app/ResetPassword/postNewPassword');
+    postNewPassword = require('./../../src/app/ResetPassword/postNewPassword');
   });
 
   describe('and the details are valid', () => {

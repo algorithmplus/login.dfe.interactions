@@ -1,40 +1,37 @@
-const proxyquire = require('proxyquire');
-const { expect } = require('chai');
+jest.mock('request-promise');
+jest.mock('login.dfe.jwt-strategies');
+jest.mock('../../src/infrastructure/Config');
 
 describe('When deleting a reset code through the api', () => {
-  let adapter;
-  let bearerToken;
-  let rpAction;
+  let rp;
+  let jwtGetBearerToken;
 
-  let rpOpts;
+  let adapter;
 
   beforeEach(() => {
-    bearerToken = 'some-token';
-    rpAction = function () {
-      return 'user1';
-    };
-    rpOpts = null;
+    rp = require('request-promise');
+    rp.mockReturnValue('user1');
 
-    const DirectoriesApiUserAdapter = proxyquire('./../../src/UserCodes/UserCodesApiAdapter', {
-      'request-promise': function (opts) {
-        rpOpts = opts;
-        return rpAction();
-      },
-      'login.dfe.jwt-strategies': function (config) {
-        return {
-          getBearerToken() {
-            return bearerToken;
-          },
-        };
-      },
-      './../Config': {
+    jwtGetBearerToken = jest.fn().mockReturnValue('some-token');
+    const jwt = require('login.dfe.jwt-strategies');
+    jwt.mockImplementation((jwtConfig) => {
+      return {
+        getBearerToken: jwtGetBearerToken
+      };
+    });
+
+    const config = require('./../../src/infrastructure/Config');
+    config.mockImplementation(() => {
+      return {
         directories: {
           service: {
             url: 'https://directories.login.dfe.test',
           },
         },
-      },
+      }
     });
+
+    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
     adapter = new DirectoriesApiUserAdapter();
   });
 
@@ -43,7 +40,8 @@ describe('When deleting a reset code through the api', () => {
 
     await adapter.deleteCode(userId);
 
-    expect(rpOpts.method).to.equal('DELETE');
-    expect(rpOpts.uri).to.equal(`https://directories.login.dfe.test/userCodes/${userId}`);
+    expect(rp.mock.calls.length).toBe(1);
+    expect(rp.mock.calls[0][0].method).toBe('DELETE');
+    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/${userId}`);
   });
 });
