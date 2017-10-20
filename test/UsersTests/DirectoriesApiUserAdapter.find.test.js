@@ -35,12 +35,14 @@ describe('When finding a user with the api', () => {
           },
         };
       },
-      '../Config': {
-        directories: {
-          service: {
-            url: 'https://directories.login.dfe.test',
+      '../Config': function() {
+        return {
+          directories: {
+            service: {
+              url: 'https://directories.login.dfe.test',
+            },
           },
-        },
+        }
       },
     });
     adapter = new DirectoriesApiUserAdapter();

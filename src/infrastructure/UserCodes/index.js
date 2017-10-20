@@ -1,4 +1,4 @@
-const config = require('../Config');
+const config = require('../Config')();
 const StaticUserCodeAdapter = require('./StaticUserCodeAdapter');
 const UserCodesApiAdapter = require('./UserCodesApiAdapter');
 

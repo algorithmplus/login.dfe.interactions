@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 const jwtStrategy = require('login.dfe.jwt-strategies');
-const config = require('../Config');
+const config = require('../Config')();
 
 class DirectoriesApiUserAdapter {
   async authenticate(username, password, client) {

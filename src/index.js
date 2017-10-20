@@ -10,7 +10,7 @@ const logger = require('./infrastructure/logger');
 const session = require('express-session');
 
 const app = express();
-const config = require('./infrastructure/Config');
+const config = require('./infrastructure/Config')();
 const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const devLauncher = require('./app/DevLauncher');
