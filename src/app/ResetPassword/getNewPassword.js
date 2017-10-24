@@ -1,7 +1,5 @@
 'use strict';
 
-const getPasswordPolicy = require('./../../infrastructure/PasswordPolicy').get;
-
 const action = (req, res) => {
   res.render('ResetPassword/views/newpassword', {
     csrfToken: req.csrfToken(),
@@ -10,7 +8,6 @@ const action = (req, res) => {
     confirmPassword: '',
     validationFailed: false,
     validationMessages: {},
-    passwordPolicy: getPasswordPolicy(),
   });
 };
 
