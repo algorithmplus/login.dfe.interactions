@@ -3,8 +3,9 @@
 const clients = require('./../../infrastructure/Clients');
 const users = require('./../../infrastructure/Users');
 const userCodes = require('./../../infrastructure/UserCodes');
+const getPasswordPolicy = require('./../../infrastructure/PasswordPolicy').get;
 
-const validate = (newPassword, confirmPassword) => {
+const validate = (newPassword, confirmPassword, passwordPolicy) => {
   const messages = {};
   let failed = false;
 
@@ -21,6 +22,15 @@ const validate = (newPassword, confirmPassword) => {
     failed = true;
   }
 
+  if (!failed) {
+    passwordPolicy.rules.forEach((rule) => {
+      if (!newPassword.match(rule.pattern)) {
+        messages.newPassword = 'The password does not meet the password policy';
+        failed = true;
+      }
+    });
+  }
+
   return {
     failed,
     messages,
@@ -28,7 +38,8 @@ const validate = (newPassword, confirmPassword) => {
 };
 
 const action = async (req, res) => {
-  const validationResult = validate(req.body.newPassword, req.body.confirmPassword);
+  const passwordPolicy = getPasswordPolicy();
+  const validationResult = validate(req.body.newPassword, req.body.confirmPassword, passwordPolicy);
 
   if (validationResult.failed) {
     res.render('ResetPassword/views/newpassword', {
@@ -37,6 +48,7 @@ const action = async (req, res) => {
       confirmPassword: '',
       validationFailed: true,
       validationMessages: validationResult.messages,
+      passwordPolicy,
     });
     return;
   }
