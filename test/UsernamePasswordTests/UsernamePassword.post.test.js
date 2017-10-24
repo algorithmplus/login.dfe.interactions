@@ -1,4 +1,5 @@
-// const usernamePassword = require('./../../src/UsernamePassword/postUsernamePassword');
+jest.mock('./../../src/infrastructure/logger');
+
 const utils = require('./../utils');
 
 describe('When user submits username/password', () => {
@@ -7,6 +8,7 @@ describe('When user submits username/password', () => {
   let interactionCompleteProcess;
   let usersAuthenticate;
   let clientsGet;
+  let loggerAudit;
   
   let postHandler;
 
@@ -33,6 +35,11 @@ describe('When user submits username/password', () => {
     });
     const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
+
+    loggerAudit = jest.fn();
+    const logger = require('./../../src/infrastructure/logger');
+    logger.audit = loggerAudit;
+    logger.info = jest.fn();
     
     postHandler = require('./../../src/app/UsernamePassword/postUsernamePassword');
   });
@@ -105,6 +112,19 @@ describe('When user submits username/password', () => {
 
       expect(res.render.mock.calls[0][1].csrfToken).toBe('my-secure-token');
     });
+
+    it('then it should audit a failed login attempt', async () => {
+      await postHandler(req, res);
+
+      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls[0][0]).toBe(`Failed login attempt for ${req.body.username}`);
+      expect(loggerAudit.mock.calls[0][1]).toMatchObject({
+        type: 'sign-in',
+        subType: 'username-password',
+        success: false,
+        userEmail: req.body.username,
+      });
+    });
   });
 
   describe('with a valid username/password', () => {
@@ -133,6 +153,20 @@ describe('When user submits username/password', () => {
 
       expect(interactionCompleteProcess.mock.calls[0][1]).not.toBeNull();
       expect(interactionCompleteProcess.mock.calls[0][1].status).toBe('success');
+    });
+
+    it('then it should audit a successful login attempt', async () => {
+      await postHandler(req, res);
+
+      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls[0][0]).toBe(`Successful login attempt for ${req.body.username} (id: user1)`);
+      expect(loggerAudit.mock.calls[0][1]).toMatchObject({
+        type: 'sign-in',
+        subType: 'username-password',
+        success: true,
+        userId: 'user1',
+        userEmail: req.body.username,
+      });
     });
   });
 
