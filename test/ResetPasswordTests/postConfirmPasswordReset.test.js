@@ -3,6 +3,7 @@ const utils = require('./../utils');
 jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
+jest.mock('./../../src/infrastructure/logger');
 
 describe('When posting the confirm password reset view', () => {
 
@@ -11,6 +12,7 @@ describe('When posting the confirm password reset view', () => {
   let clientsGet;
   let userCodesValidateCode;
   let usersFind;
+  let loggerAudit;
 
   let postConfirmPasswordReset;
 
@@ -22,13 +24,18 @@ describe('When posting the confirm password reset view', () => {
     const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
 
-    userCodesValidateCode = jest.fn().mockReturnValue({ code: '' });
+    userCodesValidateCode = jest.fn().mockReturnValue({code: ''});
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.validateCode = userCodesValidateCode;
 
-    usersFind = jest.fn().mockReturnValue({ sub: '12345' });
+    usersFind = jest.fn().mockReturnValue({sub: '12345'});
     const users = require('./../../src/infrastructure/Users');
     users.find = usersFind;
+
+    loggerAudit = jest.fn();
+    const logger = require('./../../src/infrastructure/logger');
+    logger.audit = loggerAudit;
+    logger.info = jest.fn();
 
     postConfirmPasswordReset = require('./../../src/app/ResetPassword/postConfirmPasswordReset');
   });
@@ -61,7 +68,7 @@ describe('When posting the confirm password reset view', () => {
     });
 
     it('then a user code is validated for that user id', async () => {
-      usersFind.mockReturnValue({ sub: '12345EDC' });
+      usersFind.mockReturnValue({sub: '12345EDC'});
 
       await postConfirmPasswordReset(req, res);
 
@@ -200,6 +207,66 @@ describe('When posting the confirm password reset view', () => {
       await postConfirmPasswordReset(req, res);
 
       expect(res.render.mock.calls[0][1].validationMessages.email).toBe('Please enter a valid email address');
+    });
+  });
+
+  describe('and the code is incorrect', () => {
+    beforeEach(() => {
+      req.body = {
+        email: 'user.one@unit.test',
+        code: '654321',
+      };
+
+      userCodesValidateCode.mockReturnValue(null);
+    });
+
+    it('then it should render the confirm view', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/confirm');
+    });
+
+    it('then it should include the csrf token on the model', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
+    });
+
+    it('then it should include the posted email', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(res.render.mock.calls[0][1].email).toBe('user.one@unit.test');
+    });
+
+    it('then it should include the posted code', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(res.render.mock.calls[0][1].code).toBe('654321');
+    });
+
+    it('then it should be a validation failure', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    });
+
+    it('then it should include a validation message for code', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(res.render.mock.calls[0][1].validationMessages.code).toBe('The code you entered is incorrect. Please check and try again.');
+    });
+
+    it('then it should audit a failed reset attempt', async () => {
+      await postConfirmPasswordReset(req, res);
+
+      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls[0][0]).toBe('Failed attempt to reset password for user.one@unit.test (id: 12345) - Invalid code');
+      expect(loggerAudit.mock.calls[0][1]).toMatchObject({
+        type: 'reset-password',
+        success: false,
+        userId: '12345',
+      });
     });
   });
 
