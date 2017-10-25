@@ -3,6 +3,7 @@
 const clients = require('./../../infrastructure/Clients');
 const users = require('./../../infrastructure/Users');
 const userCodes = require('./../../infrastructure/UserCodes');
+const {passwordPolicy} = require('login.dfe.validation');
 
 const validate = (newPassword, confirmPassword) => {
   const messages = {};
@@ -10,6 +11,10 @@ const validate = (newPassword, confirmPassword) => {
 
   if (newPassword.length === 0) {
     messages.newPassword = 'Please enter your new password';
+    failed = true;
+  }
+  else if (!passwordPolicy.doesPasswordMeetPolicy(newPassword)) {
+    messages.newPassword = 'Your password does not meet the minimum requirements';
     failed = true;
   }
 

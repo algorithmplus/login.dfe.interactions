@@ -32,6 +32,7 @@
     "express-ejs-layouts": "^2.3.1",
     "express-session": "^1.15.6",
     "login.dfe.jwt-strategies": "github:DFE-Digital/login.dfe.jwt-strategies#master",
+    "login.dfe.validation": "github:DFE-Digital/login.dfe.validation#master",
     "morgan": "^1.8.2",
     "request-promise": "^4.2.2",
     "uuid": "^3.1.0",
