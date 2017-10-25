@@ -1,22 +1,37 @@
 
     <div class="grid-row">
         <div class="column-two-thirds">
-
-            <p class="lede">
-                Redirecting you...
-            </p>
+            <div id="js-disabled" class="js-hidden">
+                <h1 class="heading-xlarge">Action complete</h1>
+                <p class="lede">Use the button below to continue</p>
+                <form id="main" method="post" action="<%= destination %>">
+                    <% Object.keys(postbackData).forEach((key) => { %>
+                    <input type="hidden" name="<%= key %>" value="<%= postbackData[key] %>"/>
+                    <% }); %>
+                    <button class="button" type="submit">Continue</button>
+                </form>
+            </div>
+            <div id="js-enabled" class="hidden js-visible">
+                <div class="spinner">
+                    <div class="spinner-circle1 spinner-child"></div>
+                    <div class="spinner-circle2 spinner-child"></div>
+                    <div class="spinner-circle3 spinner-child"></div>
+                    <div class="spinner-circle4 spinner-child"></div>
+                    <div class="spinner-circle5 spinner-child"></div>
+                    <div class="spinner-circle6 spinner-child"></div>
+                    <div class="spinner-circle7 spinner-child"></div>
+                    <div class="spinner-circle8 spinner-child"></div>
+                    <div class="spinner-circle9 spinner-child"></div>
+                    <div class="spinner-circle10 spinner-child"></div>
+                    <div class="spinner-circle11 spinner-child"></div>
+                    <div class="spinner-circle12 spinner-child"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <form id="main" method="post" action="<%= destination %>">
-        <% Object.keys(postbackData).forEach((key) => { %>
-        <input type="hidden" name="<%= key %>" value="<%= postbackData[key] %>"/>
-        <% }); %>
-        <button class="button" type="submit">Continue</button>
-
-    </form>
+    <% if (locals.noredirect != 'true') { %>
     <script>
-        <% if (locals.noredirect != 'true') { %>
         document.getElementById('main').submit();
-        <% } %>
     </script>
+    <% } %>

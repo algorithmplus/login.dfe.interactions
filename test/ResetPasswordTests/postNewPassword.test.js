@@ -1,6 +1,7 @@
 jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/UserCodes');
+jest.mock('./../../src/infrastructure/logger');
 jest.mock('login.dfe.validation');
 
 describe('when posting new password', () => {
@@ -29,6 +30,7 @@ describe('when posting new password', () => {
   let render;
   let redirect;
   let res;
+  let loggerAudit;
 
   let postNewPassword;
 
@@ -54,8 +56,13 @@ describe('when posting new password', () => {
     redirect = jest.fn();
     res = {
       render,
-      redirect
+      redirect,
     };
+
+    loggerAudit = jest.fn();
+    const logger = require('./../../src/infrastructure/logger');
+    logger.audit = loggerAudit;
+    logger.info = jest.fn();
 
     postNewPassword = require('./../../src/app/ResetPassword/postNewPassword');
   });
@@ -90,6 +97,18 @@ describe('when posting new password', () => {
 
       expect(userCodesDeleteCode.mock.calls.length).toBe(1);
       expect(userCodesDeleteCode.mock.calls[0][0]).toBe(req.session.uid);
+    });
+
+    it('then it should audit a successful password reset', async () => {
+      await postNewPassword(req, res);
+
+      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls[0][0]).toBe('Successful reset password for user id: user1');
+      expect(loggerAudit.mock.calls[0][1]).toMatchObject({
+        type: 'reset-password',
+        success: true,
+        userId: 'user1',
+      });
     });
 
   });

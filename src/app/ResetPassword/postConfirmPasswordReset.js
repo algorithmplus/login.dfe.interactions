@@ -61,6 +61,13 @@ const action = async (req, res) => {
     return;
   }
 
+  if (user) {
+    logger.audit(`Failed attempt to reset password for ${req.body.email} (id: ${user.sub}) - Invalid code`, {
+      type: 'reset-password',
+      success: false,
+      userId: user.sub,
+    });
+  }
   validationResult.messages.code = 'The code you entered is incorrect. Please check and try again.';
   res.render('ResetPassword/views/confirm', {
     csrfToken: req.csrfToken(),
