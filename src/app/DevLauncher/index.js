@@ -18,7 +18,9 @@ module.exports = (csrf) => {
     res.render('DevLauncher/views/complete', { data: req.body });
   });
   router.get('/dev/styleguide', (req, res) => {
-    res.render('DevLauncher/views/styleguide')
+    res.render('DevLauncher/views/styleguide', {
+      title: 'Styleguide'
+    });
   });
   router.get('/dev/complete', (req, res) => {
     res.render('InteractionComplete/views/index', {
