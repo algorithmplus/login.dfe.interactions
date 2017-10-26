@@ -17,6 +17,11 @@ module.exports = () => {
   router.post('/dev/:uuid/complete', (req, res) => {
     res.render('DevLauncher/views/complete', { data: req.body });
   });
+  router.get('/dev/styleguide', (req, res) => {
+    res.render('DevLauncher/views/styleguide', {
+      title: 'Styleguide'
+    });
+  });
   router.get('/dev/complete', (req, res) => {
     res.render('InteractionComplete/views/index', {
       noredirect: 'true',
