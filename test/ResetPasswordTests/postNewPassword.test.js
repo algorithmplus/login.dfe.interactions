@@ -1,6 +1,7 @@
-jest.mock('./../../src/Clients');
-jest.mock('./../../src/Users');
-jest.mock('./../../src/UserCodes');
+jest.mock('./../../src/infrastructure/Clients');
+jest.mock('./../../src/infrastructure/Users');
+jest.mock('./../../src/infrastructure/UserCodes');
+jest.mock('./../../src/infrastructure/logger');
 
 describe('when posting new password', () => {
 
@@ -27,31 +28,37 @@ describe('when posting new password', () => {
   let render;
   let redirect;
   let res;
+  let loggerAudit;
 
   let postNewPassword;
 
   beforeEach(() => {
     clientsGet = jest.fn().mockReturnValue(client);
 
-    const clients = require('./../../src/Clients');
+    const clients = require('./../../src/infrastructure/Clients');
     clients.get = clientsGet;
 
     userAdapterChangePassword = jest.fn();
-    const userAdapter = require('./../../src/Users');
+    const userAdapter = require('./../../src/infrastructure/Users');
     userAdapter.changePassword = userAdapterChangePassword;
 
     userCodesDeleteCode = jest.fn().mockReturnValue(true);
-    const userCodes = require('./../../src/UserCodes');
+    const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.deleteCode = userCodesDeleteCode;
 
     render = jest.fn();
     redirect = jest.fn();
     res = {
       render,
-      redirect
+      redirect,
     };
 
-    postNewPassword = require('../../src/app/ResetPassword/postNewPassword');
+    loggerAudit = jest.fn();
+    const logger = require('./../../src/infrastructure/logger');
+    logger.audit = loggerAudit;
+    logger.info = jest.fn();
+
+    postNewPassword = require('./../../src/app/ResetPassword/postNewPassword');
   });
 
   describe('and the details are valid', () => {
@@ -84,6 +91,18 @@ describe('when posting new password', () => {
 
       expect(userCodesDeleteCode.mock.calls.length).toBe(1);
       expect(userCodesDeleteCode.mock.calls[0][0]).toBe(req.session.uid);
+    });
+
+    it('then it should audit a successful password reset', async () => {
+      await postNewPassword(req, res);
+
+      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls[0][0]).toBe('Successful reset password for user id: user1');
+      expect(loggerAudit.mock.calls[0][1]).toMatchObject({
+        type: 'reset-password',
+        success: true,
+        userId: 'user1',
+      });
     });
 
   });

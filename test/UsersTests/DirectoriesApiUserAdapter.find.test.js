@@ -1,5 +1,6 @@
-const proxyquire = require('proxyquire');
-const { expect } = require('chai');
+jest.mock('request-promise');
+jest.mock('login.dfe.jwt-strategies');
+jest.mock('../../src/infrastructure/Config');
 
 describe('When finding a user with the api', () => {
   const username = 'user.one@unit.tests';
@@ -9,46 +10,45 @@ describe('When finding a user with the api', () => {
       directoryId: 'directory1',
     },
   };
+  const bearerToken = 'some-token';
+
+  let rp;
+  let jwtGetBearerToken;
 
   let adapter;
-  let bearerToken;
-  let rpAction;
-
-  let rpOpts;
 
   beforeEach(() => {
-    bearerToken = 'some-token';
-    rpAction = function () {
-      return 'user1';
-    };
-    rpOpts = null;
+    rp = require('request-promise');
+    rp.mockReturnValue('user1');
 
-    const DirectoriesApiUserAdapter = proxyquire('./../../src/Users/DirectoriesApiUserAdapter', {
-      'request-promise': function (opts) {
-        rpOpts = opts;
-        return rpAction();
-      },
-      'login.dfe.jwt-strategies': function (config) {
-        return {
-          getBearerToken() {
-            return bearerToken;
-          },
-        };
-      },
-      './../Config': {
+    jwtGetBearerToken = jest.fn().mockReturnValue(bearerToken);
+    const jwt = require('login.dfe.jwt-strategies');
+    jwt.mockImplementation((jwtConfig) => {
+      return {
+        getBearerToken: jwtGetBearerToken
+      }
+    });
+
+    const config = require('./../../src/infrastructure/Config');
+    config.mockImplementation(() =>{
+      return {
         directories: {
           service: {
             url: 'https://directories.login.dfe.test',
           },
         },
-      },
+      };
     });
+
+    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
     adapter = new DirectoriesApiUserAdapter();
   });
+
   it('it calls the clients directory at the user endpoint with the user identifier', async () => {
     await adapter.find(username, client);
 
-    expect(rpOpts.method).to.equal('GET');
-    expect(rpOpts.uri).to.equal(`https://directories.login.dfe.test/directory1/user/${username}`);
+    expect(rp.mock.calls[0][0].method).toBe('GET');
+    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/directory1/user/${username}`);
   });
+
 });

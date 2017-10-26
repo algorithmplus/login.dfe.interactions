@@ -1,8 +1,9 @@
 'use strict';
 
-const clients = require('../../Clients');
-const users = require('../../Users');
-const userCodes = require('../../UserCodes');
+const clients = require('./../../infrastructure/Clients');
+const users = require('./../../infrastructure/Users');
+const userCodes = require('./../../infrastructure/UserCodes');
+const logger = require('./../../infrastructure/logger');
 
 const validate = (newPassword, confirmPassword) => {
   const messages = {};
@@ -46,6 +47,12 @@ const action = async (req, res) => {
   users.changePassword(req.session.uid, req.body.newPassword, client);
 
   userCodes.deleteCode(req.session.uid);
+
+  logger.audit(`Successful reset password for user id: ${req.session.uid}`, {
+    type: 'reset-password',
+    success: true,
+    userId: req.session.uid,
+  });
 
   res.redirect(`/${req.params.uuid}/resetpassword/complete`);
 };

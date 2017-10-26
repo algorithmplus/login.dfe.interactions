@@ -1,8 +1,8 @@
-const InteractionComplete = require('../InteractionComplete');
-const clients = require('../../Clients');
-const Users = require('../../Users');
+const InteractionComplete = require('./../InteractionComplete');
+const clients = require('./../../infrastructure/Clients');
+const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
-
+const logger = require('./../../infrastructure/logger');
 
 const validateBody = (body) => {
   const validationMessages = {};
@@ -25,7 +25,7 @@ const validateBody = (body) => {
 const post = async (req, res) => {
   const client = await clients.get(req.query.clientid);
   if (client === null) {
-    InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, res);
+    InteractionComplete.process(req.params.uuid, {status: 'failed', reason: 'invalid clientid'}, res);
     return;
   }
 
@@ -36,17 +36,34 @@ const post = async (req, res) => {
   }
 
   if (user === null) {
+    logger.audit(`Failed login attempt for ${req.body.username}`, {
+      type: 'sign-in',
+      subType: 'username-password',
+      success: false,
+      userEmail: req.body.username,
+    });
+
     res.render('UsernamePassword/views/index', {
       emailValidationMessage: validation.username_validationMessage,
       passwordValidationMessage: validation.password_validationMessage,
       isFailedLogin: true,
       title: 'Sign in',
+      clientId: req.query.clientid,
+      uuid: req.params.uuid,
       message: 'Invalid email address or password. Try again.',
       csrfToken: req.csrfToken(),
     });
     return;
   }
-  InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id }, res);
+
+  logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
+    type: 'sign-in',
+    subType: 'username-password',
+    success: true,
+    userId: user.id,
+    userEmail: req.body.username,
+  });
+  InteractionComplete.process(req.params.uuid, {status: 'success', uid: user.id}, res);
 };
 
 module.exports = post;

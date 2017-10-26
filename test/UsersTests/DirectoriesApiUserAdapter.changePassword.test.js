@@ -1,5 +1,6 @@
-const proxyquire = require('proxyquire');
-const { expect } = require('chai');
+jest.mock('request-promise');
+jest.mock('login.dfe.jwt-strategies');
+jest.mock('../../src/infrastructure/Config');
 
 describe('When changing password for a user with the api', () => {
   const uid = 'user1';
@@ -9,72 +10,69 @@ describe('When changing password for a user with the api', () => {
       directoryId: 'directory1',
     },
   };
+  const bearerToken = 'some-token';
+
+  let rp;
+  let jwtGetBearerToken;
 
   let adapter;
-  let bearerToken;
-  let rpAction;
-
-  let rpOpts;
 
   beforeEach(() => {
-    bearerToken = 'some-token';
-    rpAction = function () {
-      return 'user1';
-    };
-    rpOpts = null;
+    rp = require('request-promise');
+    rp.mockReturnValue('user1');
 
-    const DirectoriesApiUserAdapter = proxyquire('./../../src/Users/DirectoriesApiUserAdapter', {
-      'request-promise': function (opts) {
-        rpOpts = opts;
-        return rpAction();
-      },
-      'login.dfe.jwt-strategies': function (config) {
-        return {
-          getBearerToken() {
-            return bearerToken;
-          },
-        };
-      },
-      './../Config': {
+    jwtGetBearerToken = jest.fn().mockReturnValue(bearerToken);
+    const jwt = require('login.dfe.jwt-strategies');
+    jwt.mockImplementation((jwtConfig) => {
+      return {
+        getBearerToken: jwtGetBearerToken
+      }
+    });
+
+    const config = require('./../../src/infrastructure/Config');
+    config.mockImplementation(() =>{
+      return {
         directories: {
           service: {
             url: 'https://directories.login.dfe.test',
           },
         },
-      },
+      };
     });
+
+    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
     adapter = new DirectoriesApiUserAdapter();
   });
 
   it('then it should set users password in directories api', async () => {
     await adapter.changePassword(uid, password, client);
 
-    expect(rpOpts.uri).to.equal('https://directories.login.dfe.test/directory1/user/user1/changepassword');
+    expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/directory1/user/user1/changepassword');
   });
 
   it('then it should jwt as auth for api call', async () => {
     await adapter.changePassword(uid, password, client);
 
-    expect(rpOpts.headers.authorization).to.equal(`bearer ${bearerToken}`);
+    expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
   });
 
   it('then it should send new password in body', async () => {
     await adapter.changePassword(uid, password, client);
 
-    expect(rpOpts.body.password).to.equal(password);
+    expect(rp.mock.calls[0][0].body.password).toBe(password);
   });
 
   it('then it should throw error if api call fails', async () => {
-    rpAction = () => {
+    rp.mockImplementation(() => {
       throw new Error('unit test');
-    };
+    });
 
     try{
       await adapter.changePassword(uid, password, client);
-      expect.fail(null, null, 'didnt throw an error');
+      throw new Error('didnt throw an error');
     }
     catch(e){
-      expect(e.message).to.equal('Error: unit test');
+      expect(e.message).toBe('Error: unit test');
     }
   })
 

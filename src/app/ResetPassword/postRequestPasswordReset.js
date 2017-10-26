@@ -1,10 +1,10 @@
 'use strict';
 
 const emailValidator = require('email-validator');
-const directoriesApi = require('./../../Users');
-const clients = require('./../../Clients');
-const userCodes = require('./../../UserCodes');
-const logger = require('./../../logger')
+const directoriesApi = require('./../../infrastructure/Users');
+const clients = require('./../../infrastructure/Clients');
+const userCodes = require('./../../infrastructure/UserCodes');
+const logger = require('./../../infrastructure/logger');
 
 const validate = (email) => {
   const messages = {
@@ -45,8 +45,8 @@ const action = async (req, res) => {
   try {
     const client = await clients.get(req.query.clientid);
     const user = await directoriesApi.find(email, client);
-    await userCodes.upsertCode(user.sub);
-  } catch (e){
+    await userCodes.upsertCode(user.sub, req.query.clientid);
+  } catch (e) {
     logger.info(`Password reset requested for ${email} and failed`);
     logger.info(e);
   }
