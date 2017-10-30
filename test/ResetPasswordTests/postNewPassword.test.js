@@ -2,6 +2,7 @@ jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/logger');
+jest.mock('login.dfe.validation');
 
 describe('when posting new password', () => {
 
@@ -9,6 +10,7 @@ describe('when posting new password', () => {
   let clientsGet;
 
   let userAdapterChangePassword;
+  let doesPasswordMeetPolicy;
 
   let userCodesDeleteCode;
 
@@ -45,6 +47,10 @@ describe('when posting new password', () => {
     userCodesDeleteCode = jest.fn().mockReturnValue(true);
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.deleteCode = userCodesDeleteCode;
+
+    doesPasswordMeetPolicy = jest.fn().mockReturnValue(true);
+    const validation = require('login.dfe.validation');
+    validation.passwordPolicy.doesPasswordMeetPolicy = doesPasswordMeetPolicy;
 
     render = jest.fn();
     redirect = jest.fn();
@@ -160,8 +166,8 @@ describe('when posting new password', () => {
     beforeEach(() => {
       req.body = {
         newPassword: 'mary-had-a-little-lamb',
-        confirmPassword: ''
-      }
+        confirmPassword: '',
+      };
     });
 
     it('then it should render the newpassword view', async () => {
@@ -249,6 +255,49 @@ describe('when posting new password', () => {
       expect(render.mock.calls[0][1].validationMessages.confirmPassword).toBe('Passwords do not match');
     });
 
+  });
+
+  describe('and the password does not meet the policy', () => {
+    beforeEach(() => {
+      doesPasswordMeetPolicy.mockReturnValue(false);
+    });
+
+    it('then it should render the newpassword view', async () => {
+      await postNewPassword(req, res);
+
+      expect(render.mock.calls.length).toBe(1);
+      expect(render.mock.calls[0][0]).toBe('ResetPassword/views/newpassword');
+    });
+
+    it('then it should include the csrf token on the model', async () => {
+      await postNewPassword(req, res);
+
+      expect(render.mock.calls[0][1].csrfToken).toBe('token');
+    });
+
+    it('then it should include a blank new password', async () => {
+      await postNewPassword(req, res);
+
+      expect(render.mock.calls[0][1].newPassword).toBe('');
+    });
+
+    it('then it should include a blank confirm password', async () => {
+      await postNewPassword(req, res);
+
+      expect(render.mock.calls[0][1].confirmPassword).toBe('');
+    });
+
+    it('then it should be a validation failure', async () => {
+      await postNewPassword(req, res);
+
+      expect(render.mock.calls[0][1].validationFailed).toBe(true);
+    });
+
+    it('then it should include a validation message for password', async () => {
+      await postNewPassword(req, res);
+
+      expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Your password does not meet the minimum requirements');
+    });
   });
 
 });
