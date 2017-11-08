@@ -5,12 +5,16 @@
         </h1>
         <p class="lede">Enter your email address and we'll send you a link to reset your password.</p>
         <p>If you don't get a link, check that you have entered the correct email address.</p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="col-12">
         <form method="post" id="form-reset-password">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
             <fieldset>
                 <legend class="vh">Reset password</legend>
                 <div class="form-group <%=  locals.validationMessages.email !== undefined ? "form-group-error" : "" %>">
-                    <label class="form-label-bold" for="email">Email address</label>
+                    <label class="form-label" for="email">Email address</label>
                     <% if (locals.validationMessages.email !== undefined) { %>
                     <p class="error-message" id="validation-email"><%= locals.validationMessages.email %></p>
                     <% } %>
