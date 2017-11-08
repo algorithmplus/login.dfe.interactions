@@ -9,27 +9,27 @@
     </div>
     <% } %>
     <div class="grid-row">
-        <div class="col-9">
+        <div class="col-8">
             <h1 class="heading-xlarge">
                 Sign in to access DfE services
             </h1>
         </div>
     </div>
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <form method="post" id="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <fieldset>
                     <legend class="vh">Sign in form</legend>
                     <div class="form-group <%= locals.emailValidationMessage !== undefined ? 'form-group-error' : '' %>">
-                        <label class="form-label-bold" for="username">Email address</label>
+                        <label class="form-label" for="username">Email address</label>
                         <% if (locals.emailValidationMessage!== undefined) { %>
                             <p class="error-message" id="validation-email"><%=locals.emailValidationMessage %></p>
                         <% } %>
                         <input class="form-control" id="username" name="username" type="email" <% if (locals.emailValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                     </div>
                     <div class="form-group <%= locals.passwordValidationMessage !== undefined ? 'form-group-error' : '' %>">
-                        <label class="form-label-bold" for="password">Password</label>
+                        <label class="form-label" for="password">Password</label>
                         <% if(locals.passwordValidationMessage !== undefined) { %>
                             <p class="error-message" id="validation-password"><%=locals.passwordValidationMessage%></p>
                         <% } %>
@@ -43,16 +43,12 @@
                     </div>
                 </fieldset>
             </form>
-        </div>
-        <div class="col-4">
-            <aside>
-                <h2 class="heading-medium">Problems signing in?</h2>
-                <nav class="subnav">
-                    <ul>
-                        <li><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>">Forgotten your password?</a></li>
-                    </ul>
-                </nav>
-            </aside>
+
+            <hr>
+
+            <h2 class="heading-medium">Problems signing in?</h2>
+            <p><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>">Forgotten your password?</a></p>
+
         </div>
     </div>
 
