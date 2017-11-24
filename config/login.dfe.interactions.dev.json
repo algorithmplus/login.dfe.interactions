@@ -4,7 +4,7 @@
       "enabled": false,
       "host": "127.0.0.1",
       "port": 6379,
-      "auth": null
+      "auth": ""
     },
     "logLevel": "info",
     "colors": {
@@ -25,6 +25,9 @@
   },
   "session": {
     "secret": "super-secret"
+  },
+  "userCodes": {
+    "type": "static"
   },
   "oidcService": {
     "url": "https://localhost:4431/dev"
