@@ -16,6 +16,9 @@ const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const devLauncher = require('./app/DevLauncher');
 
+const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
+validateConfigAndQuitOnError(interactionsSchema, config, logger);
+
 const csrf = csurf({ cookie: true });
 
 const sess = {
