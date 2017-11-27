@@ -7,10 +7,10 @@ const userCodesType = (config && config.userCodes && config.userCodes.type) ? co
 let adapter;
 switch (userCodesType.toLowerCase()) {
   case 'static':
-    adapter = new StaticUserCodeAdapter();
+    adapter = StaticUserCodeAdapter;
     break;
   case 'usercodesapi':
-    adapter = new UserCodesApiAdapter();
+    adapter = UserCodesApiAdapter;
     break;
   default:
     throw new Error(`Unsupported user code type ${userCodesType}. Supported types are static or usercodesapi`);

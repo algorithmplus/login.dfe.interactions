@@ -6,7 +6,7 @@ describe('When upserting a reset code through the api', () => {
   let rp;
   let jwtGetBearerToken;
 
-  let adapter;
+  let userCodesApiAdapter;
 
   beforeEach(() => {
     rp = require('request-promise');
@@ -31,15 +31,14 @@ describe('When upserting a reset code through the api', () => {
       }
     });
 
-    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
-    adapter = new DirectoriesApiUserAdapter();
+    userCodesApiAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
   });
 
   it('then the user codes api endpoint is called', async () => {
     const userId = '1234EDCFR';
     rp.mockReturnValue(userId);
 
-    await adapter.upsertCode(userId);
+    await userCodesApiAdapter.upsertCode(userId);
 
     expect(rp.mock.calls.length).toBe(1);
     expect(rp.mock.calls[0][0].method).toBe('PUT');
@@ -49,7 +48,7 @@ describe('When upserting a reset code through the api', () => {
     const userId = '1234EDCFR';
     rp.mockReturnValue(userId);
 
-    await adapter.upsertCode(userId);
+    await userCodesApiAdapter.upsertCode(userId);
 
     expect(rp.mock.calls[0][0].body.uid).toBe(userId);
   });

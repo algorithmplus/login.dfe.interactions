@@ -1,21 +1,21 @@
-class StaticUserCodeAdapter {
-  upsertCode(userId) {
-    return { sub: userId, code: 'ABC123' };
-  }
 
-  deleteCode() {
-    return true;
-  }
+const upsertCode = async userId => ({ sub: userId, code: 'ABC123' });
 
-  validateCode(userId, code) {
-    if (userId && code === 'ABC123') {
-      return {
-        uid: '23121d3c-84df-44ac-b458-3d63a9a05497',
-        code: 'ABC123',
-      };
-    }
-    return null;
-  }
-}
+const deleteCode = async () => true;
 
-module.exports = StaticUserCodeAdapter;
+const validateCode = async (userId, code) => {
+  if (userId && code === 'ABC123') {
+    return {
+      uid: '23121d3c-84df-44ac-b458-3d63a9a05497',
+      code: 'ABC123',
+    };
+  }
+  return null;
+};
+
+module.exports = {
+  upsertCode,
+  deleteCode,
+  validateCode,
+};
+
