@@ -15,7 +15,7 @@ describe('When authenticating a user with the api', () => {
   let rp;
   let jwtGetBearerToken;
 
-  let adapter;
+  let directoriesApiUserAdapter;
 
   beforeEach(() => {
     rp = require('request-promise');
@@ -40,26 +40,26 @@ describe('When authenticating a user with the api', () => {
       };
     });
 
-    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
-    adapter = new DirectoriesApiUserAdapter();
+    directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
+
   });
 
   it('it should post to the clients directory', async () => {
-    await adapter.authenticate(username, password, client);
+    await directoriesApiUserAdapter.authenticate(username, password, client);
 
     expect(rp.mock.calls[0][0].method).toBe('POST');
     expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/directory1/user/authenticate');
   });
 
   it('it should send entered username and password', async () => {
-    await adapter.authenticate(username, password, client);
+    await directoriesApiUserAdapter.authenticate(username, password, client);
 
     expect(rp.mock.calls[0][0].body.username).toBe(username);
     expect(rp.mock.calls[0][0].body.password).toBe(password);
   });
 
   it('it should user the jwt token for authorization', async () => {
-    await adapter.authenticate(username, password, client);
+    await directoriesApiUserAdapter.authenticate(username, password, client);
 
     expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
   });
@@ -72,7 +72,7 @@ describe('When authenticating a user with the api', () => {
     });
 
     try{
-      await adapter.authenticate(username, password, client);
+      await directoriesApiUserAdapter.authenticate(username, password, client);
       throw new Error('No error thrown!');
     }
     catch (e) {
@@ -84,7 +84,7 @@ describe('When authenticating a user with the api', () => {
 
   describe('with valid credentials', () => {
     it('then it should return the user id', async () => {
-      const userId = await adapter.authenticate(username, password, client);
+      const userId = await directoriesApiUserAdapter.authenticate(username, password, client);
 
       expect(userId).not.toBeNull();
       expect(userId.id).toBe('user1');
@@ -101,7 +101,7 @@ describe('When authenticating a user with the api', () => {
     });
 
     it('then it should return null', async () => {
-      const userId = await adapter.authenticate(username, password, client);
+      const userId = await directoriesApiUserAdapter.authenticate(username, password, client);
 
       expect(userId).toBeNull();
     });
