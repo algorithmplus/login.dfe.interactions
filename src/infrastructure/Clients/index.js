@@ -1,3 +1,3 @@
 const HotConfigClientAdapter = require('./HotConfigClientAdapter');
 
-module.exports = new HotConfigClientAdapter();
+module.exports = HotConfigClientAdapter;
