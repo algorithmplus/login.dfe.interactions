@@ -7,10 +7,10 @@ const directoryType = (config && config.directories && config.directories.type) 
 let adapter;
 switch (directoryType.toLowerCase()) {
   case 'static':
-    adapter = new StaticUserAdapter();
+    adapter = StaticUserAdapter;
     break;
   case 'directoriesapi':
-    adapter = new DirectoriesApiUserAdapter();
+    adapter = DirectoriesApiUserAdapter;
     break;
   default:
     throw new Error(`Unsupported directory type ${directoryType}. Supported types are static or directoriesapi`);

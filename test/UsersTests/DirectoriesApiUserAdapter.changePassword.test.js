@@ -15,7 +15,7 @@ describe('When changing password for a user with the api', () => {
   let rp;
   let jwtGetBearerToken;
 
-  let adapter;
+  let directoriesApiUserAdapter;
 
   beforeEach(() => {
     rp = require('request-promise');
@@ -40,24 +40,23 @@ describe('When changing password for a user with the api', () => {
       };
     });
 
-    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
-    adapter = new DirectoriesApiUserAdapter();
+    directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
   it('then it should set users password in directories api', async () => {
-    await adapter.changePassword(uid, password, client);
+    await directoriesApiUserAdapter.changePassword(uid, password, client);
 
     expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/directory1/user/user1/changepassword');
   });
 
   it('then it should jwt as auth for api call', async () => {
-    await adapter.changePassword(uid, password, client);
+    await directoriesApiUserAdapter.changePassword(uid, password, client);
 
     expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
   });
 
   it('then it should send new password in body', async () => {
-    await adapter.changePassword(uid, password, client);
+    await directoriesApiUserAdapter.changePassword(uid, password, client);
 
     expect(rp.mock.calls[0][0].body.password).toBe(password);
   });
@@ -68,7 +67,7 @@ describe('When changing password for a user with the api', () => {
     });
 
     try{
-      await adapter.changePassword(uid, password, client);
+      await directoriesApiUserAdapter.changePassword(uid, password, client);
       throw new Error('didnt throw an error');
     }
     catch(e){

@@ -19,7 +19,7 @@ module.exports = () => {
   });
   router.get('/dev/styleguide', (req, res) => {
     res.render('DevLauncher/views/styleguide', {
-      title: 'Styleguide'
+      title: 'Styleguide',
     });
   });
   router.get('/dev/complete', (req, res) => {

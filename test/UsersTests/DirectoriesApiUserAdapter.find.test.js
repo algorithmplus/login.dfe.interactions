@@ -15,7 +15,7 @@ describe('When finding a user with the api', () => {
   let rp;
   let jwtGetBearerToken;
 
-  let adapter;
+  let directoriesApiUserAdapter;
 
   beforeEach(() => {
     rp = require('request-promise');
@@ -40,12 +40,11 @@ describe('When finding a user with the api', () => {
       };
     });
 
-    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
-    adapter = new DirectoriesApiUserAdapter();
+    directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
   it('it calls the clients directory at the user endpoint with the user identifier', async () => {
-    await adapter.find(username, client);
+    await directoriesApiUserAdapter.find(username, client);
 
     expect(rp.mock.calls[0][0].method).toBe('GET');
     expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/directory1/user/${username}`);

@@ -6,7 +6,7 @@ describe('When deleting a reset code through the api', () => {
   let rp;
   let jwtGetBearerToken;
 
-  let adapter;
+  let userCodesApiAdapter;
 
   beforeEach(() => {
     rp = require('request-promise');
@@ -31,14 +31,13 @@ describe('When deleting a reset code through the api', () => {
       }
     });
 
-    const DirectoriesApiUserAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
-    adapter = new DirectoriesApiUserAdapter();
+    userCodesApiAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
   });
 
   it('then the user codes api endpoint is called', async () => {
     const userId = 'user1@test.com';
 
-    await adapter.deleteCode(userId);
+    await userCodesApiAdapter.deleteCode(userId);
 
     expect(rp.mock.calls.length).toBe(1);
     expect(rp.mock.calls[0][0].method).toBe('DELETE');

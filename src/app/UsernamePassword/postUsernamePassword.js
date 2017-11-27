@@ -25,7 +25,7 @@ const validateBody = (body) => {
 const post = async (req, res) => {
   const client = await clients.get(req.query.clientid);
   if (client === null) {
-    InteractionComplete.process(req.params.uuid, {status: 'failed', reason: 'invalid clientid'}, res);
+    InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, res);
     return;
   }
 
@@ -63,7 +63,7 @@ const post = async (req, res) => {
     userId: user.id,
     userEmail: req.body.username,
   });
-  InteractionComplete.process(req.params.uuid, {status: 'success', uid: user.id}, res);
+  InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id }, res);
 };
 
 module.exports = post;

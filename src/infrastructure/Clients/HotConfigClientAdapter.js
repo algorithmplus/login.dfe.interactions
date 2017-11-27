@@ -1,6 +1,5 @@
 'use strict';
 
-const ClientAdapter = require('./ClientAdapter');
 const config = require('./../Config')();
 const request = require('request-promise');
 const jwtStrategy = require('login.dfe.jwt-strategies');
@@ -24,14 +23,15 @@ const allClients = async () => {
   return JSON.parse(json);
 };
 
-class HotConfigClientAdapter extends ClientAdapter {
-  async get(id) {
-    assert(id, 'Client ID not specified');
-    logger.info(`HotConfigClientAdapter:get() - fetching client config with id ${id}`);
-    const clients = await allClients();
-    return clients.find(c => c.client_id.toLowerCase() === id.toLowerCase());
-  }
-}
 
-module.exports = HotConfigClientAdapter;
+const get = async (id) => {
+  assert(id, 'Client ID not specified');
+  logger.info(`HotConfigClientAdapter:get() - fetching client config with id ${id}`);
+  const clients = await allClients();
+  return clients.find(c => c.client_id.toLowerCase() === id.toLowerCase());
+};
 
+
+module.exports = {
+  get,
+};
