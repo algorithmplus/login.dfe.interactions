@@ -17,6 +17,7 @@ const resetPassword = require('./app/ResetPassword');
 const devLauncher = require('./app/DevLauncher');
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
+
 validateConfigAndQuitOnError(interactionsSchema, config, logger);
 
 const csrf = csurf({ cookie: true });
@@ -41,7 +42,7 @@ app.use(morgan('dev'));
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.use('/assets', express.static(path.join(__dirname, 'app/assets')))
+app.use('/assets', express.static(path.join(__dirname, 'app/assets')));
 app.set('views', path.resolve(__dirname, 'app'));
 app.set('logger', logger);
 
