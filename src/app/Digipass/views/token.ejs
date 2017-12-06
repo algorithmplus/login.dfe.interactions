@@ -1,0 +1,33 @@
+<div class="grid-row">
+    <div class="col-8">
+        <h1 class="heading-xlarge">
+            Additional security code needed
+        </h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="col-12">
+        <form method="post" id="form-reset-your-password">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <fieldset>
+                <legend class="vh">Additional security code needed</legend>
+                <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
+                    <label class="form-label" for="code">Enter keyfob code</label>
+                    <p class="form-hint">Enter the 8 digit code from your keyfob</p>
+                    <% if (locals.validationMessages.code !== undefined) { %>
+                    <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
+                    <% } %>
+                    <div>
+                        <input class="form-control" id="code" name="code" type="text"
+                               pattern="[0-9]{8}" required aria-required="true"
+                                <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
+                    </div>
+                </div>
+                <div class="form-submit">
+                    <button type="submit" class="button">Continue</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
