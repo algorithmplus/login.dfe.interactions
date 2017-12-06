@@ -1,9 +1,9 @@
 const action = (req, res) => {
-  res.render('Digipass/views/token', {
+  return res.render('Digipass/views/token', {
     csrfToken: req.csrfToken(),
     code: '',
     validationMessages: {
-      code: '',
+      code: undefined,
     },
   });
 };

@@ -80,9 +80,30 @@ const changePassword = async (uid, password, client) => {
   }
 };
 
+const getDevices = async (uid, client) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  try {
+    return await rp({
+      method: 'GET',
+      uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/devices`,
+      headers: {
+        authorization: `bearer ${token}`,
+      },
+      json: true,
+    });
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw new Error(e);
+  }
+};
 
 module.exports = {
   authenticate,
   find,
   changePassword,
+  getDevices,
 };
