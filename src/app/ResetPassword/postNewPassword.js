@@ -3,7 +3,7 @@
 const clients = require('./../../infrastructure/Clients');
 const users = require('./../../infrastructure/Users');
 const userCodes = require('./../../infrastructure/UserCodes');
-const { passwordPolicy } = require('login.dfe.validation');
+const {passwordPolicy} = require('login.dfe.validation');
 const logger = require('./../../infrastructure/logger');
 
 const validate = (newPassword, confirmPassword) => {
@@ -50,7 +50,9 @@ const action = async (req, res) => {
 
   users.changePassword(req.session.uid, req.body.newPassword, client);
 
-  userCodes.deleteCode(req.session.uid);
+  const userCode = await userCodes.getCode(req.session.uid);
+
+  await userCodes.deleteCode(req.session.uid);
 
   logger.audit(`Successful reset password for user id: ${req.session.uid}`, {
     type: 'reset-password',
@@ -58,7 +60,9 @@ const action = async (req, res) => {
     userId: req.session.uid,
   });
 
-  res.redirect(`/${req.params.uuid}/resetpassword/complete`);
+  res.redirect(`/${req.params.uuid}/resetpassword/complete`, {
+    redirectUri: userCode.redirectUri,
+  });
 };
 
 module.exports = action;
