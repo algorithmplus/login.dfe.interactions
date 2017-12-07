@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 
 
-const upsertCode = async (userId, clientId) => {
+const upsertCode = async (userId, clientId, redirectUri) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -16,6 +16,7 @@ const upsertCode = async (userId, clientId) => {
       body: {
         uid: userId,
         clientId,
+        redirectUri,
       },
       json: true,
     });
