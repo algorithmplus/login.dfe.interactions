@@ -51,7 +51,10 @@ const action = async (req, res) => {
     logger.info(e);
   }
 
-  res.render('ResetPassword/views/codesent');
+  res.render('ResetPassword/views/codesent', {
+    uuid: req.params.uuid,
+    clientid: req.query.clientid,
+  });
 };
 
 module.exports = action;
