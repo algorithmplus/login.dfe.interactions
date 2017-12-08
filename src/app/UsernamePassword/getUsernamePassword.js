@@ -8,6 +8,7 @@ const get = (req, res) => {
     clientId: req.query.clientid,
     uuid: req.params.uuid,
     csrfToken: req.csrfToken(),
+    redirectUri: req.query.redirect_uri,
   });
 };
 
