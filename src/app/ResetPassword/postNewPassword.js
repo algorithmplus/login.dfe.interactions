@@ -60,9 +60,8 @@ const action = async (req, res) => {
     userId: req.session.uid,
   });
 
-  res.redirect(`/${req.params.uuid}/resetpassword/complete`, {
-    redirectUri: userCode.redirectUri,
-  });
+  req.session.redirectUri = userCode.redirectUri;
+  res.redirect(`/${req.params.uuid}/resetpassword/complete`);
 };
 
 module.exports = action;
