@@ -1,6 +1,5 @@
 const { getDevices } = require('./../../infrastructure/Users');
 const { validateDigipassToken } = require('./../../infrastructure/devices');
-const clients = require('./../../infrastructure/Clients');
 const logger = require('./../../infrastructure/logger');
 
 const validateInput = (code) => {
@@ -36,7 +35,7 @@ const validateToken = async (uid, code) => {
     return false;
   }
 
-  return validateDigipassToken(digipass.serialNumber, code);
+  return await validateDigipassToken(digipass.serialNumber, code);
 };
 
 const action = async (req, res) => {
