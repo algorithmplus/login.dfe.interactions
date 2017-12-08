@@ -80,13 +80,13 @@ const changePassword = async (uid, password, client) => {
   }
 };
 
-const getDevices = async (uid, client) => {
+const getDevices = async (uid) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
     return await rp({
       method: 'GET',
-      uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/devices`,
+      uri: `${config.directories.service.url}/users/${uid}/devices`,
       headers: {
         authorization: `bearer ${token}`,
       },
@@ -97,7 +97,7 @@ const getDevices = async (uid, client) => {
     if (status === 404) {
       return null;
     }
-    throw new Error(e);
+    throw e;
   }
 };
 

@@ -23,10 +23,8 @@ const validateInput = (code) => {
   };
 };
 
-const validateToken = async (uid, code, clientId) => {
-  const client = await clients.get(clientId);
-
-  const devices = await getDevices(uid, client);
+const validateToken = async (uid, code) => {
+  const devices = await getDevices(uid);
   if (!devices || devices.length === 0) {
     logger.info(`No devices for ${uid}`);
     return false;
@@ -51,7 +49,7 @@ const action = async (req, res) => {
     });
   }
 
-  const codeValid = await validateToken(req.query.uid, req.body.code, req.query.clientid);
+  const codeValid = await validateToken(req.query.uid, req.body.code);
   if (!codeValid) {
     return res.render('Digipass/views/token', {
       csrfToken: req.csrfToken(),
