@@ -1,6 +1,7 @@
 const { getDevices } = require('./../../infrastructure/Users');
 const { validateDigipassToken } = require('./../../infrastructure/devices');
 const logger = require('./../../infrastructure/logger');
+const InteractionComplete = require('./../InteractionComplete');
 
 const validateInput = (code) => {
   const messages = {
@@ -59,7 +60,7 @@ const action = async (req, res) => {
     });
   }
 
-  return res.send('TODO');
+  return InteractionComplete.process(req.params.uuid, { status: 'success' }, res);
 };
 
 module.exports = action;
