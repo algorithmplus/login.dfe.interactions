@@ -45,13 +45,16 @@ const action = async (req, res) => {
   try {
     const client = await clients.get(req.query.clientid);
     const user = await directoriesApi.find(email, client);
-    await userCodes.upsertCode(user.sub, req.query.clientid);
+    await userCodes.upsertCode(user.sub, req.query.clientid, req.query.redirect_uri);
   } catch (e) {
     logger.info(`Password reset requested for ${email} and failed`);
     logger.info(e);
   }
 
-  res.render('ResetPassword/views/codesent');
+  res.render('ResetPassword/views/codesent', {
+    uuid: req.params.uuid,
+    clientid: req.query.clientid,
+  });
 };
 
 module.exports = action;

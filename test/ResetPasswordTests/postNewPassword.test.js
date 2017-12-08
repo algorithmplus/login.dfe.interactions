@@ -5,26 +5,25 @@ jest.mock('./../../src/infrastructure/logger');
 jest.mock('login.dfe.validation');
 
 describe('when posting new password', () => {
-
   const client = {};
+  const expectedRedirectUri = 'http://localhost.test';
   let clientsGet;
 
   let userAdapterChangePassword;
   let doesPasswordMeetPolicy;
 
   let userCodesDeleteCode;
+  let userCodesGetCode;
 
   const req = {
     params: {
-      uuid: '123-abc'
+      uuid: '123-abc',
     },
     session: {
       clientId: 'UnitTests',
       uid: 'user1',
     },
-    csrfToken: () => {
-      return 'token'
-    }
+    csrfToken: () => 'token',
   };
 
   let render;
@@ -45,8 +44,10 @@ describe('when posting new password', () => {
     userAdapter.changePassword = userAdapterChangePassword;
 
     userCodesDeleteCode = jest.fn().mockReturnValue(true);
+    userCodesGetCode = jest.fn().mockReturnValue({userCode:{ uid: '123', code: 'abc123', redirectUri: expectedRedirectUri }});
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.deleteCode = userCodesDeleteCode;
+    userCodes.getCode = userCodesGetCode;
 
     doesPasswordMeetPolicy = jest.fn().mockReturnValue(true);
     const validation = require('login.dfe.validation');
@@ -68,41 +69,44 @@ describe('when posting new password', () => {
   });
 
   describe('and the details are valid', () => {
-
     beforeEach(() => {
       req.body = {
         newPassword: 'mary-had-a-little-lamb',
-        confirmPassword: 'mary-had-a-little-lamb'
-      }
+        confirmPassword: 'mary-had-a-little-lamb',
+      };
     });
 
     it('then it should redirect to complete', async () => {
       await postNewPassword(req, res);
 
-      expect(redirect.mock.calls.length).toBe(1);
+      expect(redirect.mock.calls).toHaveLength(1);
       expect(redirect.mock.calls[0][0]).toBe('/123-abc/resetpassword/complete');
     });
 
     it('then it should change the users password', async () => {
       await postNewPassword(req, res);
 
-      expect(userAdapterChangePassword.mock.calls.length).toBe(1);
+      expect(userAdapterChangePassword.mock.calls).toHaveLength(1);
       expect(userAdapterChangePassword.mock.calls[0][0]).toBe(req.session.uid);
       expect(userAdapterChangePassword.mock.calls[0][1]).toBe(req.body.newPassword);
       expect(userAdapterChangePassword.mock.calls[0][2]).toBe(client);
     });
+    it('then the usercode is retrieved to get the redirectUri', async () => {
+      await postNewPassword(req, res);
 
+      expect(userCodesGetCode.mock.calls).toHaveLength(1);
+    });
     it('then it should delete the users reset codes', async () => {
       await postNewPassword(req, res);
 
-      expect(userCodesDeleteCode.mock.calls.length).toBe(1);
+      expect(userCodesDeleteCode.mock.calls).toHaveLength(1);
       expect(userCodesDeleteCode.mock.calls[0][0]).toBe(req.session.uid);
     });
 
     it('then it should audit a successful password reset', async () => {
       await postNewPassword(req, res);
 
-      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls).toHaveLength(1);
       expect(loggerAudit.mock.calls[0][0]).toBe('Successful reset password for user id: user1');
       expect(loggerAudit.mock.calls[0][1]).toMatchObject({
         type: 'reset-password',
@@ -110,22 +114,20 @@ describe('when posting new password', () => {
         userId: 'user1',
       });
     });
-
   });
 
   describe('and new password is missing', () => {
-
     beforeEach(() => {
       req.body = {
         newPassword: '',
-        confirmPassword: 'mary-had-a-little-lamb'
-      }
+        confirmPassword: 'mary-had-a-little-lamb',
+      };
     });
 
     it('then it should render the newpassword view', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls.length).toBe(1);
+      expect(render.mock.calls).toHaveLength(1);
       expect(render.mock.calls[0][0]).toBe('ResetPassword/views/newpassword');
     });
 
@@ -158,11 +160,9 @@ describe('when posting new password', () => {
 
       expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Please enter your new password');
     });
-
   });
 
   describe('and confirm password is missing', () => {
-
     beforeEach(() => {
       req.body = {
         newPassword: 'mary-had-a-little-lamb',
@@ -173,7 +173,7 @@ describe('when posting new password', () => {
     it('then it should render the newpassword view', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls.length).toBe(1);
+      expect(render.mock.calls).toHaveLength(1);
       expect(render.mock.calls[0][0]).toBe('ResetPassword/views/newpassword');
     });
 
@@ -206,22 +206,20 @@ describe('when posting new password', () => {
 
       expect(render.mock.calls[0][1].validationMessages.confirmPassword).toBe('Please confirm your new password');
     });
-
   });
 
   describe('and confirm password does not match new password', () => {
-
     beforeEach(() => {
       req.body = {
         newPassword: 'mary-had-a-little-lamb',
-        confirmPassword: 'mary-had-a-large-lamb'
-      }
+        confirmPassword: 'mary-had-a-large-lamb',
+      };
     });
 
     it('then it should render the newpassword view', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls.length).toBe(1);
+      expect(render.mock.calls).toHaveLength(1);
       expect(render.mock.calls[0][0]).toBe('ResetPassword/views/newpassword');
     });
 
@@ -254,7 +252,6 @@ describe('when posting new password', () => {
 
       expect(render.mock.calls[0][1].validationMessages.confirmPassword).toBe('Passwords do not match');
     });
-
   });
 
   describe('and the password does not meet the policy', () => {
@@ -265,7 +262,7 @@ describe('when posting new password', () => {
     it('then it should render the newpassword view', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls.length).toBe(1);
+      expect(render.mock.calls).toHaveLength(1);
       expect(render.mock.calls[0][0]).toBe('ResetPassword/views/newpassword');
     });
 
@@ -299,5 +296,4 @@ describe('when posting new password', () => {
       expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Your password does not meet the minimum requirements');
     });
   });
-
 });

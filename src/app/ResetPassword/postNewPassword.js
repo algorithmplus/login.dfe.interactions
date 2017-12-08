@@ -50,7 +50,9 @@ const action = async (req, res) => {
 
   users.changePassword(req.session.uid, req.body.newPassword, client);
 
-  userCodes.deleteCode(req.session.uid);
+  const userCode = await userCodes.getCode(req.session.uid);
+
+  await userCodes.deleteCode(req.session.uid);
 
   logger.audit(`Successful reset password for user id: ${req.session.uid}`, {
     type: 'reset-password',
@@ -58,6 +60,7 @@ const action = async (req, res) => {
     userId: req.session.uid,
   });
 
+  req.session.redirectUri = userCode.userCode.redirectUri;
   res.redirect(`/${req.params.uuid}/resetpassword/complete`);
 };
 

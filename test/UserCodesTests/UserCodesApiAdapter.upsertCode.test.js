@@ -46,10 +46,14 @@ describe('When upserting a reset code through the api', () => {
   });
   it('then the user id is passed in the body', async () => {
     const userId = '1234EDCFR';
+    const clientId = '123Client';
+    const redirectUri = 'http://localhost.test';
     rp.mockReturnValue(userId);
 
-    await userCodesApiAdapter.upsertCode(userId);
+    await userCodesApiAdapter.upsertCode(userId, clientId, redirectUri);
 
     expect(rp.mock.calls[0][0].body.uid).toBe(userId);
+    expect(rp.mock.calls[0][0].body.clientId).toBe(clientId);
+    expect(rp.mock.calls[0][0].body.redirectUri).toBe(redirectUri);
   });
 });

@@ -40,6 +40,7 @@ describe('when handling the posting of a password reset request', () => {
       };
       req.query = {
         clientid: 'client1',
+        redirect_uri: 'https://local.test',
       };
     });
 
@@ -61,6 +62,8 @@ describe('when handling the posting of a password reset request', () => {
 
       expect(userCodesUpsertCode.mock.calls.length).toBe(1);
       expect(userCodesUpsertCode.mock.calls[0][0]).toBe('12345');
+      expect(userCodesUpsertCode.mock.calls[0][1]).toBe('client1');
+      expect(userCodesUpsertCode.mock.calls[0][2]).toBe('https://local.test');
     });
 
     it('then it should render the codesent view', async () => {

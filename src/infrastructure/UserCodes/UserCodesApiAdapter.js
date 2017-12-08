@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 
 
-const upsertCode = async (userId, clientId) => {
+const upsertCode = async (userId, clientId, redirectUri) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -16,6 +16,7 @@ const upsertCode = async (userId, clientId) => {
       body: {
         uid: userId,
         clientId,
+        redirectUri,
       },
       json: true,
     });
@@ -81,9 +82,36 @@ const validateCode = async (userId, code) => {
   }
 };
 
+const getCode = async (userId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+  try {
+    const userCode = await rp({
+      method: 'GET',
+      uri: `${config.directories.service.url}/userCodes/${userId}`,
+      headers: {
+        authorization: `bearer ${token}`,
+      },
+      body: {
+        uid: userId,
+      },
+      json: true,
+    });
+
+    return {
+      userCode,
+    };
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw new Error(e);
+  }
+};
 
 module.exports = {
   upsertCode,
   deleteCode,
   validateCode,
+  getCode,
 };
