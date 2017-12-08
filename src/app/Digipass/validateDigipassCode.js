@@ -27,16 +27,46 @@ const validateToken = async (uid, code) => {
   const devices = await getDevices(uid);
   if (!devices || devices.length === 0) {
     logger.info(`No devices for ${uid}`);
+    logger.audit(`Failed digipass challenge/response for ${uid} - no devices`, {
+      type: 'sign-in',
+      subType: 'digipass',
+      success: false,
+      userId: uid,
+    });
     return false;
   }
 
   const digipass = devices.find(d => d.type === 'digipass');
   if (!digipass) {
     logger.info(`No digipass devices for ${uid}`);
+    logger.audit(`Failed digipass challenge/response for ${uid} - no digipass`, {
+      type: 'sign-in',
+      subType: 'digipass',
+      success: false,
+      userId: uid,
+    });
     return false;
   }
 
-  return await validateDigipassToken(digipass.serialNumber, code);
+  const valid = await validateDigipassToken(digipass.serialNumber, code);
+  if (valid) {
+    logger.audit(`Successful digipass challenge/response for ${uid} using device ${digipass.serialNumber}`, {
+      type: 'sign-in',
+      subType: 'digipass',
+      success: true,
+      userId: uid,
+      deviceSerialNumber: digipass.serialNumber,
+    });
+  } else {
+    logger.audit(`Failed digipass challenge/response for ${uid} using device ${digipass.serialNumber}`, {
+      type: 'sign-in',
+      subType: 'digipass',
+      success: false,
+      userId: uid,
+      deviceSerialNumber: digipass.serialNumber,
+    });
+  }
+  return valid;
 };
 
 const action = async (req, res) => {

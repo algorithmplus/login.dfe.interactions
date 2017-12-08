@@ -44,6 +44,7 @@ describe('when validating the user entered digipass code', () => {
     processComplete.mockReset();
 
     logger = require('./../../src/infrastructure/logger');
+    logger.audit.mockReset();
   });
 
   it('then it should get list of devices for user', async () => {
@@ -170,5 +171,67 @@ describe('when validating the user entered digipass code', () => {
       },
     });
     expect(validateDigipassToken.mock.calls).toHaveLength(1);
+  });
+
+  it('then it should audit successful authentication', async () => {
+    await validateDigipassCode(req, res);
+
+    expect(logger.audit.mock.calls).toHaveLength(1);
+    expect(logger.audit.mock.calls[0][0]).toBe('Successful digipass challenge/response for user-1 using device 567890');
+    expect(logger.audit.mock.calls[0][1]).toMatchObject({
+      type: 'sign-in',
+      subType: 'digipass',
+      success: true,
+      userId: 'user-1',
+      deviceSerialNumber: '567890',
+    });
+  });
+
+  it('then it should audit failure if code not valid', async () => {
+    validateDigipassToken.mockReturnValue(false);
+
+    await validateDigipassCode(req, res);
+
+    expect(logger.audit.mock.calls).toHaveLength(1);
+    expect(logger.audit.mock.calls[0][0]).toBe('Failed digipass challenge/response for user-1 using device 567890');
+    expect(logger.audit.mock.calls[0][1]).toMatchObject({
+      type: 'sign-in',
+      subType: 'digipass',
+      success: false,
+      userId: 'user-1',
+      deviceSerialNumber: '567890',
+    });
+  });
+
+  it('then it should audit failure if user has no digipass device registered', async () => {
+    getDevices.mockReturnValue([
+      { id: '1', type: 'authenticator', serialNumber: '0987654' },
+    ]);
+
+    await validateDigipassCode(req, res);
+
+    expect(logger.audit.mock.calls).toHaveLength(1);
+    expect(logger.audit.mock.calls[0][0]).toBe('Failed digipass challenge/response for user-1 - no digipass');
+    expect(logger.audit.mock.calls[0][1]).toMatchObject({
+      type: 'sign-in',
+      subType: 'digipass',
+      success: false,
+      userId: 'user-1',
+    });
+  });
+
+  it('then it should audit failure if user has no devices registered', async () => {
+    getDevices.mockReturnValue([]);
+
+    await validateDigipassCode(req, res);
+
+    expect(logger.audit.mock.calls).toHaveLength(1);
+    expect(logger.audit.mock.calls[0][0]).toBe('Failed digipass challenge/response for user-1 - no devices');
+    expect(logger.audit.mock.calls[0][1]).toMatchObject({
+      type: 'sign-in',
+      subType: 'digipass',
+      success: false,
+      userId: 'user-1',
+    });
   });
 });
