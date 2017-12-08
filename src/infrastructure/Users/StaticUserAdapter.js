@@ -20,6 +20,7 @@ const getDevices = async (uid) => {
   if (uid === '23121d3c-84df-44ac-b458-3d63a9a05497') {
     return [
       {
+        id: 'b9e41652-1d1c-47bb-ba34-204243203db2',
         type: 'digipass',
         serialNumber: '123456',
       },
@@ -27,6 +28,7 @@ const getDevices = async (uid) => {
   } else if (uid === 'bfa93e30-48b5-4942-b45d-8cf9ece5b7e9') {
     return [
       {
+        id: '82ece83b-5901-4c8c-b3e9-3c81439eb384',
         type: 'authenticator',
         serialNumber: '123456',
       },
