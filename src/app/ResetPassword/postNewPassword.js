@@ -60,7 +60,7 @@ const action = async (req, res) => {
     userId: req.session.uid,
   });
 
-  req.session.redirectUri = userCode.redirectUri;
+  req.session.redirectUri = userCode.userCode.redirectUri;
   res.redirect(`/${req.params.uuid}/resetpassword/complete`);
 };
 
