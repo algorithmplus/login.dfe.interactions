@@ -148,6 +148,13 @@ describe('When user submits username/password', () => {
       expect(interactionCompleteProcess.mock.calls[0][1].uid).toBe('user1');
     });
 
+    it('then it should process interaction complete for usernamepassword type', async () => {
+      await postHandler(req, res);
+
+      expect(interactionCompleteProcess.mock.calls[0][1]).not.toBeNull();
+      expect(interactionCompleteProcess.mock.calls[0][1].type).toBe('usernamepassword');
+    });
+
     it('then it should return success', async () => {
       await postHandler(req, res);
 
