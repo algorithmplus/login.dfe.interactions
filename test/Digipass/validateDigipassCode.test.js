@@ -69,6 +69,8 @@ describe('when validating the user entered digipass code', () => {
     expect(processComplete.mock.calls[0][0]).toBe(req.params.uuid);
     expect(processComplete.mock.calls[0][1]).toMatchObject({
       status: 'success',
+      type: 'digipass',
+      uid: 'user-1',
     });
   });
 
