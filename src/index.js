@@ -14,6 +14,7 @@ const app = express();
 const config = require('./infrastructure/Config')();
 const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
+const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
@@ -54,6 +55,7 @@ app.set('layout', 'layouts/layout');
 app.use('/', devLauncher(csrf));
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
+app.use('/:uuid/digipass', digipass(csrf));
 
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
