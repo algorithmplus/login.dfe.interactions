@@ -63,7 +63,7 @@ const post = async (req, res) => {
     userId: user.id,
     userEmail: req.body.username,
   });
-  InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id }, res);
+  InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id, type: 'usernamepassword' }, res);
 };
 
 module.exports = post;
