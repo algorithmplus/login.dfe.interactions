@@ -52,6 +52,7 @@ const post = async (req, res) => {
       uuid: req.params.uuid,
       message: 'Invalid email address or password. Try again.',
       csrfToken: req.csrfToken(),
+      redirectUri: req.query.redirect_uri,
     });
     return;
   }
