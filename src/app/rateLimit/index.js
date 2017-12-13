@@ -1,8 +1,19 @@
 const ExpressBrute = require('express-brute');
+const RedisStore = require('express-brute-redis');
 const moment = require('moment');
 const config = require('./../../infrastructure/Config')();
 
-const store = new ExpressBrute.MemoryStore(); // stores state locally, don't use this in production
+let store;
+if (config.hostingEnvironment.env === 'dev') {
+  store = new ExpressBrute.MemoryStore();
+} else {
+  store = new RedisStore({
+    host: config.hostingEnvironment.rateLimit.host,
+    port: config.hostingEnvironment.rateLimit.port,
+    password: config.hostingEnvironment.rateLimit.password,
+  });
+}
+
 const bruteforce = new ExpressBrute(store, {
   freeRetries: 3,
   minWait: 1 * 1000,
