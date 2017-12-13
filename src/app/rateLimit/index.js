@@ -1,5 +1,6 @@
 const ExpressBrute = require('express-brute');
 const RedisStore = require('express-brute-redis');
+const Redis = require('redis');
 const moment = require('moment');
 const config = require('./../../infrastructure/Config')();
 
@@ -7,8 +8,11 @@ let store;
 if (config.hostingEnvironment.env === 'dev1') {
   store = new ExpressBrute.MemoryStore();
 } else {
+  const client = Redis.createClient({
+    url: config.hostingEnvironment.rateLimitUrl,
+  });
   store = new RedisStore({
-    url: config.hostingEnvironment.rateLimit.url,
+    client,
   });
 }
 

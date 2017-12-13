@@ -20,7 +20,7 @@ const devLauncher = require('./app/DevLauncher');
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
-// validateConfigAndQuitOnError(interactionsSchema, config, logger);
+validateConfigAndQuitOnError(interactionsSchema, config, logger);
 
 const app = express();
 const csrf = csurf({ cookie: true });
