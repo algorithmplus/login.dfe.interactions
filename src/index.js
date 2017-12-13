@@ -9,9 +9,10 @@ const morgan = require('morgan');
 const logger = require('./infrastructure/logger');
 const session = require('express-session');
 const https = require('https');
-
-const app = express();
 const config = require('./infrastructure/Config')();
+
+const rateLimiter = require('./app/rateLimit');
+
 const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
@@ -21,6 +22,7 @@ const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.
 
 validateConfigAndQuitOnError(interactionsSchema, config, logger);
 
+const app = express();
 const csrf = csurf({ cookie: true });
 
 const sess = {
@@ -33,6 +35,7 @@ if (app.get('env') !== 'dev') {
   sess.cookie.secure = true;
 }
 
+app.use(rateLimiter);
 app.use(session(sess));
 
 // Add middleware
