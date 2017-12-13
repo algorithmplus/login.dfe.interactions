@@ -4,13 +4,11 @@ const moment = require('moment');
 const config = require('./../../infrastructure/Config')();
 
 let store;
-if (config.hostingEnvironment.env === 'dev') {
+if (config.hostingEnvironment.env === 'dev1') {
   store = new ExpressBrute.MemoryStore();
 } else {
   store = new RedisStore({
-    host: config.hostingEnvironment.rateLimit.host,
-    port: config.hostingEnvironment.rateLimit.port,
-    password: config.hostingEnvironment.rateLimit.password,
+    url: config.hostingEnvironment.rateLimit.url,
   });
 }
 
