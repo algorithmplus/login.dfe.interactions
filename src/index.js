@@ -17,10 +17,15 @@ const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
+const appInsights = require('applicationinsights');
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
 validateConfigAndQuitOnError(interactionsSchema, config, logger);
+
+if (config.hostingEnvironment.applicationInsights) {
+  appInsights.setup(config.hostingEnvironment.applicationInsights).start();
+}
 
 const app = express();
 const csrf = csurf({ cookie: true });
