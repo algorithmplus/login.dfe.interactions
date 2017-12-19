@@ -4,9 +4,7 @@ const logger = require('./../../infrastructure/logger');
 const InteractionComplete = require('./../InteractionComplete');
 
 const validateInput = (code) => {
-  const messages = {
-    code: undefined,
-  };
+  const messages = {};
   let valid = true;
 
   if (!code) {
