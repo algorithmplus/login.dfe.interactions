@@ -29,6 +29,12 @@ const post = async (req, res) => {
     return;
   }
 
+  if (req.body.cancel) {
+    logger.info(`Cancelling username/password for uuid ${req.params.uuid}`);
+    InteractionComplete.process(req.params.uuid, { status: 'cancelled', type: 'usernamepassword' }, res);
+    return;
+  }
+
   let user = null;
   const validation = validateBody(req.body);
   if (!validation.failedValidation) {
