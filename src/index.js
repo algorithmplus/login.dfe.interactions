@@ -1,3 +1,4 @@
+const appInsights = require('applicationinsights');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -17,7 +18,6 @@ const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
-const appInsights = require('applicationinsights');
 const setCorrelationId = require('express-mw-correlation-id');
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
