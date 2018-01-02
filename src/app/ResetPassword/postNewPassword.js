@@ -46,9 +46,9 @@ const action = async (req, res) => {
     return;
   }
 
-  const client = await clients.get(req.session.clientId);
+  const client = await clients.get(req.session.clientId, req.id);
 
-  users.changePassword(req.session.uid, req.body.newPassword, client);
+  await users.changePassword(req.session.uid, req.body.newPassword, client, req.id);
 
   const userCode = await userCodes.getCode(req.session.uid);
 

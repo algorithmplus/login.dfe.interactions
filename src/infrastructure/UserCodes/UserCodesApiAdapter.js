@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 
 
-const upsertCode = async (userId, clientId, redirectUri) => {
+const upsertCode = async (userId, clientId, redirectUri, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -12,6 +12,7 @@ const upsertCode = async (userId, clientId, redirectUri) => {
       uri: `${config.directories.service.url}/userCodes/upsert`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       body: {
         uid: userId,
@@ -29,7 +30,7 @@ const upsertCode = async (userId, clientId, redirectUri) => {
   }
 };
 
-const deleteCode = async (userId) => {
+const deleteCode = async (userId, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -38,6 +39,7 @@ const deleteCode = async (userId) => {
       uri: `${config.directories.service.url}/userCodes/${userId}`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       json: true,
     });
@@ -54,7 +56,7 @@ const deleteCode = async (userId) => {
   }
 };
 
-const validateCode = async (userId, code) => {
+const validateCode = async (userId, code, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -63,6 +65,7 @@ const validateCode = async (userId, code) => {
       uri: `${config.directories.service.url}/userCodes/validate/${userId}/${code}`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       body: {
         uid: userId,
@@ -82,7 +85,7 @@ const validateCode = async (userId, code) => {
   }
 };
 
-const getCode = async (userId) => {
+const getCode = async (userId, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
   try {
     const userCode = await rp({
@@ -90,6 +93,7 @@ const getCode = async (userId) => {
       uri: `${config.directories.service.url}/userCodes/${userId}`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       body: {
         uid: userId,

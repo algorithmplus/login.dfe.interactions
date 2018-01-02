@@ -46,11 +46,11 @@ const action = async (req, res) => {
   let userCode;
   let user;
   try {
-    const client = await clients.get(req.query.clientid);
-    user = await directoriesApi.find(req.body.email, client);
-    userCode = await userCodes.validateCode(user.sub, req.body.code);
+    const client = await clients.get(req.query.clientid, req.id);
+    user = await directoriesApi.find(req.body.email, client, req.id);
+    userCode = await userCodes.validateCode(user.sub, req.body.code, req.id);
   } catch (e) {
-    logger.info(`Error confirming password reset for ${req.body.email}`);
+    logger.info(`Error confirming password reset for ${req.body.email} correlationId: ${req.id}`);
     logger.info(e);
   }
 
@@ -66,6 +66,7 @@ const action = async (req, res) => {
       type: 'reset-password',
       success: false,
       userId: user.sub,
+      reqI: req.id,
     });
   }
   validationResult.messages.code = 'The code you entered is incorrect. Please check and try again.';
@@ -75,6 +76,7 @@ const action = async (req, res) => {
     code: req.body.code,
     validationFailed: true,
     validationMessages: validationResult.messages,
+    reqI: req.id,
   });
 };
 

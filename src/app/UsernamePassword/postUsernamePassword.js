@@ -23,7 +23,7 @@ const validateBody = (body) => {
 };
 
 const post = async (req, res) => {
-  const client = await clients.get(req.query.clientid);
+  const client = await clients.get(req.query.clientid, req.id);
   if (client === null) {
     InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, res);
     return;
@@ -32,7 +32,7 @@ const post = async (req, res) => {
   let user = null;
   const validation = validateBody(req.body);
   if (!validation.failedValidation) {
-    user = await Users.authenticate(req.body.username, req.body.password, client);
+    user = await Users.authenticate(req.body.username, req.body.password, client, req.id);
   }
 
   if (user === null) {
