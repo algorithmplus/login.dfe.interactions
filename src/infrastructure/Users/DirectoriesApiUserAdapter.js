@@ -80,7 +80,7 @@ const changePassword = async (uid, password, client) => {
   }
 };
 
-const getDevices = async (uid) => {
+const getDevices = async (uid, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -89,6 +89,7 @@ const getDevices = async (uid) => {
       uri: `${config.directories.service.url}/users/${uid}/devices`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       json: true,
     });
