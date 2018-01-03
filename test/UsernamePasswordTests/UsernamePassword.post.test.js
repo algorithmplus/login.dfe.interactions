@@ -9,7 +9,7 @@ describe('When user submits username/password', () => {
   let usersAuthenticate;
   let clientsGet;
   let loggerAudit;
-  
+
   let postHandler;
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('When user submits username/password', () => {
     req.body.password = 'IAmIronman!';
     req.params.uuid = 'some-uuid';
     req.csrfToken.mockReturnValue('my-secure-token');
-    
+
     res = utils.mockResponse();
 
     interactionCompleteProcess = jest.fn();
@@ -40,7 +40,7 @@ describe('When user submits username/password', () => {
     const logger = require('./../../src/infrastructure/logger');
     logger.audit = loggerAudit;
     logger.info = jest.fn();
-    
+
     postHandler = require('./../../src/app/UsernamePassword/postUsernamePassword');
   });
 
@@ -52,52 +52,52 @@ describe('When user submits username/password', () => {
     it('then it should render usernamepassword view', async () => {
       await postHandler(req, res);
 
-      expect(res.render.mock.calls.length).toBe(1);
+      expect(res.render.mock.calls).toHaveLength(1);
       expect(res.render.mock.calls[0][0]).toBe('UsernamePassword/views/index');
     });
-    
+
     it('then a validation message will appear if the email is not present', async () => {
       req.body.username = '';
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].emailValidationMessage).toBe('Enter your email address');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter your email address');
     });
-    
+
     it('then a validation message will appear if the email is not in the correct format', async () => {
       req.body.username = 'Tony';
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].emailValidationMessage).toBe('Enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter a valid email address');
     });
-    
+
     it('then a validation message will appear if the password is not present', async () => {
       req.body.password = '';
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].passwordValidationMessage).toBe('Enter your password');
+      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Enter your password');
     });
-    
+
     it('then a validation message will appear if the email and password is not present', async () => {
       req.body.password = '';
       req.body.username = '';
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].passwordValidationMessage).toBe('Enter your password');
-      expect(res.render.mock.calls[0][1].emailValidationMessage).toBe('Enter your email address');
+      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Enter your password');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter your email address');
     });
-    
+
     it('then a validation message will appear if the email and password is not present', async () => {
       req.body.password = '';
       req.body.username = 'Tony';
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].passwordValidationMessage).toBe('Enter your password');
-      expect(res.render.mock.calls[0][1].emailValidationMessage).toBe('Enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Enter your password');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter a valid email address');
     });
 
     it('then it should be a failed login', async () => {
@@ -116,7 +116,7 @@ describe('When user submits username/password', () => {
     it('then it should audit a failed login attempt', async () => {
       await postHandler(req, res);
 
-      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls).toHaveLength(1);
       expect(loggerAudit.mock.calls[0][0]).toBe(`Failed login attempt for ${req.body.username}`);
       expect(loggerAudit.mock.calls[0][1]).toMatchObject({
         type: 'sign-in',
@@ -137,7 +137,7 @@ describe('When user submits username/password', () => {
     it('then it should process interaction complete for uuid', async () => {
       await postHandler(req, res);
 
-      expect(interactionCompleteProcess.mock.calls.length).toBe(1);
+      expect(interactionCompleteProcess.mock.calls).toHaveLength(1);
       expect(interactionCompleteProcess.mock.calls[0][0]).toBe('some-uuid');
     });
 
@@ -165,7 +165,7 @@ describe('When user submits username/password', () => {
     it('then it should audit a successful login attempt', async () => {
       await postHandler(req, res);
 
-      expect(loggerAudit.mock.calls.length).toBe(1);
+      expect(loggerAudit.mock.calls).toHaveLength(1);
       expect(loggerAudit.mock.calls[0][0]).toBe(`Successful login attempt for ${req.body.username} (id: user1)`);
       expect(loggerAudit.mock.calls[0][1]).toMatchObject({
         type: 'sign-in',
@@ -185,7 +185,7 @@ describe('When user submits username/password', () => {
     it('then is should complete interaction', async () => {
       await postHandler(req, res);
 
-      expect(interactionCompleteProcess.mock.calls.length).toBe(1);
+      expect(interactionCompleteProcess.mock.calls).toHaveLength(1);
       expect(interactionCompleteProcess.mock.calls[0][0]).toBe('some-uuid');
     });
 

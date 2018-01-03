@@ -35,7 +35,7 @@ const sess = {
   cookie: {},
 };
 
-if (app.get('env') !== 'dev') {
+if (config.hostingEnvironment.env !== 'dev') {
   app.set('trust proxy', 1);
   sess.cookie.secure = true;
 }
