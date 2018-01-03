@@ -9,6 +9,7 @@ const get = (req, res) => {
     uuid: req.params.uuid,
     csrfToken: req.csrfToken(),
     redirectUri: req.query.redirect_uri,
+    validationMessages: {},
   });
 };
 

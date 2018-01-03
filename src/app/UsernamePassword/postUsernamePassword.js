@@ -6,20 +6,24 @@ const logger = require('./../../infrastructure/logger');
 
 const validateBody = (body) => {
   const validationMessages = {};
-  validationMessages.failedValidation = false;
+  let failedValidation = false;
+
   if (body.username === '') {
-    validationMessages.username_validationMessage = 'Enter your email address';
-    validationMessages.failedValidation = true;
+    validationMessages.username = 'Enter your email address';
+    failedValidation = true;
   } else if (!emailValidator.validate(body.username)) {
-    validationMessages.username_validationMessage = 'Enter a valid email address';
-    validationMessages.failedValidation = true;
+    validationMessages.username = 'Enter a valid email address';
+    failedValidation = true;
   }
 
   if (body.password === '') {
-    validationMessages.password_validationMessage = 'Enter your password';
-    validationMessages.failedValidation = true;
+    validationMessages.password = 'Enter your password';
+    failedValidation = true;
   }
-  return validationMessages;
+  return {
+    validationMessages,
+    failedValidation,
+  };
 };
 
 const post = async (req, res) => {
@@ -50,8 +54,6 @@ const post = async (req, res) => {
     });
 
     res.render('UsernamePassword/views/index', {
-      emailValidationMessage: validation.username_validationMessage,
-      passwordValidationMessage: validation.password_validationMessage,
       isFailedLogin: true,
       title: 'Sign in',
       clientId: req.query.clientid,
@@ -59,6 +61,7 @@ const post = async (req, res) => {
       message: 'Invalid email address or password. Try again.',
       csrfToken: req.csrfToken(),
       redirectUri: req.query.redirect_uri,
+      validationMessages: validation.validationMessages,
     });
     return;
   }

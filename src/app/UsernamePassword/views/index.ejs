@@ -4,15 +4,6 @@
 </form>
 
 
-<% if (locals.isFailedLogin) { %>
-    <div class="row">
-        <div class="col-12">
-            <div class="notification notification-error">
-                <%= locals.message || 'error!' %>
-            </div>
-        </div>
-    </div>
-    <% } %>
     <div class="grid-row">
         <div class="col-8">
             <h1 class="heading-xlarge">
@@ -26,19 +17,19 @@
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <fieldset>
                     <legend class="vh">Sign in form</legend>
-                    <div class="form-group <%= locals.emailValidationMessage !== undefined ? 'form-group-error' : '' %>">
+                    <div class="form-group <%= (locals.validationMessages.username !== undefined) ? 'form-group-error' : '' %>">
                         <label class="form-label" for="username">Email address</label>
-                        <% if (locals.emailValidationMessage!== undefined) { %>
-                            <p class="error-message" id="validation-email"><%=locals.emailValidationMessage %></p>
+                        <% if (locals.validationMessages.username !== undefined) { %>
+                            <p class="error-message" id="validation-email"><%=locals.validationMessages.username %></p>
                         <% } %>
-                        <input class="form-control" id="username" name="username" type="email" <% if (locals.emailValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
+                        <input class="form-control" id="username" name="username" type="email" <% if (locals.validationMessages.username !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                     </div>
-                    <div class="form-group <%= locals.passwordValidationMessage !== undefined ? 'form-group-error' : '' %>">
+                    <div class="form-group <%= (locals.validationMessages.password !== undefined) ? 'form-group-error' : '' %>">
                         <label class="form-label" for="password">Password</label>
-                        <% if(locals.passwordValidationMessage !== undefined) { %>
-                            <p class="error-message" id="validation-password"><%=locals.passwordValidationMessage%></p>
+                        <% if(locals.validationMessages.password !== undefined) { %>
+                            <p class="error-message" id="validation-password"><%=locals.validationMessages.password%></p>
                         <% } %>
-                        <input class="form-control" id="password" name="password" type="password" <% if (locals.passwordValidationMessage !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
+                        <input class="form-control" id="password" name="password" type="password" <% if (locals.validationMessages.password !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
                     </div>
                     <div class="panel">
                         <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
