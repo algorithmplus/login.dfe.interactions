@@ -66,7 +66,7 @@ const action = async (req, res) => {
       type: 'reset-password',
       success: false,
       userId: user.sub,
-      reqI: req.id,
+      reqId: req.id,
     });
   }
   validationResult.messages.code = 'The code you entered is incorrect. Please check and try again.';
@@ -76,7 +76,7 @@ const action = async (req, res) => {
     code: req.body.code,
     validationFailed: true,
     validationMessages: validationResult.messages,
-    reqI: req.id,
+    reqId: req.id,
   });
 };
 
