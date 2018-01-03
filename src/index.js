@@ -1,3 +1,4 @@
+const logger = require('./infrastructure/logger');
 const appInsights = require('applicationinsights');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -7,7 +8,6 @@ const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
-const logger = require('./infrastructure/logger');
 const session = require('express-session');
 const https = require('https');
 const config = require('./infrastructure/Config')();
@@ -19,6 +19,7 @@ const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
 const setCorrelationId = require('express-mw-correlation-id');
+
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
