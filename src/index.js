@@ -18,6 +18,8 @@ const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
+const setCorrelationId = require('express-mw-correlation-id');
+
 
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
@@ -28,6 +30,9 @@ if (config.hostingEnvironment.applicationInsights) {
 }
 
 const app = express();
+
+app.use(setCorrelationId(true));
+
 const csrf = csurf({ cookie: true });
 
 const sess = {

@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 const logger = require('./../logger');
 
-const validateDigipassToken = async (serialNumber, code) => {
+const validateDigipassToken = async (serialNumber, code, correlationId) => {
   const token = await jwtStrategy(config.devices.service).getBearerToken();
 
   try {
@@ -12,6 +12,7 @@ const validateDigipassToken = async (serialNumber, code) => {
       uri: `${config.devices.service.url}/digipass/${serialNumber}/verify`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       body: {
         code,
