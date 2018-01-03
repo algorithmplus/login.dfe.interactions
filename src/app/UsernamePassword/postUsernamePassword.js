@@ -63,17 +63,16 @@ const post = async (req, res) => {
       redirectUri: req.query.redirect_uri,
       validationMessages: validation.validationMessages,
     });
-    return;
+  } else {
+    logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
+      type: 'sign-in',
+      subType: 'username-password',
+      success: true,
+      userId: user.id,
+      userEmail: req.body.username,
+    });
+    InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id, type: 'usernamepassword' }, res);
   }
-
-  logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
-    type: 'sign-in',
-    subType: 'username-password',
-    success: true,
-    userId: user.id,
-    userEmail: req.body.username,
-  });
-  InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id, type: 'usernamepassword' }, res);
 };
 
 module.exports = post;
