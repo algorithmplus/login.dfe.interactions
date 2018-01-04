@@ -43,11 +43,11 @@ const action = async (req, res) => {
   }
 
   try {
-    const client = await clients.get(req.query.clientid);
-    const user = await directoriesApi.find(email, client);
-    await userCodes.upsertCode(user.sub, req.query.clientid, req.query.redirect_uri);
+    const client = await clients.get(req.query.clientid, req.id);
+    const user = await directoriesApi.find(email, client, req.id);
+    await userCodes.upsertCode(user.sub, req.query.clientid, req.query.redirect_uri, req.id);
   } catch (e) {
-    logger.info(`Password reset requested for ${email} and failed`);
+    logger.info(`Password reset requested for ${email} and failed correlationId: ${req.id}`);
     logger.info(e);
   }
 

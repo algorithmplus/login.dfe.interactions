@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 
 
-const authenticate = async (username, password, client) => {
+const authenticate = async (username, password, client, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -12,6 +12,7 @@ const authenticate = async (username, password, client) => {
       uri: `${config.directories.service.url}/${client.params.directoryId}/user/authenticate`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       body: {
         username,
@@ -32,7 +33,7 @@ const authenticate = async (username, password, client) => {
   }
 };
 
-const find = async (username, client) => {
+const find = async (username, client, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -41,6 +42,7 @@ const find = async (username, client) => {
       uri: `${config.directories.service.url}/${client.params.directoryId}/user/${username}`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       json: true,
     });
@@ -60,7 +62,7 @@ const find = async (username, client) => {
   }
 };
 
-const changePassword = async (uid, password, client) => {
+const changePassword = async (uid, password, client, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -69,6 +71,7 @@ const changePassword = async (uid, password, client) => {
       uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/changepassword`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       body: {
         password,
@@ -80,7 +83,7 @@ const changePassword = async (uid, password, client) => {
   }
 };
 
-const getDevices = async (uid) => {
+const getDevices = async (uid, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -89,6 +92,7 @@ const getDevices = async (uid) => {
       uri: `${config.directories.service.url}/users/${uid}/devices`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
       },
       json: true,
     });
