@@ -36,6 +36,9 @@ const action = async (req, res) => {
     res.render('ResetPassword/views/request', {
       csrfToken: req.csrfToken(),
       email,
+      uuid: req.params.uuid,
+      clientId: req.query.clientid,
+      redirectUri: req.query.redirect_uri,
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
     });
