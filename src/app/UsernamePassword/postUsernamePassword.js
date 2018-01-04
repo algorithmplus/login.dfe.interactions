@@ -62,6 +62,7 @@ const post = async (req, res) => {
       csrfToken: req.csrfToken(),
       redirectUri: req.query.redirect_uri,
       validationMessages: validation.validationMessages,
+      username: req.body.username,
     });
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
