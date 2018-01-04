@@ -54,6 +54,8 @@ const action = async (req, res) => {
   res.render('ResetPassword/views/codesent', {
     uuid: req.params.uuid,
     clientid: req.query.clientid,
+    email,
+    csrfToken: req.csrfToken(),
   });
 };
 
