@@ -55,6 +55,7 @@ const action = async (req, res) => {
     uuid: req.params.uuid,
     clientid: req.query.clientid,
     email,
+    title: 'Email sent',
     csrfToken: req.csrfToken(),
   });
 };
