@@ -1,3 +1,12 @@
+<% if (locals.resend) { %>
+
+<div class="notification notification-success" tabindex="0">
+    <h2>Password reset code email resent</h2>
+    <span class="icon">x</span>
+</div>
+
+<% } %>
+
 <div class="grid-row">
     <div class="col-8">
         <div class="govuk-box-highlight">
@@ -8,10 +17,12 @@
                 Please check your email for a verification code.
             </p>
         </div>
-        <p>A password reset code has been sent to the email address on file. If you do not receive it in 10 to 15 minutes, please make sure you entered the correct email address for the account.</p>
+
+        <p>A password reset code has been sent to <strong><%=locals.email%></strong>. If you do not receive it in 10 to 15 minutes, please make sure you entered the correct email address for the account.</p>
         <form method="post" id="form-resend-reset-password">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
             <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
+            <input type="hidden" name="resend" id="resend" value="true" />
             <div class="form-submit">
                 <button type="submit" class="button">Resend code</button>
             </div>

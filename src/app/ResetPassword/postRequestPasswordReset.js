@@ -30,6 +30,7 @@ const validate = (email) => {
 
 const action = async (req, res) => {
   const email = req.body.email;
+  const resend = req.body.resend;
   const validationResult = validate(email);
 
   if (validationResult.failed) {
@@ -55,6 +56,7 @@ const action = async (req, res) => {
     uuid: req.params.uuid,
     clientid: req.query.clientid,
     email,
+    resend,
     title: 'Email sent',
     csrfToken: req.csrfToken(),
   });
