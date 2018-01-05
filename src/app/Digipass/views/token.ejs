@@ -21,7 +21,7 @@
                     <% } %>
 
                     <input class="form-control char-width-8" id="code" name="code" type="text"
-                           pattern="[0-9]{8}" required aria-required="true" maxlength="8"
+                           pattern="[0-9]{8}" required aria-required="true" maxlength="8" autocomplete="off"
                             <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
 
                 </div>
