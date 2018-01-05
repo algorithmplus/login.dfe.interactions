@@ -31,5 +31,16 @@ module.exports = () => {
     });
   });
 
+  router.get('/passwordresetnewpassword', (req, res) => {
+    req.session.uid = '23121d3c-84df-44ac-b458-3d63a9a05497';
+    req.session.clientId = 'local';
+    res.redirect(`/${req.query.uuid}/resetpassword/newpassword?clientid=local&redirect_uri=https://localhost:4431`);
+  });
+  router.get('/passwordresetcomplete', (req, res) => {
+    req.session.uid = '23121d3c-84df-44ac-b458-3d63a9a05497';
+    req.session.clientId = 'local';
+    res.redirect(`/${req.query.uuid}/resetpassword/complete?clientid=local&redirect_uri=https://localhost:4431`);
+  });
+
   return router;
 };
