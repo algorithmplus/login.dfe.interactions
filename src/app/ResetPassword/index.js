@@ -10,6 +10,7 @@ const postConfirmPasswordReset = require('./postConfirmPasswordReset');
 const getNewPassword = require('./getNewPassword');
 const postNewPassword = require('./postNewPassword');
 const getComplete = require('./getComplete');
+const hasConfirmedIdentity = require('./hasConfirmedIdentity');
 
 const router = express.Router({ mergeParams: true });
 
@@ -22,10 +23,10 @@ const registerRoutes = (csrf) => {
   router.get('/confirm', csrf, getConfirmPasswordReset);
   router.post('/confirm', csrf, postConfirmPasswordReset);
 
-  router.get('/newpassword', csrf, getNewPassword);
-  router.post('/newpassword', csrf, postNewPassword);
+  router.get('/newpassword', csrf, hasConfirmedIdentity, getNewPassword);
+  router.post('/newpassword', csrf, hasConfirmedIdentity, postNewPassword);
 
-  router.get('/complete', csrf, getComplete);
+  router.get('/complete', csrf, hasConfirmedIdentity, getComplete);
 
   return router;
 };
