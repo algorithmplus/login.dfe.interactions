@@ -5,6 +5,9 @@ const action = (req, res) => {
     csrfToken: req.csrfToken(),
     title: 'Reset your password',
     email: '',
+    uuid: req.params.uuid,
+    clientId: req.query.clientid,
+    redirectUri: req.query.redirect_uri,
     validationMessages: {},
     validationFailed: false,
   });

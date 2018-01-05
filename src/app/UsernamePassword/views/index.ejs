@@ -1,13 +1,9 @@
-<form method="post">
-    <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-    <button type="submit" name="cancel" value="true" class="link link-back">Back</button>
-</form>
 
 
     <div class="grid-row">
         <div class="col-8">
             <h1 class="heading-xlarge">
-                Sign in to access DfE services
+                Sign in
             </h1>
         </div>
     </div>
@@ -29,22 +25,25 @@
                         <% if(locals.validationMessages.password !== undefined) { %>
                             <p class="error-message" id="validation-password"><%=locals.validationMessages.password%></p>
                         <% } %>
-                        <input class="form-control" id="password" name="password" type="password" <% if (locals.validationMessages.password !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
+                        <div class="show-password">
+                            <input class="form-control" id="password" name="password" type="password" <% if (locals.validationMessages.password !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
+                        </div>
+                        <p class="help-text"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">I've forgotten my password</a></p>
                     </div>
-                    <div class="panel">
+                    <div class="panel panel-border-wide">
                         <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
                     </div>
-                    <div class="form-submit">
+                    <div class="form-submit submit-buttons">
                         <button type="submit" class="button">Sign in</button>
+                        <button type="submit" name="cancel" value="true" class="button button-secondary">Cancel</button>
                     </div>
                 </fieldset>
             </form>
-
-            <hr>
-
-            <h2 class="heading-medium">Problems signing in?</h2>
-            <p><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">Forgotten your password?</a></p>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <%- include('../../includes/helpdesk'); %>.
         </div>
     </div>
 
