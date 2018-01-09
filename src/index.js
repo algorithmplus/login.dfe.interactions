@@ -12,7 +12,7 @@ const session = require('express-session');
 const https = require('https');
 const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
-const sanatisation = require('./app/sanatisation');
+const sanitization = require('login.dfe.sanitization');
 
 const rateLimiter = require('./app/rateLimit');
 
@@ -64,7 +64,15 @@ app.use(session(sess));
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(sanatisation());
+app.use(sanitization({
+  sanitizer: (key, value) => {
+    if (key.toLowerCase() === 'clientid') {
+      return !/^[A-Za-z0-9]+$/.test(value) ? '' : value;
+    } else {
+      return sanitization.defaultSanitizer(key, value);
+    }
+  },
+}));
 
 app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
 app.use(morgan('dev'));
