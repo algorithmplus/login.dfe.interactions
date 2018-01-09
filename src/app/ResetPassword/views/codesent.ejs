@@ -1,11 +1,31 @@
+<% if (locals.resend) { %>
+
+<div class="notification notification-success" tabindex="0">
+    <h2>Password reset code email resent</h2>
+    <span class="icon">x</span>
+</div>
+
+<% } %>
+
 <div class="grid-row">
     <div class="col-8">
-        <h1 class="heading-xlarge">
-            Thank you
-        </h1>
-        <p class="lede">We've emailed a link so that you can reset your password.</p>
-        <p>If you haven't received the email within a few minutes, please check your spam, bulk or junk email folder – your email system may have blocked it by mistake.</p>
-        <p>If it doesn't arrive at all, please check that you've given us the correct email address for your existing account – we'll only send a password reset link to the email address belonging to an account.</p>
-        <a href="#" class="button">Resend password reset code</a>
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">
+                Email sent
+            </h1>
+            <p class="font-medium">
+                Please check your email for a verification code.
+            </p>
+        </div>
+
+        <p>A password reset code has been sent to <strong><%=locals.email%></strong>. If you do not receive it in 10 to 15 minutes, please make sure you entered the correct email address for the account.</p>
+        <form method="post" id="form-resend-reset-password">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
+            <input type="hidden" name="resend" id="resend" value="true" />
+            <div class="form-submit">
+                <button type="submit" class="button">Resend code</button>
+            </div>
+        </form>
     </div>
 </div>
