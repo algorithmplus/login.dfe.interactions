@@ -50,12 +50,14 @@ const csrf = csurf({
 
 const sess = {
   secret: config.session.secret,
-  cookie: {},
+  cookie: {
+    httpOnly: true,
+    secure: true,
+  },
 };
 
 if (config.hostingEnvironment.env !== 'dev') {
   app.set('trust proxy', 1);
-  sess.cookie.secure = true;
 }
 
 app.use(rateLimiter);
