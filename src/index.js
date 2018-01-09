@@ -11,6 +11,8 @@ const morgan = require('morgan');
 const session = require('express-session');
 const https = require('https');
 const config = require('./infrastructure/Config')();
+const helmet = require('helmet');
+const sanitization = require('login.dfe.sanitization');
 
 const rateLimiter = require('./app/rateLimit');
 
@@ -31,18 +33,31 @@ if (config.hostingEnvironment.applicationInsights) {
 
 const app = express();
 
+app.use(helmet({
+  noCache: true,
+  frameguard: {
+    action: 'deny',
+  },
+}));
 app.use(setCorrelationId(true));
 
-const csrf = csurf({ cookie: true });
+const csrf = csurf({
+  cookie: {
+    secure: true,
+    httpOnly: true,
+  },
+});
 
 const sess = {
   secret: config.session.secret,
-  cookie: {},
+  cookie: {
+    httpOnly: true,
+    secure: true,
+  },
 };
 
 if (config.hostingEnvironment.env !== 'dev') {
   app.set('trust proxy', 1);
-  sess.cookie.secure = true;
 }
 
 app.use(rateLimiter);
@@ -51,6 +66,16 @@ app.use(session(sess));
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(sanitization({
+  sanitizer: (key, value) => {
+    if (key.toLowerCase() === 'clientid') {
+      return !/^[A-Za-z0-9]+$/.test(value) ? '' : value;
+    } else {
+      return sanitization.defaultSanitizer(key, value);
+    }
+  },
+}));
+
 app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
 app.use(morgan('dev'));
 
