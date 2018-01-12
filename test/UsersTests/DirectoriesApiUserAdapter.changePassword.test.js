@@ -5,11 +5,6 @@ jest.mock('../../src/infrastructure/Config');
 describe('When changing password for a user with the api', () => {
   const uid = 'user1';
   const password = 'password';
-  const client = {
-    params: {
-      directoryId: 'directory1',
-    },
-  };
   const bearerToken = 'some-token';
 
   let rp;
@@ -23,40 +18,36 @@ describe('When changing password for a user with the api', () => {
 
     jwtGetBearerToken = jest.fn().mockReturnValue(bearerToken);
     const jwt = require('login.dfe.jwt-strategies');
-    jwt.mockImplementation((jwtConfig) => {
-      return {
-        getBearerToken: jwtGetBearerToken
-      }
-    });
+    jwt.mockImplementation(jwtConfig => ({
+      getBearerToken: jwtGetBearerToken,
+    }));
 
     const config = require('./../../src/infrastructure/Config');
-    config.mockImplementation(() =>{
-      return {
-        directories: {
-          service: {
-            url: 'https://directories.login.dfe.test',
-          },
+    config.mockImplementation(() => ({
+      directories: {
+        service: {
+          url: 'https://directories.login.dfe.test',
         },
-      };
-    });
+      },
+    }));
 
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
   it('then it should set users password in directories api', async () => {
-    await directoriesApiUserAdapter.changePassword(uid, password, client);
+    await directoriesApiUserAdapter.changePassword(uid, password);
 
-    expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/directory1/user/user1/changepassword');
+    expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/users/user1/changepassword');
   });
 
   it('then it should jwt as auth for api call', async () => {
-    await directoriesApiUserAdapter.changePassword(uid, password, client);
+    await directoriesApiUserAdapter.changePassword(uid, password);
 
     expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
   });
 
   it('then it should send new password in body', async () => {
-    await directoriesApiUserAdapter.changePassword(uid, password, client);
+    await directoriesApiUserAdapter.changePassword(uid, password);
 
     expect(rp.mock.calls[0][0].body.password).toBe(password);
   });
@@ -66,13 +57,11 @@ describe('When changing password for a user with the api', () => {
       throw new Error('unit test');
     });
 
-    try{
-      await directoriesApiUserAdapter.changePassword(uid, password, client);
+    try {
+      await directoriesApiUserAdapter.changePassword(uid, password);
       throw new Error('didnt throw an error');
-    }
-    catch(e){
+    } catch (e) {
       expect(e.message).toBe('Error: unit test');
     }
-  })
-
+  });
 });

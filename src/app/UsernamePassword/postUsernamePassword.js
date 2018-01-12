@@ -53,12 +53,15 @@ const post = async (req, res) => {
       userEmail: req.body.username,
     });
 
+    if(Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
+      validation.validationMessages.loginError = 'Invalid email address or password. Try again.';
+    }
+
     res.render('UsernamePassword/views/index', {
       isFailedLogin: true,
       title: 'Sign in',
       clientId: req.query.clientid,
       uuid: req.params.uuid,
-      message: 'Invalid email address or password. Try again.',
       csrfToken: req.csrfToken(),
       redirectUri: req.query.redirect_uri,
       validationMessages: validation.validationMessages,
