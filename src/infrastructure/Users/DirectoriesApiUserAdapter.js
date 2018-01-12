@@ -9,7 +9,7 @@ const authenticate = async (username, password, client, correlationId) => {
   try {
     const userId = await rp({
       method: 'POST',
-      uri: `${config.directories.service.url}/${client.params.directoryId}/user/authenticate`,
+      uri: `${config.directories.service.url}/users/authenticate`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
@@ -39,7 +39,7 @@ const find = async (username, client, correlationId) => {
   try {
     const res = await rp({
       method: 'GET',
-      uri: `${config.directories.service.url}/${client.params.directoryId}/user/${username}`,
+      uri: `${config.directories.service.url}/users/${username}`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
@@ -68,7 +68,7 @@ const changePassword = async (uid, password, client, correlationId) => {
   try {
     await rp({
       method: 'POST',
-      uri: `${config.directories.service.url}/${client.params.directoryId}/user/${uid}/changepassword`,
+      uri: `${config.directories.service.url}/users/${uid}/changepassword`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
