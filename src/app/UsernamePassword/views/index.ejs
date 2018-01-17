@@ -1,5 +1,4 @@
 
-
     <div class="grid-row">
         <div class="col-8">
             <h1 class="heading-xlarge">
@@ -31,24 +30,14 @@
                         </div>
                         <p class="form-help font-xsmall"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">I've forgotten my password</a></p>
                     </div>
-
-
-
                 </fieldset>
-
-
                 <div class="form-submit submit-buttons">
                     <button type="submit" class="button">Sign in</button>
                     <button type="submit" name="cancel" value="true" class="button button-secondary">Cancel</button>
                 </div>
-
-                <fieldset>
-                    <div class="panel panel-border-wide">
-                        <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
-                    </div>
-                </fieldset>
-
-
+                <div class="panel panel-border-wide">
+                    <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
+                </div>
             </form>
         </div>
         <div class="col-6">
@@ -59,7 +48,6 @@
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-8">
             <%- include('../../includes/helpdesk'); %>
