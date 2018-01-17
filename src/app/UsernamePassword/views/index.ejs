@@ -1,44 +1,51 @@
 
-
     <div class="grid-row">
         <div class="col-8">
             <h1 class="heading-xlarge">
-                Sign in
+                DfE Sign-in
             </h1>
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
+            <p>DfE Sign-in is the new way to sign-in to access some specific education sector services online.</p>
             <form method="post" id="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <fieldset>
-                    <legend class="vh">Sign in form</legend>
+                    <legend class="heading-medium">Sign-in</legend>
                     <div class="form-group <%= (locals.validationMessages.username !== undefined) ? 'form-group-error' : '' %>">
-                        <label class="form-label" for="username">Email address</label>
+                        <label class="form-label" for="username">Email address or Secure Access username <span class="toggle-help">DfE Sign-in will replace Secure Access. If you have have not yet converted your Secure Access account to DfE Sign-in then enter your Secure Access username.</span> </label>
                         <% if (locals.validationMessages.username !== undefined) { %>
                             <p class="error-message" id="validation-email"><%=locals.validationMessages.username %></p>
                         <% } %>
-                        <input class="form-control" id="username" name="username" type="email" <% if (locals.validationMessages.username !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %> value="<%=locals.username%>">
+                        <input class="form-control full-width" id="username" name="username" type="email" <% if (locals.validationMessages.username !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %> value="<%=locals.username%>">
                     </div>
                     <div class="form-group <%= (locals.validationMessages.password !== undefined) ? 'form-group-error' : '' %>">
                         <label class="form-label" for="password">Password</label>
                         <% if(locals.validationMessages.password !== undefined) { %>
                             <p class="error-message" id="validation-password"><%=locals.validationMessages.password%></p>
                         <% } %>
-                        <div class="show-password">
+                        <div class="show-password full-width">
                             <input class="form-control" id="password" name="password" type="password" <% if (locals.validationMessages.password !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
                         </div>
-                        <p class="help-text"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">I've forgotten my password</a></p>
-                    </div>
-                    <div class="panel panel-border-wide">
-                        <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
-                    </div>
-                    <div class="form-submit submit-buttons">
-                        <button type="submit" class="button">Sign in</button>
-                        <button type="submit" name="cancel" value="true" class="button button-secondary">Cancel</button>
+                        <p class="form-help font-xsmall"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">I've forgotten my password</a></p>
                     </div>
                 </fieldset>
+                <div class="form-submit submit-buttons">
+                    <button type="submit" class="button">Sign in</button>
+                    <button type="submit" name="cancel" value="true" class="button button-secondary">Cancel</button>
+                </div>
+                <div class="panel panel-border-wide">
+                    <p>By continuing you accept the <a href="<%= locals.portal.url %>/terms">terms and conditions</a>.</p>
+                </div>
             </form>
+        </div>
+        <div class="col-6">
+            <div class="highlight">
+                <h3 class="heading-medium">Secure Access users</h3>
+                <p>Enter your Secure Access username and password to convert your account to the new DfE Sign-in. </p>
+                <p><img src="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/images/secure-access.svg" class="responsive" alt="" /> </p>
+            </div>
         </div>
     </div>
     <div class="row">
