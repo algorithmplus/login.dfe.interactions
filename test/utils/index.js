@@ -2,6 +2,7 @@ const mockRequest = () => {
   return {
     params: {
       uuid: '123-abc',
+      uid: '123-abc',
     },
     session: {
     },

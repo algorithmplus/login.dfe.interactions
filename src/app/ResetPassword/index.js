@@ -20,8 +20,8 @@ const registerRoutes = (csrf) => {
   router.get('/request', csrf, getRequestPasswordReset);
   router.post('/request', csrf, postRequestPasswordReset);
 
-  router.get('/confirm', csrf, getConfirmPasswordReset);
-  router.post('/confirm', csrf, postConfirmPasswordReset);
+  router.get('/:uid/confirm', csrf, getConfirmPasswordReset);
+  router.post('/:uid/confirm', csrf, postConfirmPasswordReset);
 
   router.get('/newpassword', csrf, hasConfirmedIdentity, getNewPassword);
   router.post('/newpassword', csrf, hasConfirmedIdentity, postNewPassword);
