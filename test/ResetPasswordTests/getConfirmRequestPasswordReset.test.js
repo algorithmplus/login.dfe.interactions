@@ -24,10 +24,10 @@ describe('When getting the confirm password reset view', () => {
     expect(res.render.mock.calls[0][1].csrfToken).toBe('token');
   });
 
-  it('then it should include a blank email', () => {
+  it('then it should include the uid', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.mock.calls[0][1].email).toBe('');
+    expect(res.render.mock.calls[0][1].uid).toBe(req.params.uuid);
   });
 
   it('then it should include a blank code', () => {
