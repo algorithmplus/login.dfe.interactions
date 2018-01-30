@@ -1,4 +1,5 @@
 jest.mock('request-promise');
+jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('login.dfe.jwt-strategies', () => {
   return jest.fn().mockImplementation(() => {
     return {
