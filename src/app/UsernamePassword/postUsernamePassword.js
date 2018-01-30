@@ -53,7 +53,7 @@ const post = async (req, res) => {
       userEmail: req.body.username,
     });
 
-    if(Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
+    if (Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
       validation.validationMessages.loginError = 'Invalid email address or password. Try again.';
     }
 

@@ -12,9 +12,7 @@ const find = async (username, client) => {
   return { id: '23121d3c-84df-44ac-b458-3d63a9a05497' };
 };
 
-const changePassword = async (uid, password, client) => {
-  return Promise.resolve(null);
-};
+const changePassword = async (uid, password, client) => Promise.resolve(null);
 
 const getDevices = async (uid) => {
   if (uid === '23121d3c-84df-44ac-b458-3d63a9a05497') {

@@ -70,9 +70,8 @@ app.use(sanitization({
   sanitizer: (key, value) => {
     if (key.toLowerCase() === 'clientid') {
       return !/^[A-Za-z0-9]+$/.test(value) ? '' : value;
-    } else {
-      return sanitization.defaultSanitizer(key, value);
     }
+    return sanitization.defaultSanitizer(key, value);
   },
 }));
 
