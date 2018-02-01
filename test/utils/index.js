@@ -1,15 +1,15 @@
 const mockRequest = () => {
   return {
+    accepts: () => {
+      return ['text/html'];
+    },
     params: {
       uuid: '123-abc',
       uid: '123-abc',
     },
-    session: {
-    },
-    body: {
-    },
-    query: {
-    },
+    session: {},
+    body: {},
+    query: {},
     csrfToken: jest.fn().mockReturnValue('token'),
   };
 };
