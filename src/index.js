@@ -13,6 +13,7 @@ const https = require('https');
 const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
 const sanitization = require('login.dfe.sanitization');
+const healthCheck = require('login.dfe.healthcheck');
 
 const rateLimiter = require('./app/rateLimit');
 
@@ -89,6 +90,7 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 
 // Setup routes
+app.use('/healthcheck', healthCheck({ config }));
 app.use('/', devLauncher(csrf));
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
