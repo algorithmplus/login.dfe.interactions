@@ -1,4 +1,5 @@
 const Config = require('./../../infrastructure/Config')();
+const { sendResult } = require('./../../infrastructure/utils');
 const crypto = require('crypto');
 
 const signData = (data) => {
@@ -26,10 +27,10 @@ const buildPostbackData = (uuid, data) => {
 
 
 class InteractionComplete {
-  static process(uuid, data, res) {
+  static process(uuid, data, req, res) {
     const postbackData = buildPostbackData(uuid, data);
 
-    res.render('InteractionComplete/views/index', {
+    sendResult(req, res, 'InteractionComplete/views/index', {
       destination: `${Config.oidcService.url}/${uuid}/complete`,
       postbackData,
       noredirect: (Config.hostingEnvironment.env === 'dev').toString(),

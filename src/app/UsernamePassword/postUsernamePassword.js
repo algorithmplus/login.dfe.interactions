@@ -3,6 +3,7 @@ const clients = require('./../../infrastructure/Clients');
 const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
+const { sendResult } = require('./../../infrastructure/utils');
 
 const validateBody = (body) => {
   const validationMessages = {};
@@ -29,13 +30,13 @@ const validateBody = (body) => {
 const post = async (req, res) => {
   const client = await clients.get(req.query.clientid, req.id);
   if (client === null) {
-    InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, res);
+    InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, req, res);
     return;
   }
 
   if (req.body.cancel) {
     logger.info(`Cancelling username/password for uuid ${req.params.uuid}`);
-    InteractionComplete.process(req.params.uuid, { status: 'cancelled', type: 'usernamepassword' }, res);
+    InteractionComplete.process(req.params.uuid, { status: 'cancelled', type: 'usernamepassword' }, req, res);
     return;
   }
 
@@ -57,7 +58,7 @@ const post = async (req, res) => {
       validation.validationMessages.loginError = 'Invalid email address or password. Try again.';
     }
 
-    res.render('UsernamePassword/views/index', {
+    sendResult(req, res, 'UsernamePassword/views/index', {
       isFailedLogin: true,
       title: 'Sign in',
       clientId: req.query.clientid,
@@ -75,7 +76,7 @@ const post = async (req, res) => {
       userId: user.id,
       userEmail: req.body.username,
     });
-    InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id, type: 'usernamepassword' }, res);
+    InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id, type: 'usernamepassword' }, req, res);
   }
 };
 

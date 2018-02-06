@@ -92,7 +92,7 @@ const action = async (req, res) => {
     });
   }
 
-  return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'digipass' }, res);
+  return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'digipass' }, req, res);
 };
 
 module.exports = action;
