@@ -116,71 +116,8 @@
     </div>
 </footer>
 
-
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/javascript/app.min.js"></script>
-
-
-<script>
-
-
-    $(function() {
-
-        var $form
-        
-        $('#form-signin').on('submit', function (e) {
-
-            $form = $(this);
-
-            var data = {};
-
-            data._csrf = $('input[name=_csrf]').val();
-            data.username = $('#username').val();
-            data.password = $('#password').val();
-
-            console.log(data);
-
-            $.ajax({
-                type: "POST",
-                data: data,
-                url: $form.attr('action'),
-                dataType: 'json',
-                success: success
-            });
-
-            e.preventDefault();
-
-        });
-
-
-
-        function success(data) {
-
-            console.log(data);
-
-            if (data.postbackData != undefined) {
-
-                var f1 = $('<input />').attr('type', 'hidden').attr('name', 'uuid').val(data.postbackData.uuid);
-                var f2 = $('<input />').attr('type', 'hidden').attr('name', 'status').val(data.postbackData.status);
-                var f3 = $('<input />').attr('type', 'hidden').attr('name', 'uid').val(data.postbackData.uid);
-                var f4 = $('<input />').attr('type', 'hidden').attr('name', 'type').val(data.postbackData.type);
-                var f5 = $('<input />').attr('type', 'hidden').attr('name', 'sig').val(data.postbackData.sig);
-
-                var newForm = $('<form />').append(f1).append(f2).append(f3).append(f4).append(f5);
-
-                newForm.attr('id', 'js-form').attr('action', data.destination).attr('method', 'post');
-
-                $($form).after(newForm);
-                $('#js-form').submit();
-
-            }
-
-        }
-        
-    });
-
-
-</script>
 
 </body>
 </html>
