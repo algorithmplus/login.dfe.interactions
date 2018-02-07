@@ -26,7 +26,12 @@ const authenticate = async (username, password, client, correlationId) => {
     };
   } catch (e) {
     const status = e.statusCode ? e.statusCode : 500;
-    if (status === 401) {
+    if (status === 403 && e.error && e.error.reason_code === 'ACCOUNT_DEACTIVATED') {
+      return {
+        status: 'Deactivated',
+      };
+    }
+    if (status === 403) {
       return null;
     }
     throw e;
