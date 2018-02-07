@@ -72,11 +72,28 @@ describe('When authenticating a user with the api', () => {
   });
 
   describe('with valid credentials', () => {
-    it('then it should return the user id', async () => {
+    it('then it should return the user id if user active', async () => {
       const userId = await directoriesApiUserAdapter.authenticate(username, password);
 
       expect(userId).not.toBeNull();
       expect(userId.id).toBe('user1');
+    });
+
+    it('then it should return the status if user inactive', async () => {
+      rp.mockImplementation(() => {
+        const error = new Error();
+        error.statusCode = 403;
+        error.error = {
+          reason_code: 'ACCOUNT_DEACTIVATED',
+          reason_description: 'Account has been deactivated',
+        };
+        throw error;
+      });
+
+      const user = await directoriesApiUserAdapter.authenticate(username, password);
+
+      expect(user).not.toBeNull();
+      expect(user.status).toBe('Deactivated');
     });
   });
 
@@ -84,7 +101,7 @@ describe('When authenticating a user with the api', () => {
     beforeEach(() => {
       rp.mockImplementation(() => {
         const error = new Error();
-        error.statusCode = 401;
+        error.statusCode = 403;
         throw error;
       });
     });

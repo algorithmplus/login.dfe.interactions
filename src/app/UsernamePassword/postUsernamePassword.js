@@ -68,6 +68,28 @@ const post = async (req, res) => {
       validationMessages: validation.validationMessages,
       username: req.body.username,
     });
+  } else if (user.status === 'Deactivated') {
+    logger.audit(`Attempt login to deactivated account for ${req.body.username}`, {
+      type: 'sign-in',
+      subType: 'username-password',
+      success: false,
+      userEmail: req.body.username,
+    });
+
+    if (Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
+      validation.validationMessages.loginError = 'Your account has been deactivated.';
+    }
+
+    sendResult(req, res, 'UsernamePassword/views/index', {
+      isFailedLogin: true,
+      title: 'Sign in',
+      clientId: req.query.clientid,
+      uuid: req.params.uuid,
+      csrfToken: req.csrfToken(),
+      redirectUri: req.query.redirect_uri,
+      validationMessages: validation.validationMessages,
+      username: req.body.username,
+    });
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
       type: 'sign-in',
@@ -76,7 +98,11 @@ const post = async (req, res) => {
       userId: user.id,
       userEmail: req.body.username,
     });
-    InteractionComplete.process(req.params.uuid, { status: 'success', uid: user.id, type: 'usernamepassword' }, req, res);
+    InteractionComplete.process(req.params.uuid, {
+      status: 'success',
+      uid: user.id,
+      type: 'usernamepassword'
+    }, req, res);
   }
 };
 
