@@ -21,7 +21,7 @@
                     <input class="form-control" id="email" name="email" type="email" value="<%=email%>" required  aria-required="true" <% if (locals.validationMessages.email !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                 </div>
                 <div class="form-submit submit-buttons">
-                    <button type="submit" class="button">Submit</button>
+                    <button type="submit" class="button">Continue</button>
                     <a href="/<%=uuid%>/usernamepassword?clientid=<%=clientId%>&redirect_uri=<%=redirectUri%>" class="button button-secondary">Cancel</a>
                 </div>
             </fieldset>
