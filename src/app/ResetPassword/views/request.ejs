@@ -1,11 +1,10 @@
-<a href="/<%=uuid%>/usernamepassword?clientid=<%=clientId%>&redirect_uri=<%=redirectUri%>" class="link-back">Back</a>
+
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
-            Reset your password
+            Forgotten your password?
         </h1>
-        <p class="lede">Enter your email address and we'll send you a link to reset your password.</p>
-        <p>If you don't get a link, check that you have entered the correct email address.</p>
+        <p class="lede">Enter the email address you have registered for DfE Sign-in.</p>
     </div>
 </div>
 <div class="grid-row">
@@ -21,8 +20,9 @@
                     <% } %>
                     <input class="form-control" id="email" name="email" type="email" value="<%=email%>" required  aria-required="true" <% if (locals.validationMessages.email !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                 </div>
-                <div class="form-submit">
+                <div class="form-submit submit-buttons">
                     <button type="submit" class="button">Submit</button>
+                    <a href="/<%=uuid%>/usernamepassword?clientid=<%=clientId%>&redirect_uri=<%=redirectUri%>" class="button button-secondary">Cancel</a>
                 </div>
             </fieldset>
         </form>

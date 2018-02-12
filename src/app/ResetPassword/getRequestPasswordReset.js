@@ -3,7 +3,7 @@
 const action = (req, res) => {
   res.render('ResetPassword/views/request', {
     csrfToken: req.csrfToken(),
-    title: 'Reset your password',
+    title: 'Forgotten your password?',
     email: '',
     uuid: req.params.uuid,
     clientId: req.query.clientid,
