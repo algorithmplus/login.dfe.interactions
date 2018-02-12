@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title><%=locals.title || locals.app.title || 'Login.DfE'%></title>
+    <title><%=locals.title || locals.app.title || 'DfE Sign-in'%></title>
 
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/fonts.css">
     <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/govuk-template.css">
@@ -74,7 +74,7 @@
 
         <div class="error-summary" role="alert" aria-labelledby="error-summary" tabindex="-1">
             <h2 class="heading-medium error-summary-heading" id="error-summary">
-                There are errors to fix
+                Information missing or incorrect
             </h2>
             <ul class="error-summary-list">
                 <% for (const prop in locals.validationMessages) { %>
