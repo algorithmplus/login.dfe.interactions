@@ -102,17 +102,7 @@ Object.assign(app.locals, {
     url: config.hostingEnvironment.portalUrl,
   },
   app: {
-    title: 'Login.Dfe',
-  },
-});
-
-// Setup global locals for layouts and views
-Object.assign(app.locals, {
-  portal: {
-    url: config.hostingEnvironment.portalUrl,
-  },
-  app: {
-    title: 'Login.Dfe',
+    title: 'DfE Sign-in',
   },
 });
 
