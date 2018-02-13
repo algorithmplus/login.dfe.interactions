@@ -5,6 +5,7 @@ const directoriesApi = require('./../../infrastructure/Users');
 const clients = require('./../../infrastructure/Clients');
 const userCodes = require('./../../infrastructure/UserCodes');
 const logger = require('./../../infrastructure/logger');
+const uuid = require('uuid/v4');
 
 const validate = (email) => {
   const messages = {
@@ -30,8 +31,10 @@ const validate = (email) => {
 
 const action = async (req, res) => {
   const email = req.body.email;
-  const resend = req.body.resend;
   const validationResult = validate(email);
+
+  req.session.email = email;
+  req.session.resend = req.body.resend;
 
   if (validationResult.failed) {
     res.render('ResetPassword/views/request', {
@@ -50,19 +53,13 @@ const action = async (req, res) => {
     const client = await clients.get(req.query.clientid, req.id);
     const user = await directoriesApi.find(email, client, req.id);
     await userCodes.upsertCode(user.sub, req.query.clientid, req.query.redirect_uri, req.id);
+    res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
   } catch (e) {
     logger.info(`Password reset requested for ${email} and failed correlationId: ${req.id}`);
     logger.info(e);
+    res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
   }
 
-  res.render('ResetPassword/views/codesent', {
-    uuid: req.params.uuid,
-    clientid: req.query.clientid,
-    email,
-    resend,
-    title: 'Email sent',
-    csrfToken: req.csrfToken(),
-  });
 };
 
 module.exports = action;
