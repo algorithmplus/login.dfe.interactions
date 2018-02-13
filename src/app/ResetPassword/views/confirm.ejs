@@ -1,9 +1,30 @@
+<% if (locals.resend) { %>
+<div class="notification notification-success" tabindex="0">
+    <h2>Password reset code email resent</h2>
+    <span class="icon">x</span>
+</div>
+<% } %>
+<% if (locals.email) { %>
+<div class="notification notification-success" tabindex="0">
+    <h2>Email verification sent</h2>
+    <p>We've sent you an email containing a verification code.</p>
+
+    <form method="post" class="inline" id="form-resend-reset-password" action="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>">
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+        <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
+        <input type="hidden" name="resend" id="resend" value="true" />
+        <button type="submit" class="button-text">Resend code</button>
+    </form>
+    <span class="icon">x</span>
+</div>
+<% } %>
+
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
-            Reset your password
+            Enter your verification code
         </h1>
-        <p class="lede">Enter the code that was emailed to you</p>
+        <p class="lede">Enter the verification code included in the email we sent you. </p>
     </div>
 </div>
 <div class="grid-row">
@@ -14,13 +35,14 @@
                 <legend class="vh">Reset password form</legend>
                 <input type="hidden" value="<%=locals.uid%>" name="uid" id="uid"/>
                 <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
-                    <label class="form-label" for="code">Code</label>
+                    <label class="form-label" for="code">Verification code</label>
                     <% if (locals.validationMessages.code !== undefined) { %>
                     <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
                     <% } %>
                     <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" required aria-required="true" <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
                 </div>
-                <div class="form-submit">
+                <div class="form-submit submit-buttons">
+                    <a href="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>" class="button button-secondary">Go back</a>
                     <button type="submit" class="button">Continue</button>
                 </div>
             </fieldset>

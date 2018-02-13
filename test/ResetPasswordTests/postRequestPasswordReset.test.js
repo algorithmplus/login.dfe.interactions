@@ -66,11 +66,11 @@ describe('when handling the posting of a password reset request', () => {
       expect(userCodesUpsertCode.mock.calls[0][2]).toBe('https://local.test');
     });
 
-    it('then it should render the codesent view', async () => {
+    it('then it should render the confirm view', async () => {
       await postRequestPasswordReset(req,res);
 
-      expect(res.render.mock.calls.length).toBe(1);
-      expect(res.render.mock.calls[0][0]).toBe('ResetPassword/views/codesent');
+      expect(res.redirect.mock.calls).toHaveLength(1);
+      expect(res.redirect.mock.calls[0][0]).toBe('/123-abc/resetpassword/12345/confirm?clientid=client1&redirect_uri=https://local.test');
     });
   });
 
