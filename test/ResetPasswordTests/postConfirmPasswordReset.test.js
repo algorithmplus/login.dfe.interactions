@@ -94,7 +94,7 @@ describe('When posting the confirm password reset view', () => {
     it('then it should include a validation message for code', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(res.render.mock.calls[0][1].validationMessages.code).toBe('Please enter the code that was emailed to you');
+      expect(res.render.mock.calls[0][1].validationMessages.code).toBe('Enter the verification code included in the email we sent you.');
     });
   });
 
