@@ -8,7 +8,7 @@ const validate = (code) => {
   let failed = false;
 
   if (code.length === 0) {
-    messages.code = 'Please enter the code that was emailed to you';
+    messages.code = 'Enter the verification code included in the email we sent you.';
     failed = true;
   }
 
