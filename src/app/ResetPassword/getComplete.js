@@ -1,9 +1,13 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+
 const action = (req, res) => {
   res.render('ResetPassword/views/complete', {
-    title: 'Reset your password',
-    redirectUri: req.session.redirectUri,
+    title: 'Password has been reset',
+    uuid: uuid(),
+    clientId: req.query.clientid,
+    redirectUri: req.query.redirect_uri,
   });
 };
 
