@@ -1,10 +1,11 @@
 <div class="grid-row">
     <div class="col-8">
-        <h1 class="heading-xlarge">
-            Reset your password
-        </h1>
-        <p class="lede">You have successfully set up a new password.</p>
-
-        <a class="button" href="<%=locals.redirectUri%>">Continue</a>
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">
+                Password has been reset
+            </h1>
+        </div>
+        <p>Your password has been reset and can now be used to access your DfE Sign-in account.</p>
+        <a class="button" href="/<%= locals.uuid %>/usernamepassword?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">Sign in</a>
     </div>
 </div>

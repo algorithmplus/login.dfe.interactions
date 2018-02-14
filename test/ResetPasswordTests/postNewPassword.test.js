@@ -159,7 +159,7 @@ describe('when posting new password', () => {
     it('then it should include a validation message for password', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Please enter your new password');
+      expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Please enter a password');
     });
   });
 
@@ -251,7 +251,7 @@ describe('when posting new password', () => {
     it('then it should include a validation message for confirm password', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls[0][1].validationMessages.confirmPassword).toBe('Passwords do not match');
+      expect(render.mock.calls[0][1].validationMessages.confirmPassword).toBe('Please enter matching passwords');
     });
   });
 
@@ -294,7 +294,7 @@ describe('when posting new password', () => {
     it('then it should include a validation message for password', async () => {
       await postNewPassword(req, res);
 
-      expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Your password does not meet the minimum requirements');
+      expect(render.mock.calls[0][1].validationMessages.newPassword).toBe('Please enter a password of at least 12 characters');
     });
   });
 });
