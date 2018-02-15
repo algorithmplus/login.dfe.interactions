@@ -54,7 +54,7 @@ describe('When user submits username/password', () => {
       await postHandler(req, res);
 
       expect(res.render.mock.calls).toHaveLength(1);
-      expect(res.render.mock.calls[0][0]).toBe('UsernamePassword/views/index');
+      expect(res.render.mock.calls[0][0]).toBe('UsernamePassword/views/indexEas');
     });
 
     it('then a validation message will appear if the email is not present', async () => {
@@ -62,7 +62,7 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter your email address');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Please enter your email address');
     });
 
     it('then a validation message will appear if the email is not in the correct format', async () => {
@@ -70,7 +70,7 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Please enter a valid email address');
     });
 
     it('then a validation message will appear if the password is not present', async () => {
@@ -78,7 +78,7 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Enter your password');
+      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Please enter your password');
     });
 
     it('then a validation message will appear if the email and password is not present', async () => {
@@ -87,8 +87,8 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Enter your password');
-      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter your email address');
+      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Please enter your password');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Please enter your email address');
     });
 
     it('then a validation message will appear if the email and password is not present', async () => {
@@ -97,8 +97,8 @@ describe('When user submits username/password', () => {
 
       await postHandler(req, res);
 
-      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Enter your password');
-      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Enter a valid email address');
+      expect(res.render.mock.calls[0][1].validationMessages.password).toBe('Please enter your password');
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Please enter a valid email address');
     });
 
     it('then it should be a failed login', async () => {
