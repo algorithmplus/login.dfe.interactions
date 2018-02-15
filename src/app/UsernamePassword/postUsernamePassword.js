@@ -10,15 +10,15 @@ const validateBody = (body) => {
   let failedValidation = false;
 
   if (body.username === '') {
-    validationMessages.username = 'Enter your email address';
+    validationMessages.username = 'Please enter your email address';
     failedValidation = true;
   } else if (!emailValidator.validate(body.username)) {
-    validationMessages.username = 'Enter a valid email address';
+    validationMessages.username = 'Please enter a valid email address';
     failedValidation = true;
   }
 
   if (body.password === '') {
-    validationMessages.password = 'Enter your password';
+    validationMessages.password = 'Please enter your password';
     failedValidation = true;
   }
   return {
@@ -58,9 +58,9 @@ const post = async (req, res) => {
       validation.validationMessages.loginError = 'Invalid email address or password. Try again.';
     }
 
-    sendResult(req, res, 'UsernamePassword/views/index', {
+    sendResult(req, res, 'UsernamePassword/views/indexEas', {
       isFailedLogin: true,
-      title: 'Sign in',
+      title: 'DfE Sign-in',
       clientId: req.query.clientid,
       uuid: req.params.uuid,
       csrfToken: req.csrfToken(),
@@ -80,9 +80,9 @@ const post = async (req, res) => {
       validation.validationMessages.loginError = 'Your account has been deactivated.';
     }
 
-    sendResult(req, res, 'UsernamePassword/views/index', {
+    sendResult(req, res, 'UsernamePassword/views/indexEas', {
       isFailedLogin: true,
-      title: 'Sign in',
+      title: 'DfE Sign-in',
       clientId: req.query.clientid,
       uuid: req.params.uuid,
       csrfToken: req.csrfToken(),
