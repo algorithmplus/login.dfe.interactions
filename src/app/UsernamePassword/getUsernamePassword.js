@@ -1,10 +1,10 @@
 'use strict';
 
 const get = (req, res) => {
-  res.render('UsernamePassword/views/index', {
+  res.render('UsernamePassword/views/indexEas', {
     isFailedLogin: false,
     message: '',
-    title: 'Sign in',
+    title: 'DfE Sign-in',
     clientId: req.query.clientid,
     uuid: req.params.uuid,
     csrfToken: req.csrfToken(),
