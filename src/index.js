@@ -8,7 +8,7 @@ const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
-const session = require('express-session');
+const session = require('cookie-session');
 const https = require('https');
 const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
@@ -32,6 +32,14 @@ if (config.hostingEnvironment.applicationInsights) {
   appInsights.setup(config.hostingEnvironment.applicationInsights).start();
 }
 
+let expiryInMinutes = 30;
+const sessionExpiry = parseInt(config.hostingEnvironment.sessionCookieExpiryInMinutes);
+if (!isNaN(sessionExpiry)) {
+  expiryInMinutes = sessionExpiry;
+}
+
+const expiryDate = new Date(Date.now() + (60 * expiryInMinutes * 1000));
+
 const app = express();
 
 app.use(helmet({
@@ -54,6 +62,7 @@ const sess = {
   cookie: {
     httpOnly: true,
     secure: true,
+    expires: expiryDate,
   },
 };
 
