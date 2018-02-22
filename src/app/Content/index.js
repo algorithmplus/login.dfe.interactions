@@ -1,9 +1,9 @@
 'use strict';
 
 const express = require('express');
+const logger = require('./../../infrastructure/logger');
 
 const router = express.Router({ mergeParams: true });
-const logger = require('./../../infrastructure/logger');
 
 module.exports = () => {
   logger.info('Mounting static content routes');
