@@ -21,6 +21,7 @@ const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
+const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
 
@@ -100,7 +101,8 @@ app.set('layout', 'layouts/layout');
 
 // Setup routes
 app.use('/healthcheck', healthCheck({ config }));
-app.use('/', devLauncher(csrf));
+app.use('/', content(csrf));
+app.use('/dev/', devLauncher(csrf));
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
