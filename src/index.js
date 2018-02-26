@@ -115,6 +115,7 @@ Object.assign(app.locals, {
   app: {
     title: 'DfE Sign-in',
   },
+  gaTrackingId: config.hostingEnvironment.gaTrackingId,
 });
 
 // Setup server
