@@ -109,8 +109,8 @@ app.use('/:uuid/digipass', digipass(csrf));
 
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
-  portal: {
-    url: config.hostingEnvironment.portalUrl,
+  urls: {
+    help: config.hostingEnvironment.helpUrl,
   },
   app: {
     title: 'DfE Sign-in',
