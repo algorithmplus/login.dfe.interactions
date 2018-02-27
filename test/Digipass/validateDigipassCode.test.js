@@ -8,7 +8,12 @@ jest.mock('./../../src/infrastructure/devices', () => {
     validateDigipassToken: jest.fn(),
   };
 });
-jest.mock('./../../src/infrastructure/logger');
+jest.mock('./../../src/infrastructure/logger', () => {
+  return {
+    audit: jest.fn(),
+    info: jest.fn(),
+  };
+});
 jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/app/InteractionComplete');
 
@@ -45,7 +50,6 @@ describe('when validating the user entered digipass code', () => {
     processComplete.mockReset();
 
     logger = require('./../../src/infrastructure/logger');
-    logger.audit.mockReset();
   });
 
   it('then it should get list of devices for user', async () => {

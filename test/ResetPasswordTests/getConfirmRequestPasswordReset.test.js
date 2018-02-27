@@ -1,4 +1,7 @@
 const utils = require('./../utils');
+jest.mock('./../../src/infrastructure/logger', () => {
+  return {  };
+});
 const getRequestPasswordReset = require('./../../src/app/ResetPassword/getConfirmPasswordReset');
 
 describe('When getting the confirm password reset view', () => {

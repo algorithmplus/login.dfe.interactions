@@ -1,5 +1,7 @@
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/logger');
+jest.mock('./../../src/infrastructure/logger', () => {
+  return {  };
+});
 
 const utils = require('./../utils');
 

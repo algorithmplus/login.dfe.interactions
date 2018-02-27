@@ -18,7 +18,11 @@ jest.mock('./../../src/infrastructure/Config', () => {
     };
   });
 });
-jest.mock('./../../src/infrastructure/logger');
+jest.mock('./../../src/infrastructure/logger', () => {
+  return {
+    warn :jest.fn()
+  };
+});
 
 const { validateDigipassToken } = require('./../../src/infrastructure/devices/devicesApi');
 
