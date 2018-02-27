@@ -2,7 +2,9 @@ jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/logger');
+jest.mock('./../../src/infrastructure/logger', () => {
+  return {};
+});
 jest.mock('login.dfe.validation');
 
 describe('when posting new password', () => {

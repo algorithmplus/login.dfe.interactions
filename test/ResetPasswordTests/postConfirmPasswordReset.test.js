@@ -2,7 +2,12 @@ const utils = require('./../utils');
 
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/logger');
+jest.mock('./../../src/infrastructure/logger', () => {
+  return {
+    info :jest.fn(),
+    audit: jest.fn(),
+  }
+});
 
 describe('When posting the confirm password reset view', () => {
 
@@ -23,10 +28,7 @@ describe('When posting the confirm password reset view', () => {
     userCodes.validateCode = userCodesValidateCode;
 
 
-    loggerAudit = jest.fn();
-    const logger = require('./../../src/infrastructure/logger');
-    logger.audit = loggerAudit;
-    logger.info = jest.fn();
+    loggerAudit = require('./../../src/infrastructure/logger');
 
     postConfirmPasswordReset = require('./../../src/app/ResetPassword/postConfirmPasswordReset');
   });
@@ -142,9 +144,9 @@ describe('When posting the confirm password reset view', () => {
     it('then it should audit a failed reset attempt', async () => {
       await postConfirmPasswordReset(req, res);
 
-      expect(loggerAudit.mock.calls.length).toBe(1);
-      expect(loggerAudit.mock.calls[0][0]).toBe('Failed attempt to reset password id: 12345EDC - Invalid code');
-      expect(loggerAudit.mock.calls[0][1]).toMatchObject({
+      expect(loggerAudit.audit.mock.calls.length).toBe(1);
+      expect(loggerAudit.audit.mock.calls[0][0]).toBe('Failed attempt to reset password id: 12345EDC - Invalid code');
+      expect(loggerAudit.audit.mock.calls[0][1]).toMatchObject({
         type: 'reset-password',
         success: false,
         userId: '12345EDC',
