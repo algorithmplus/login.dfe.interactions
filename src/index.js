@@ -1,5 +1,4 @@
 const logger = require('./infrastructure/logger');
-const appInsights = require('applicationinsights');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -28,10 +27,6 @@ const setCorrelationId = require('express-mw-correlation-id');
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
 validateConfigAndQuitOnError(interactionsSchema, config, logger);
-
-if (config.hostingEnvironment.applicationInsights) {
-  appInsights.setup(config.hostingEnvironment.applicationInsights).start();
-}
 
 let expiryInMinutes = 30;
 const sessionExpiry = parseInt(config.hostingEnvironment.sessionCookieExpiryInMinutes);
