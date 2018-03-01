@@ -29,7 +29,8 @@ const get = async (id, reqId) => {
   assert(id, 'Client ID not specified');
   logger.info(`HotConfigClientAdapter:get() - fetching client config with id ${id} for request ${reqId}`);
   const clients = await allClients(reqId);
-  return clients.find(c => c.client_id.toLowerCase() === id.toLowerCase());
+  const client = clients.find(c => c.client_id.toLowerCase() === id.toLowerCase());
+  return client === undefined ? null : client;
 };
 
 
