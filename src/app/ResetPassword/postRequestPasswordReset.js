@@ -41,8 +41,8 @@ const action = async (req, res) => {
       csrfToken: req.csrfToken(),
       email,
       uuid: req.params.uuid,
-      clientId: req.query.clientid,
-      redirectUri: req.query.redirect_uri,
+      clientId: req.body.clientId,
+      redirectUri: req.body.redirectUri,
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
     });
@@ -50,16 +50,15 @@ const action = async (req, res) => {
   }
 
   try {
-    const client = await clients.get(req.query.clientid, req.id);
+    const client = await clients.get(req.body.clientId, req.id);
     const user = await directoriesApi.find(email, client, req.id);
-    await userCodes.upsertCode(user.sub, req.query.clientid, req.query.redirect_uri, req.id);
-    res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
+    await userCodes.upsertCode(user.sub, req.body.clientId, req.body.redirectUri, req.id);
+    res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   } catch (e) {
     logger.info(`Password reset requested for ${email} and failed correlationId: ${req.id}`);
     logger.info(e);
-    res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
+    res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   }
-
 };
 
 module.exports = action;

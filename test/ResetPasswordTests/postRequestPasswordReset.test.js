@@ -40,10 +40,8 @@ describe('when handling the posting of a password reset request', () => {
     beforeEach(() => {
       req.body = {
         email: 'user.one@unit.test',
-      };
-      req.query = {
-        clientid: 'client1',
-        redirect_uri: 'https://local.test',
+        clientId: 'client1',
+        redirectUri: 'https://local.test',
       };
     });
 

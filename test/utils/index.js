@@ -3,6 +3,7 @@ const mockRequest = () => {
     accepts: () => {
       return ['text/html'];
     },
+    id: '123',
     params: {
       uuid: '123-abc',
       uid: '123-abc',
