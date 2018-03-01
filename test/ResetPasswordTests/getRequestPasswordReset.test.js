@@ -52,13 +52,13 @@ describe('When getting the request password reset view', () => {
     await getRequestPasswordReset(req, res);
 
     expect(hotConfig.get.mock.calls).toHaveLength(1);
-    expect(hotConfig.get.mock.calls[0][0]).toBe(req.query.clientId);
+    expect(hotConfig.get.mock.calls[0][0]).toBe(req.query.clientid);
     expect(hotConfig.get.mock.calls[0][1]).toBe(req.id);
   });
 
   it('then if the return url does not match the client information a bad request is returned', async () => {
     hotConfig.get.mockReturnValue({
-      client_id: req.query.clientId,
+      client_id: req.query.clientid,
       client_secret: 'secret',
       redirect_uris: ['https://test.local'],
     });
