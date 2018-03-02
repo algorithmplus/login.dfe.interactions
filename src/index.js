@@ -13,6 +13,7 @@ const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
 const sanitization = require('login.dfe.sanitization');
 const healthCheck = require('login.dfe.healthcheck');
+const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 
 const rateLimiter = require('./app/rateLimit');
 
@@ -112,6 +113,15 @@ Object.assign(app.locals, {
   },
   gaTrackingId: config.hostingEnvironment.gaTrackingId,
 });
+
+// error handling
+const errorPageRenderer = ejsErrorPages.getErrorPageRenderer({
+  help: config.hostingEnvironment.helpUrl,
+}, config.hostingEnvironment.env === 'dev');
+app.use(getErrorHandler({
+  logger,
+  errorPageRenderer,
+}));
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {

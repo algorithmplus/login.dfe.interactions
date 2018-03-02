@@ -1,6 +1,8 @@
 'use strict';
 
 const hotConfig = require('./../../infrastructure/Clients');
+const config = require('./../../infrastructure/Config')();
+const { ejsErrorPages } = require('login.dfe.express-error-handling');
 
 const action = async (req, res) => {
   const client = await hotConfig.get(req.query.clientid, req.id);
@@ -15,7 +17,13 @@ const action = async (req, res) => {
   }
 
   if (!isValidRedirect) {
-    res.redirect('/error');
+    let details = `Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - `;
+    if(!client) {
+      details += 'no client by that id';
+    } else {
+      details += 'redirect_uri not in list of specified redirect_uris';
+    }
+    throw new Error(details);
   } else {
     res.render('ResetPassword/views/request', {
       csrfToken: req.csrfToken(),
