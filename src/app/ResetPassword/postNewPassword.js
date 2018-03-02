@@ -1,6 +1,5 @@
 'use strict';
 
-const clients = require('./../../infrastructure/Clients');
 const users = require('./../../infrastructure/Users');
 const userCodes = require('./../../infrastructure/UserCodes');
 const { passwordPolicy } = require('login.dfe.validation');
@@ -46,9 +45,7 @@ const action = async (req, res) => {
     return;
   }
 
-  const client = await clients.get(req.session.clientId, req.id);
-
-  await users.changePassword(req.session.uid, req.body.newPassword, client, req.id);
+  await users.changePassword(req.session.uid, req.body.newPassword, req.id);
 
   const userCode = await userCodes.getCode(req.session.uid);
 

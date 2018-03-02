@@ -5,14 +5,14 @@ const authenticate = async (username, password) => {
   return { id: '23121d3c-84df-44ac-b458-3d63a9a05497' };
 };
 
-const find = async (username, client) => {
+const find = async (username) => {
   if (username.toLowerCase() !== 'foo@example.com') {
     return null;
   }
   return { id: '23121d3c-84df-44ac-b458-3d63a9a05497' };
 };
 
-const changePassword = async (uid, password, client) => Promise.resolve(null);
+const changePassword = async (uid, password) => Promise.resolve(null);
 
 const getDevices = async (uid) => {
   if (uid === '23121d3c-84df-44ac-b458-3d63a9a05497') {

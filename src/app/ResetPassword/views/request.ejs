@@ -11,6 +11,8 @@
     <div class="col-12">
         <form method="post" id="form-reset-password">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <input type="hidden" name="clientId" value="<%=locals.clientId%>" />
+            <input type="hidden" name="redirectUri" value="<%=locals.redirectUri%>" />
             <fieldset>
                 <legend class="vh">Reset password</legend>
                 <div class="form-group <%=  locals.validationMessages.email !== undefined ? "form-group-error" : "" %>">

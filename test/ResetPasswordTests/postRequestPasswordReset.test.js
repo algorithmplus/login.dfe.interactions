@@ -40,17 +40,9 @@ describe('when handling the posting of a password reset request', () => {
     beforeEach(() => {
       req.body = {
         email: 'user.one@unit.test',
+        clientId: 'client1',
+        redirectUri: 'https://local.test',
       };
-      req.query = {
-        clientid: 'client1',
-        redirect_uri: 'https://local.test',
-      };
-    });
-
-    it('then the client is retrieved from the hotconfig adapter', async () => {
-      await postRequestPasswordReset(req, res);
-
-      expect(clientsGet.mock.calls.length).toBe(1);
     });
 
     it('then the user is retrieved from the directories api', async () => {

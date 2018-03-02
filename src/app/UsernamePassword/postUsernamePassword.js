@@ -43,7 +43,7 @@ const post = async (req, res) => {
   let user = null;
   const validation = validateBody(req.body);
   if (!validation.failedValidation) {
-    user = await Users.authenticate(req.body.username, req.body.password, client, req.id);
+    user = await Users.authenticate(req.body.username, req.body.password, req.id);
   }
 
   if (user === null) {
@@ -101,7 +101,7 @@ const post = async (req, res) => {
     InteractionComplete.process(req.params.uuid, {
       status: 'success',
       uid: user.id,
-      type: 'usernamepassword'
+      type: 'usernamepassword',
     }, req, res);
   }
 };
