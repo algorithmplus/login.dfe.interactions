@@ -63,18 +63,29 @@ describe('When getting the request password reset view', () => {
       redirect_uris: ['https://test.local'],
     });
 
+    let error = null;
+    try {
+      await getRequestPasswordReset(req, res);
+    } catch (e) {
+      error = e;
+    }
 
-    await getRequestPasswordReset(req, res);
-
-    expect(res.redirect.mock.calls[0][0]).toBe('/error');
+    expect(error).not.toBeNull();
+    expect(error.message).toBe(`Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - redirect_uri not in list of specified redirect_uris`);
   });
 
   it('then if no client is returned a bad request is returned', async () => {
     hotConfig.get.mockReset();
     hotConfig.get.mockReturnValue(null);
 
-    await getRequestPasswordReset(req, res);
+    let error = null;
+    try {
+      await getRequestPasswordReset(req, res);
+    } catch (e) {
+      error = e;
+    }
 
-    expect(res.redirect.mock.calls[0][0]).toBe('/error');
+    expect(error).not.toBeNull();
+    expect(error.message).toBe(`Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - no client by that id`);
   });
 });
