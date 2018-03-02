@@ -45,12 +45,6 @@ describe('when handling the posting of a password reset request', () => {
       };
     });
 
-    it('then the client is retrieved from the hotconfig adapter', async () => {
-      await postRequestPasswordReset(req, res);
-
-      expect(clientsGet.mock.calls.length).toBe(1);
-    });
-
     it('then the user is retrieved from the directories api', async () => {
       await postRequestPasswordReset(req,res);
 

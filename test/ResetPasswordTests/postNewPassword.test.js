@@ -8,9 +8,7 @@ jest.mock('./../../src/infrastructure/logger', () => {
 jest.mock('login.dfe.validation');
 
 describe('when posting new password', () => {
-  const client = {};
   const expectedRedirectUri = 'http://localhost.test';
-  let clientsGet;
 
   let userAdapterChangePassword;
   let doesPasswordMeetPolicy;
@@ -37,10 +35,6 @@ describe('when posting new password', () => {
   let postNewPassword;
 
   beforeEach(() => {
-    clientsGet = jest.fn().mockReturnValue(client);
-
-    const clients = require('./../../src/infrastructure/Clients');
-    clients.get = clientsGet;
 
     userAdapterChangePassword = jest.fn();
     const userAdapter = require('./../../src/infrastructure/Users');
@@ -92,7 +86,6 @@ describe('when posting new password', () => {
       expect(userAdapterChangePassword.mock.calls).toHaveLength(1);
       expect(userAdapterChangePassword.mock.calls[0][0]).toBe(req.session.uid);
       expect(userAdapterChangePassword.mock.calls[0][1]).toBe(req.body.newPassword);
-      expect(userAdapterChangePassword.mock.calls[0][2]).toBe(client);
     });
     it('then the usercode is retrieved to get the redirectUri', async () => {
       await postNewPassword(req, res);

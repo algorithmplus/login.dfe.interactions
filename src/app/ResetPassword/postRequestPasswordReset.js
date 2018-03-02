@@ -2,7 +2,6 @@
 
 const emailValidator = require('email-validator');
 const directoriesApi = require('./../../infrastructure/Users');
-const clients = require('./../../infrastructure/Clients');
 const userCodes = require('./../../infrastructure/UserCodes');
 const logger = require('./../../infrastructure/logger');
 const uuid = require('uuid/v4');
@@ -50,8 +49,7 @@ const action = async (req, res) => {
   }
 
   try {
-    const client = await clients.get(req.body.clientId, req.id);
-    const user = await directoriesApi.find(email, client, req.id);
+    const user = await directoriesApi.find(email, req.id);
     await userCodes.upsertCode(user.sub, req.body.clientId, req.body.redirectUri, req.id);
     res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   } catch (e) {

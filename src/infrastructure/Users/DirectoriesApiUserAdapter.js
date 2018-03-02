@@ -3,7 +3,7 @@ const jwtStrategy = require('login.dfe.jwt-strategies');
 const config = require('./../Config')();
 
 
-const authenticate = async (username, password, client, correlationId) => {
+const authenticate = async (username, password, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -38,7 +38,7 @@ const authenticate = async (username, password, client, correlationId) => {
   }
 };
 
-const find = async (username, client, correlationId) => {
+const find = async (username, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -67,7 +67,7 @@ const find = async (username, client, correlationId) => {
   }
 };
 
-const changePassword = async (uid, password, client, correlationId) => {
+const changePassword = async (uid, password, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
