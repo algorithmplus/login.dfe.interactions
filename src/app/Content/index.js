@@ -27,10 +27,5 @@ module.exports = () => {
       title: 'Help',
     });
   });
-  router.get('/error', (req, res) => {
-    res.render('Content/views/error', {
-      title: 'Error',
-    });
-  });
   return router;
 };

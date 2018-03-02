@@ -2,6 +2,7 @@
 
 const express = require('express');
 const logger = require('./../../infrastructure/logger');
+const { asyncWrapper } = require('login.dfe.express-error-handling');
 
 const getRequestPasswordReset = require('./getRequestPasswordReset');
 const postRequestPasswordReset = require('./postRequestPasswordReset');
@@ -17,16 +18,16 @@ const router = express.Router({ mergeParams: true });
 const registerRoutes = (csrf) => {
   logger.info('Mounting ResetPassword routes');
 
-  router.get('/request', csrf, getRequestPasswordReset);
-  router.post('/request', csrf, postRequestPasswordReset);
+  router.get('/request', csrf, asyncWrapper(getRequestPasswordReset));
+  router.post('/request', csrf, asyncWrapper(postRequestPasswordReset));
 
-  router.get('/:uid/confirm', csrf, getConfirmPasswordReset);
-  router.post('/:uid/confirm', csrf, postConfirmPasswordReset);
+  router.get('/:uid/confirm', csrf, asyncWrapper(getConfirmPasswordReset));
+  router.post('/:uid/confirm', csrf, asyncWrapper(postConfirmPasswordReset));
 
-  router.get('/newpassword', csrf, hasConfirmedIdentity, getNewPassword);
-  router.post('/newpassword', csrf, hasConfirmedIdentity, postNewPassword);
+  router.get('/newpassword', csrf, hasConfirmedIdentity, asyncWrapper(getNewPassword));
+  router.post('/newpassword', csrf, hasConfirmedIdentity, asyncWrapper(postNewPassword));
 
-  router.get('/complete', csrf, hasConfirmedIdentity, getComplete);
+  router.get('/complete', csrf, hasConfirmedIdentity, asyncWrapper(getComplete));
 
   return router;
 };
