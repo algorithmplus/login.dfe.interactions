@@ -28,6 +28,8 @@ const action = async (req, res) => {
       code: req.body.code,
       validationFailed: true,
       validationMessages: validationResult.messages,
+      clientId: req.body.clientId,
+      redirectUri: req.body.redirectUri,
     });
     return;
   }
@@ -42,7 +44,7 @@ const action = async (req, res) => {
 
   if (userCode) {
     req.session.uid = req.body.uid;
-    req.session.clientId = req.query.clientid;
+    req.session.clientId = req.body.clientId;
     res.redirect(`/${req.params.uuid}/resetpassword/newpassword`);
     return;
   }
@@ -62,6 +64,8 @@ const action = async (req, res) => {
     validationFailed: true,
     validationMessages: validationResult.messages,
     reqId: req.id,
+    clientId: req.body.clientId,
+    redirectUri: req.body.redirectUri,
   });
 };
 

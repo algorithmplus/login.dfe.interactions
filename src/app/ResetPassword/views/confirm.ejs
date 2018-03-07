@@ -13,6 +13,8 @@
         <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
         <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
         <input type="hidden" name="resend" id="resend" value="true" />
+        <input type="hidden" name="clientId" id="clientId" value="<%=locals.clientId%>" />
+        <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
         <button type="submit" class="button-text">Resend code</button>
     </form>
     <span class="icon">x</span>
@@ -34,6 +36,8 @@
             <fieldset>
                 <legend class="vh">Reset password form</legend>
                 <input type="hidden" value="<%=locals.uid%>" name="uid" id="uid"/>
+                <input type="hidden" name="clientId" id="clientId" value="<%=locals.clientId%>" />
+                <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
                 <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
                     <label class="form-label" for="code">Verification code</label>
                     <% if (locals.validationMessages.code !== undefined) { %>
