@@ -8,12 +8,14 @@ const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
 const morgan = require('morgan');
 const session = require('cookie-session');
+const http = require('http');
 const https = require('https');
 const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
 const sanitization = require('login.dfe.sanitization');
 const healthCheck = require('login.dfe.healthcheck');
 const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
+const KeepAliveAgent = require('agentkeepalive');
 
 const rateLimiter = require('./app/rateLimit');
 
@@ -28,6 +30,19 @@ const setCorrelationId = require('express-mw-correlation-id');
 const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
 validateConfigAndQuitOnError(interactionsSchema, config, logger);
+
+http.GlobalAgent = new KeepAliveAgent({
+  maxSockets: 10,
+  maxFreeSockets: 2,
+  timeout: 60000,
+  keepAliveTimeout: 300000,
+});
+https.GlobalAgent = new KeepAliveAgent({
+  maxSockets: 10,
+  maxFreeSockets: 2,
+  timeout: 60000,
+  keepAliveTimeout: 300000,
+});
 
 let expiryInMinutes = 30;
 const sessionExpiry = parseInt(config.hostingEnvironment.sessionCookieExpiryInMinutes);

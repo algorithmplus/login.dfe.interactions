@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/DFE-Digital/login.dfe.interactions#readme",
   "dependencies": {
+    "agentkeepalive": "^3.4.1",
     "applicationinsights": "^1.0.1",
     "async-lock": "^1.1.0",
     "body-parser": "^1.18.2",
