@@ -11,6 +11,8 @@
             <p>DfE Sign-in is the new way to sign-in to access some specific education sector services online.</p>
             <form method="post" id="form-signin" class="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+                <input type="hidden" name="clientId" value="<%=locals.clientId%>"/>
+                <input type="hidden" name="redirectUri" value="<%=locals.redirectUri%>"/>
                 <fieldset>
                     <legend class="heading-medium">Sign-in</legend>
                     <div class="form-group <%= (locals.validationMessages.username !== undefined) ? 'form-group-error' : '' %>">
