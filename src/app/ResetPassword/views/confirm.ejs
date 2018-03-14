@@ -1,7 +1,6 @@
 <% if (locals.resend) { %>
 <div class="notification notification-success" tabindex="0">
     <h2>Password reset code email resent</h2>
-    <span class="icon">x</span>
 </div>
 <% } %>
 <% if (locals.email) { %>
@@ -17,7 +16,6 @@
         <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
         <button type="submit" class="button-text">Resend code</button>
     </form>
-    <span class="icon">x</span>
 </div>
 <% } %>
 
