@@ -19,7 +19,7 @@
                     <% if (locals.validationMessages.email !== undefined) { %>
                     <p class="error-message" id="validation-email"><%= locals.validationMessages.email %></p>
                     <% } %>
-                    <input class="form-control" id="email" name="email" type="email" value="<%=email%>" required  aria-required="true" <% if (locals.validationMessages.email !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
+                    <input class="form-control" id="email" name="email" type="email" value="<%=email%>" <% if (locals.validationMessages.email !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %>>
                 </div>
                 <div class="form-submit submit-buttons">
                     <button type="submit" class="button">Continue</button>

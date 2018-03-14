@@ -42,7 +42,7 @@
                     <% if (locals.validationMessages.code !== undefined) { %>
                     <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
                     <% } %>
-                    <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" required aria-required="true" <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
+                    <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
                 </div>
                 <div class="form-submit submit-buttons">
                     <a href="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>" class="button button-secondary">Go back</a>
