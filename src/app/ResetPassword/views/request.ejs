@@ -13,8 +13,7 @@
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
             <input type="hidden" name="clientId" value="<%=locals.clientId%>" />
             <input type="hidden" name="redirectUri" value="<%=locals.redirectUri%>" />
-            <fieldset>
-                <legend class="vh">Reset password</legend>
+
                 <div class="form-group <%=  locals.validationMessages.email !== undefined ? "form-group-error" : "" %>">
                     <label class="form-label" for="email">Email address</label>
                     <% if (locals.validationMessages.email !== undefined) { %>
@@ -26,7 +25,7 @@
                     <button type="submit" class="button">Continue</button>
                     <a href="<%=locals.redirectUri%>" class="button button-secondary">Cancel</a>
                 </div>
-            </fieldset>
+
         </form>
     </div>
 </div>
