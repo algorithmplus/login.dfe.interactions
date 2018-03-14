@@ -33,8 +33,7 @@
     <div class="col-12">
         <form method="post" id="form-confirm-reset-password">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-            <fieldset>
-                <legend class="vh">Reset password form</legend>
+
                 <input type="hidden" value="<%=locals.uid%>" name="uid" id="uid"/>
                 <input type="hidden" name="clientId" id="clientId" value="<%=locals.clientId%>" />
                 <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
@@ -49,7 +48,7 @@
                     <a href="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>" class="button button-secondary">Go back</a>
                     <button type="submit" class="button">Continue</button>
                 </div>
-            </fieldset>
+
         </form>
     </div>
 </div>
