@@ -96,6 +96,8 @@ const post = async (req, res) => {
       status: 'success',
       uid: user.id,
       type: 'usernamepassword',
+      clientId: req.body.clientId,
+      redirectUri: req.body.redirectUri,
     }, req, res);
   }
 };
