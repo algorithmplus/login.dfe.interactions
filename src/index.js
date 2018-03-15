@@ -50,7 +50,7 @@ if (!isNaN(sessionExpiry)) {
   expiryInMinutes = sessionExpiry;
 }
 
-const expiryDate = new Date(Date.now() + (60 * expiryInMinutes * 1000));
+const expiryInMilliseconds = 60000 * expiryInMinutes;
 
 const app = express();
 
@@ -74,7 +74,7 @@ const sess = {
   cookie: {
     httpOnly: true,
     secure: true,
-    expires: expiryDate,
+    expires: expiryInMilliseconds,
   },
 };
 
