@@ -1,7 +1,6 @@
 <% if (locals.resend) { %>
 <div class="notification notification-success" tabindex="0">
     <h2>Password reset code email resent</h2>
-    <span class="icon">x</span>
 </div>
 <% } %>
 <% if (locals.email) { %>
@@ -17,7 +16,6 @@
         <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
         <button type="submit" class="button-text">Resend code</button>
     </form>
-    <span class="icon">x</span>
 </div>
 <% } %>
 
@@ -33,8 +31,7 @@
     <div class="col-12">
         <form method="post" id="form-confirm-reset-password">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-            <fieldset>
-                <legend class="vh">Reset password form</legend>
+
                 <input type="hidden" value="<%=locals.uid%>" name="uid" id="uid"/>
                 <input type="hidden" name="clientId" id="clientId" value="<%=locals.clientId%>" />
                 <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
@@ -43,13 +40,13 @@
                     <% if (locals.validationMessages.code !== undefined) { %>
                     <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
                     <% } %>
-                    <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" required aria-required="true" <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
+                    <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
                 </div>
                 <div class="form-submit submit-buttons">
                     <a href="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>" class="button button-secondary">Go back</a>
                     <button type="submit" class="button">Continue</button>
                 </div>
-            </fieldset>
+
         </form>
     </div>
 </div>
