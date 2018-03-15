@@ -1,20 +1,28 @@
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
-            Additional security code needed
+            Enter your token code
         </h1>
-        <p class="lede">Enter the 8 digit code from your fob</p>
+        <p class="lede">For additional security please enter your 8-digit token code.</p>
     </div>
 </div>
 <div class="grid-row">
-    <div class="col-12">
+
+
+
+    <div class="col-6">
+        <h2 class="heading-medium">Token instructions</h2>
+        <ol class="list list-number">
+            <li>Press the arrow on the token</li>
+            <li>Enter your PIN</li>
+            <li>Enter the 8-digit code that appears on your token in the Token code text field</li>
+        </ol>
         <form method="post" id="form-reset-your-password">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-            <fieldset>
-                <legend class="vh">Additional security code needed</legend>
+
                 <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
 
-                    <label class="form-label" for="code">Code</label>
+                    <label class="form-label" for="code">Token code</label>
 
                     <% if (locals.validationMessages.code !== undefined) { %>
                         <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
@@ -28,8 +36,11 @@
                 <div class="form-submit">
                     <button type="submit" class="button">Continue</button>
                 </div>
-            </fieldset>
+
         </form>
+    </div>
+    <div class="col-6">
+        <img src="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/images/token.svg" class="responsive spacing" alt="Illustration of the token">
     </div>
 </div>
 <div class="row">

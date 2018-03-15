@@ -90,7 +90,7 @@ describe('when validating the user entered digipass code', () => {
       csrfToken: 'token',
       code: '',
       validationMessages: {
-        code: 'You must enter your code',
+        code: 'Please enter your token code',
       },
     });
   });
@@ -106,7 +106,7 @@ describe('when validating the user entered digipass code', () => {
       csrfToken: 'token',
       code: '',
       validationMessages: {
-        code: 'Your code must be 8 digits',
+        code: 'Your token code must be 8 digits',
       },
     });
   });
@@ -122,7 +122,7 @@ describe('when validating the user entered digipass code', () => {
       csrfToken: 'token',
       code: '',
       validationMessages: {
-        code: 'Your code must be 8 digits',
+        code: 'Your token code must be 8 digits',
       },
     });
   });
@@ -138,7 +138,7 @@ describe('when validating the user entered digipass code', () => {
       csrfToken: 'token',
       code: '',
       validationMessages: {
-        code: 'The code you entered is invalid',
+        code: 'The token code you entered is invalid',
       },
     });
     expect(validateDigipassToken.mock.calls).toHaveLength(0);
@@ -157,7 +157,7 @@ describe('when validating the user entered digipass code', () => {
       csrfToken: 'token',
       code: '',
       validationMessages: {
-        code: 'The code you entered is invalid',
+        code: 'The token code you entered is invalid',
       },
     });
     expect(validateDigipassToken.mock.calls).toHaveLength(0);
@@ -174,7 +174,7 @@ describe('when validating the user entered digipass code', () => {
       csrfToken: 'token',
       code: '',
       validationMessages: {
-        code: 'The code you entered is invalid',
+        code: 'The token code you entered is invalid',
       },
     });
     expect(validateDigipassToken.mock.calls).toHaveLength(1);

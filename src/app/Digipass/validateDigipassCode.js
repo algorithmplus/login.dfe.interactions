@@ -8,10 +8,10 @@ const validateInput = (code) => {
   let valid = true;
 
   if (!code) {
-    messages.code = 'You must enter your code';
+    messages.code = 'Please enter your token code';
     valid = false;
   } else if (code.length !== 8 || isNaN(parseInt(code))) {
-    messages.code = 'Your code must be 8 digits';
+    messages.code = 'Your token code must be 8 digits';
     valid = false;
   }
 
@@ -87,7 +87,7 @@ const action = async (req, res) => {
       csrfToken: req.csrfToken(),
       code: '',
       validationMessages: {
-        code: 'The code you entered is invalid',
+        code: 'The token code you entered is invalid',
       },
     });
   }
