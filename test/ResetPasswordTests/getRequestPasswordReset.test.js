@@ -88,4 +88,19 @@ describe('When getting the request password reset view', () => {
     expect(error).not.toBeNull();
     expect(error.message).toBe(`Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - no client by that id`);
   });
+
+  it('then if the client has a postRedirectUrl that is used instead of the redirectUri', async () => {
+    hotConfig.get.mockReturnValue({
+      client_id: req.query.clientid,
+      client_secret: 'secret',
+      postResetUrl: 'https://test.local.new',
+    });
+
+    await getRequestPasswordReset(req, res);
+
+    expect(res.render.mock.calls).toHaveLength(1);
+    expect(res.render.mock.calls[0][1]).toMatchObject({
+      redirectUri: 'https://test.local.new',
+    });
+  });
 });
