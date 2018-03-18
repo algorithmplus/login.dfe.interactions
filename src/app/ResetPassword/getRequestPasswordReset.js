@@ -8,17 +8,23 @@ const action = async (req, res) => {
   const client = await hotConfig.get(req.query.clientid, req.id);
 
   let isValidRedirect = false;
+  let redirectUri = req.query.redirect_uri;
 
   if (client) {
-    const validUriResult = client.redirect_uris.find(c => c === req.query.redirect_uri);
-    if (validUriResult) {
+    if (client.postResetUrl) {
+      redirectUri = client.postResetUrl;
       isValidRedirect = true;
+    } else {
+      const validUriResult = client.redirect_uris.find(c => c === req.query.redirect_uri);
+      if (validUriResult) {
+        isValidRedirect = true;
+      }
     }
   }
 
   if (!isValidRedirect) {
     let details = `Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - `;
-    if(!client) {
+    if (!client) {
       details += 'no client by that id';
     } else {
       details += 'redirect_uri not in list of specified redirect_uris';
@@ -31,7 +37,7 @@ const action = async (req, res) => {
       email: '',
       uuid: req.params.uuid,
       clientId: req.query.clientid,
-      redirectUri: req.query.redirect_uri,
+      redirectUri,
       validationMessages: {},
       validationFailed: false,
     });
