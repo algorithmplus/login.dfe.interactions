@@ -18,15 +18,19 @@ jest.mock('login.dfe.jwt-strategies', () => {
   });
 });
 
+const rp = jest.fn();
+const requestPromise = require('request-promise');
+requestPromise.defaults.mockReturnValue(rp);
+
+
 const { getDevices } = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
 
 const uid = 'user-1';
 
+
 describe('when getting users devices', () => {
-  let rp;
 
   beforeEach(() => {
-    rp = require('request-promise');
     rp.mockReturnValue([
       {
         id: 'device-1',

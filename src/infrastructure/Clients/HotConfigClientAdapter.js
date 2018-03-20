@@ -1,7 +1,10 @@
 'use strict';
 
 const config = require('./../Config')();
-const request = require('request-promise');
+const request = require('request-promise').defaults({
+  forever: true,
+  keepAlive: true,
+});
 const jwtStrategy = require('login.dfe.jwt-strategies');
 const assert = require('assert');
 const logger = require('./../logger');

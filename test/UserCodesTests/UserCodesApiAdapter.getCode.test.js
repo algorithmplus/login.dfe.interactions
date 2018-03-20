@@ -2,14 +2,17 @@ jest.mock('request-promise');
 jest.mock('login.dfe.jwt-strategies');
 jest.mock('../../src/infrastructure/Config');
 
+const rp = jest.fn();
+const requestPromise = require('request-promise');
+requestPromise.defaults.mockReturnValue(rp);
+
+
 describe('When getting a reset code through the api', () => {
-  let rp;
   let jwtGetBearerToken;
 
   let userCodesApiAdapter;
 
   beforeEach(() => {
-    rp = require('request-promise');
     rp.mockReturnValue('user1');
 
     jwtGetBearerToken = jest.fn().mockReturnValue('some-token');
