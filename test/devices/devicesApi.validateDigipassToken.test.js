@@ -24,16 +24,19 @@ jest.mock('./../../src/infrastructure/logger', () => {
   };
 });
 
+
+const rp = jest.fn();
+const requestPromise = require('request-promise');
+requestPromise.defaults.mockReturnValue(rp);
+
 const { validateDigipassToken } = require('./../../src/infrastructure/devices/devicesApi');
 
 const serialNumber = '123456';
 const code = '987654';
 
 describe('When validating a digipass code with the api', () => {
-  let rp;
 
   beforeEach(() => {
-    rp = require('request-promise');
     rp.mockReturnValue({
       valid: true,
     });
