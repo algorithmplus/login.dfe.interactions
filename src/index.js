@@ -17,7 +17,7 @@ const healthCheck = require('login.dfe.healthcheck');
 const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 const KeepAliveAgent = require('agentkeepalive');
 
-const rateLimiter = require('./app/rateLimit');
+// const rateLimiter = require('./app/rateLimit');
 
 const usernamePassword = require('./app/UsernamePassword');
 const resetPassword = require('./app/ResetPassword');
@@ -82,7 +82,7 @@ if (config.hostingEnvironment.env !== 'dev') {
   app.set('trust proxy', 1);
 }
 
-app.use(rateLimiter);
+// app.use(rateLimiter);
 app.use(session(sess));
 
 // Add middleware
