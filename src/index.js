@@ -113,10 +113,14 @@ app.set('layout', 'layouts/layout');
 // Setup routes
 app.use('/healthcheck', healthCheck({ config }));
 app.use('/', content(csrf));
-app.use('/dev/', devLauncher(csrf));
+
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
+
+if (config.hostingEnvironment.env === 'dev') {
+    app.use('/dev/', devLauncher(csrf));
+}
 
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
@@ -148,6 +152,7 @@ if (config.hostingEnvironment.env === 'dev') {
     requestCert: false,
     rejectUnauthorized: false,
   };
+
   const server = https.createServer(options, app);
 
   server.listen(config.hostingEnvironment.port, () => {
