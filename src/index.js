@@ -118,7 +118,7 @@ app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
 
-if (config.hostingEnvironment.env === 'dev') {
+if (config.hostingEnvironment.useDevViews) {
     app.use('/dev/', devLauncher(csrf));
 }
 
