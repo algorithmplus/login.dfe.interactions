@@ -2,7 +2,15 @@ jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/infrastructure/logger', () => {
   return {  };
 });
-
+jest.mock('./../../src/infrastructure/Config', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
+    };
+  });
+});
 const utils = require('./../utils');
 
 describe('When user submits username/password', () => {

@@ -1,9 +1,13 @@
 jest.mock('request-promise');
+jest.mock('agentkeepalive', () => ({
+  HttpsAgent: jest.fn(),
+}));
 jest.mock('login.dfe.jwt-strategies');
 jest.mock('../../src/infrastructure/Config');
 
 const rp = jest.fn();
 const requestPromise = require('request-promise');
+
 requestPromise.defaults.mockReturnValue(rp);
 
 
@@ -17,22 +21,21 @@ describe('When validating a reset code through the api', () => {
 
     jwtGetBearerToken = jest.fn().mockReturnValue('some-token');
     const jwt = require('login.dfe.jwt-strategies');
-    jwt.mockImplementation((jwtConfig) => {
-      return {
-        getBearerToken: jwtGetBearerToken
-      };
-    });
+    jwt.mockImplementation(jwtConfig => ({
+      getBearerToken: jwtGetBearerToken,
+    }));
 
     const config = require('./../../src/infrastructure/Config');
-    config.mockImplementation(() => {
-      return {
-        directories: {
-          service: {
-            url: 'https://directories.login.dfe.test',
-          },
+    config.mockImplementation(() => ({
+      directories: {
+        service: {
+          url: 'https://directories.login.dfe.test',
         },
-      }
-    });
+      },
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
+    }));
 
     userCodesApiAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
   });
@@ -44,7 +47,7 @@ describe('When validating a reset code through the api', () => {
 
     await userCodesApiAdapter.validateCode(userId, code);
 
-    expect(rp.mock.calls.length).toBe(1);
+    expect(rp.mock.calls).toHaveLength(1);
     expect(rp.mock.calls[0][0].method).toBe('GET');
     expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/validate/${userId}/${code}`);
   });
@@ -71,5 +74,4 @@ describe('When validating a reset code through the api', () => {
 
     expect(actual).toBeNull();
   });
-
 });

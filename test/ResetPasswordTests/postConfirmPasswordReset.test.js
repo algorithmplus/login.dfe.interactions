@@ -8,7 +8,18 @@ jest.mock('./../../src/infrastructure/logger', () => {
     audit: jest.fn(),
   }
 });
-
+jest.mock('agentkeepalive', () => ({
+  HttpsAgent: jest.fn(),
+}));
+jest.mock('./../../src/infrastructure/Config', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
+    };
+  });
+});
 describe('When posting the confirm password reset view', () => {
 
   let req;

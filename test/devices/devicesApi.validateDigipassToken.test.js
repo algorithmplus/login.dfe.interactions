@@ -7,6 +7,9 @@ jest.mock('login.dfe.jwt-strategies', () => {
     };
   });
 });
+jest.mock('agentkeepalive', () => ({
+  HttpsAgent: jest.fn(),
+}));
 jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
     return {
@@ -14,6 +17,9 @@ jest.mock('./../../src/infrastructure/Config', () => {
         service: {
           url: 'https://devices.test',
         },
+      },
+      hostingEnvironment: {
+        agentKeepAlive: {},
       },
     };
   });

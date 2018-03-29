@@ -6,7 +6,15 @@ jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/logger', () => {
   return {  };
 });
-
+jest.mock('./../../src/infrastructure/Config', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
+    };
+  });
+});
 describe('when handling the posting of a password reset request', () => {
 
   let req;
