@@ -5,6 +5,15 @@ jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/infrastructure/logger', () => {
   return {};
 });
+jest.mock('./../../src/infrastructure/Config', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
+    };
+  });
+});
 jest.mock('login.dfe.validation');
 
 describe('when posting new password', () => {

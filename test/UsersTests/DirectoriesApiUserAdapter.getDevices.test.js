@@ -7,9 +7,15 @@ jest.mock('./../../src/infrastructure/Config', () => {
           url: 'https://directories.test',
         },
       },
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
     };
   });
 });
+jest.mock('agentkeepalive', () => ({
+  HttpsAgent: jest.fn(),
+}));
 jest.mock('login.dfe.jwt-strategies', () => {
   return jest.fn().mockImplementation(() => {
     return {
