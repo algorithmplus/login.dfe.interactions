@@ -38,7 +38,7 @@
                         <% if (locals.validationMessages.username !== undefined) { %>
                             <p class="error-message" id="validation-email"><%=locals.validationMessages.username %></p>
                         <% } %>
-                        <input class="form-control full-width" id="username" name="username" type="email" <% if (locals.validationMessages.username !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %> value="<%=locals.username%>">
+                        <input class="form-control full-width" id="username" name="username" type="text" <% if (locals.validationMessages.username !== undefined) { %> aria-invalid="true" aria-describedby="validation-email" <% } %> value="<%=locals.username%>">
                     </div>
                     <div class="form-group <%= (locals.validationMessages.password !== undefined) ? 'form-group-error' : '' %>">
                         <label class="form-label" for="password">Password</label>
