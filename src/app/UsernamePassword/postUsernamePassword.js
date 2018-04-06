@@ -3,7 +3,7 @@ const clients = require('./../../infrastructure/Clients');
 const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
-const { sendResult } = require('./../../infrastructure/utils');
+const { sendRedirect, sendResult } = require('./../../infrastructure/utils');
 const osaAuthenticate = require('./../../infrastructure/osa');
 
 const validateBody = (body, allowUserName) => {
@@ -103,7 +103,10 @@ const post = async (req, res) => {
       allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
     });
   } else if (legacyUser) {
-    res.redirect(`/${req.params.uuid}/migration?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
+    sendRedirect(req, res, {
+      redirect: true,
+      uri: `/${req.params.uuid}/migration?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`,
+    });
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
       type: 'sign-in',
