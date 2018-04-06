@@ -1,4 +1,18 @@
 
+    <% if(locals.showDefaultMessage) { %>
+        <div class="notification notification-information" tabindex="-1">
+            <h2>DfE Sign-in</h2>
+        </div>
+    <%} else if(locals.header) { %>
+        <div class="notification notification-information" tabindex="-1">
+            <h2><%=locals.header%></h2>
+            <% if(locals.headerMessage) { %>
+                <p><%-locals.headerMessage.replace('__helplink__',locals.urls.help)%></p>
+            <%}%>
+        </div>
+    <%}%>
+
+
     <div class="grid-row">
         <div class="col-8">
             <h1 class="heading-xlarge">
@@ -8,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-6">
-            <p>DfE Sign-in is the new way to sign-in to access some specific education sector services online.</p>
+            <p>DfE Sign-in is the new way to sign-in to access some specific education sector services.</p>
             <form method="post" id="form-signin" class="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <input type="hidden" name="clientId" value="<%=locals.clientId%>"/>
@@ -16,7 +30,11 @@
                 <fieldset>
                     <legend class="heading-medium">Sign-in</legend>
                     <div class="form-group <%= (locals.validationMessages.username !== undefined) ? 'form-group-error' : '' %>">
-                        <label class="form-label" for="username">Email address or Secure Access username <span class="toggle-help">DfE Sign-in will replace Secure Access. If you have have not yet converted your Secure Access account to DfE Sign-in then enter your Secure Access username.</span> </label>
+                        <% if(locals.supportsUsernameLogin) {%>
+                            <label class="form-label" for="username">Email address or Secure Access username</label>
+                        <%} else {%>
+                            <label class="form-label" for="username">Email address</label>
+                        <%}%>
                         <% if (locals.validationMessages.username !== undefined) { %>
                             <p class="error-message" id="validation-email"><%=locals.validationMessages.username %></p>
                         <% } %>
@@ -34,19 +52,19 @@
                     </div>
                 </fieldset>
                 <div class="form-submit submit-buttons">
-                    <button type="submit" class="button">Sign in</button>
+                    <button type="submit" class="button">
+                        Sign in
+                        <span class="loader spinner-inline vh">
+                            <span class="ball b-1"></span>
+                            <span class="ball b-2"></span>
+                            <span class="ball b-3"></span>
+                        </span>
+                    </button>
                 </div>
                 <div class="panel panel-border-wide">
                     <p>By continuing you accept the <a href="/terms">terms and conditions</a>.</p>
                 </div>
             </form>
-        </div>
-        <div class="col-6">
-            <div class="highlight">
-                <h3 class="heading-medium">Secure Access users</h3>
-                <p>Enter your Secure Access username and password to convert your account to the new DfE Sign-in. </p>
-                <p><img src="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/images/secure-access.svg" class="responsive" alt="" /> </p>
-            </div>
         </div>
     </div>
     <div class="row">

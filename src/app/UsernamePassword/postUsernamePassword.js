@@ -4,15 +4,20 @@ const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
 const { sendResult } = require('./../../infrastructure/utils');
+const osaAuthenticate = require('./../../infrastructure/osa');
 
-const validateBody = (body) => {
+const validateBody = (body, allowUserName) => {
   const validationMessages = {};
   let failedValidation = false;
 
   if (body.username === '') {
-    validationMessages.username = 'Please enter your email address';
+    if (allowUserName) {
+      validationMessages.username = 'Please enter your email address or username';
+    } else {
+      validationMessages.username = 'Please enter your email address';
+    }
     failedValidation = true;
-  } else if (!emailValidator.validate(body.username)) {
+  } else if (!emailValidator.validate(body.username) && !allowUserName) {
     validationMessages.username = 'Please enter a valid email address';
     failedValidation = true;
   }
@@ -35,9 +40,16 @@ const post = async (req, res) => {
   }
 
   let user = null;
-  const validation = validateBody(req.body);
+  let legacyUser = false;
+  const supportsUsernameLogin = client.params && client.params.supportsUsernameLogin;
+  const validation = validateBody(req.body, supportsUsernameLogin);
   if (!validation.failedValidation) {
-    user = await Users.authenticate(req.body.username, req.body.password, req.id);
+    if (emailValidator.validate(req.body.username)) {
+      user = await Users.authenticate(req.body.username, req.body.password, req.id);
+    } else {
+      legacyUser = true;
+      user = await osaAuthenticate.authenticate(req.body.username, req.body.password, req.id);
+    }
   }
 
   if (user === null) {
@@ -52,7 +64,7 @@ const post = async (req, res) => {
       validation.validationMessages.loginError = 'Invalid email address or password. Try again.';
     }
 
-    sendResult(req, res, 'UsernamePassword/views/indexEas', {
+    sendResult(req, res, 'UsernamePassword/views/index', {
       isFailedLogin: true,
       title: 'DfE Sign-in',
       clientId: req.query.clientid,
@@ -61,6 +73,9 @@ const post = async (req, res) => {
       redirectUri: req.query.redirect_uri,
       validationMessages: validation.validationMessages,
       username: req.body.username,
+      header: !client.params || client.params.header,
+      headerMessage: !client.params || client.params.headerMessage,
+      allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
     });
   } else if (user.status === 'Deactivated') {
     logger.audit(`Attempt login to deactivated account for ${req.body.username}`, {
@@ -74,7 +89,7 @@ const post = async (req, res) => {
       validation.validationMessages.loginError = 'Your account has been deactivated.';
     }
 
-    sendResult(req, res, 'UsernamePassword/views/indexEas', {
+    sendResult(req, res, 'UsernamePassword/views/index', {
       isFailedLogin: true,
       title: 'DfE Sign-in',
       clientId: req.query.clientid,
@@ -83,7 +98,12 @@ const post = async (req, res) => {
       redirectUri: req.query.redirect_uri,
       validationMessages: validation.validationMessages,
       username: req.body.username,
+      header: !client.params || client.params.header,
+      headerMessage: !client.params || client.params.headerMessage,
+      allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
     });
+  } else if (legacyUser) {
+    res.redirect(`/${req.params.uuid}/migration?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
       type: 'sign-in',
