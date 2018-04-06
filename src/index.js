@@ -20,6 +20,7 @@ const KeepAliveAgent = require('agentkeepalive');
 // const rateLimiter = require('./app/rateLimit');
 
 const usernamePassword = require('./app/UsernamePassword');
+const migrationUser = require('./app/migration');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const devLauncher = require('./app/DevLauncher');
@@ -115,6 +116,7 @@ app.use('/healthcheck', healthCheck({ config }));
 app.use('/', content(csrf));
 
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
+app.use('/:uuid/migration', migrationUser(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
 
