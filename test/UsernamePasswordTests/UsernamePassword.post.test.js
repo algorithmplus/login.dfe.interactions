@@ -223,7 +223,7 @@ describe('When user submits username/password', () => {
       await postHandler(req, res);
 
       expect(res.redirect.mock.calls).toHaveLength(1);
-      expect(res.redirect.mock.calls[0][0]).toBe('/some-uuid/migration?clientid=test&redirect_uri=http://test');
+      expect(res.redirect.mock.calls[0][0]).toBe('/some-uuid/migration');
     });
 
     it('then it should audit a successful login attempt', async () => {
