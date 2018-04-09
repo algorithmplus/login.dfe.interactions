@@ -1,17 +1,6 @@
-const mapMimeType = (mimeType) => {
-  switch (mimeType.toLowerCase()) {
-    case 'application/json':
-      return 'json';
-      break;
-    case 'text/html':
-      return 'html';
-      break;
-  }
-  return undefined;
-};
+const mapMimeType = require('./mimeType');
 
 const sendRedirect = (req, res, data) => {
-
   const accepts = req.accepts();
   let renderType;
 
@@ -30,9 +19,7 @@ const sendRedirect = (req, res, data) => {
   if (renderType === 'json') {
     return res.contentType('json').send(JSON.stringify(data));
   }
-
   return res.redirect(data.uri);
-
 };
 
 module.exports = sendRedirect;

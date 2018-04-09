@@ -1,14 +1,4 @@
-const mapMimeType = (mimeType) => {
-  switch (mimeType.toLowerCase()) {
-    case 'application/json':
-      return 'json';
-      break;
-    case 'text/html':
-      return 'html';
-      break;
-  }
-  return undefined;
-};
+const mapMimeType = require('./mimeType');
 
 const sendResult = (req, res, viewName, data) => {
   const accepts = req.accepts();
