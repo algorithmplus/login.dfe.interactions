@@ -108,6 +108,7 @@ const post = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       organisation: user.organisation,
+      clientName: client.friendlyName,
       clientId: req.query.clientid,
       redirectUri: req.query.redirect_uri,
     };
