@@ -1,0 +1,31 @@
+<div class="grid-row">
+    <div class="col-8">
+        <h1 class="heading-xlarge">
+            Your details
+        </h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="col-6">
+        <p>We have identified your account from Secure Access.</p>
+        <dl class="rows spacer la">
+            <dt>Name</dt>
+            <dd><%=locals.user.firstName%> <%=locals.user.lastName%></dd>
+            <dt>Email address</dt>
+            <% if(locals.user.email) { %>
+                <dd><%=locals.user.email%></dd>
+            <%} else { %>
+                <dd><em>No email address found</em></dd>
+            <%}%>
+            <dt>Organisation</dt>
+            <dd><%=locals.user.organisation.name%>
+            <% if(locals.user.organisation.type === '001') { %>
+              ,URN:<%=locals.user.organisation.urn%>
+            <%} else if(locals.user.organisation.type === '010' || locals.user.organisation.type === '013') { %>
+                ,UID:<%=locals.user.organisation.uid%>
+            <%} %>
+            </dd>
+        </dl>
+        <p><a href="email.html" class="button">Continue</a> </p>
+    </div>
+</div>
