@@ -1,6 +1,6 @@
 const mapMimeType = require('./mimeType');
 
-const sendResult = (req, res, viewName, data) => {
+const sendRedirect = (req, res, data) => {
   const accepts = req.accepts();
   let renderType;
 
@@ -13,13 +13,13 @@ const sendResult = (req, res, viewName, data) => {
   }
 
   if (!renderType) {
-    renderType = 'html';
+    return res.redirect(data.uri);
   }
 
   if (renderType === 'json') {
     return res.contentType('json').send(JSON.stringify(data));
   }
-  return res.render(viewName, data);
+  return res.redirect(data.uri);
 };
 
-module.exports = sendResult;
+module.exports = sendRedirect;

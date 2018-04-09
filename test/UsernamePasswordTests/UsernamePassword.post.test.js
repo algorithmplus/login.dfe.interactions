@@ -1,16 +1,13 @@
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/logger', () => {
-  return {  };
-});
-jest.mock('./../../src/infrastructure/Config', () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      hostingEnvironment: {
-        agentKeepAlive: {},
-      },
-    };
-  });
-});
+jest.mock('./../../src/infrastructure/logger', () => ({ }));
+jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
+  hostingEnvironment: {
+    agentKeepAlive: {},
+  },
+  osaApi: {
+    type: 'static',
+  },
+})));
 const utils = require('./../utils');
 
 describe('When user submits username/password', () => {
@@ -18,6 +15,7 @@ describe('When user submits username/password', () => {
   let res;
   let interactionCompleteProcess;
   let usersAuthenticate;
+  let osaAuthenticate;
   let clientsGet;
   let loggerAudit;
 
@@ -25,7 +23,8 @@ describe('When user submits username/password', () => {
 
   beforeEach(() => {
     req = utils.mockRequest();
-    req.query.clientId = 'test';
+    req.query.clientid = 'test';
+    req.query.redirect_uri = 'http://test';
     req.body.username = 'Tony@Stark.com';
     req.body.password = 'IAmIronman!';
     req.params.uuid = 'some-uuid';
@@ -40,6 +39,10 @@ describe('When user submits username/password', () => {
     usersAuthenticate = jest.fn();
     const users = require('./../../src/infrastructure/Users');
     users.authenticate = usersAuthenticate;
+
+    osaAuthenticate = jest.fn();
+    const osaAuth = require('./../../src/infrastructure/osa');
+    osaAuth.authenticate = osaAuthenticate;
 
     clientsGet = jest.fn().mockReturnValue({
       client_id: 'test',
@@ -64,7 +67,7 @@ describe('When user submits username/password', () => {
       await postHandler(req, res);
 
       expect(res.render.mock.calls).toHaveLength(1);
-      expect(res.render.mock.calls[0][0]).toBe('UsernamePassword/views/indexEas');
+      expect(res.render.mock.calls[0][0]).toBe('UsernamePassword/views/index');
     });
 
     it('then a validation message will appear if the email is not present', async () => {
@@ -73,6 +76,20 @@ describe('When user submits username/password', () => {
       await postHandler(req, res);
 
       expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Please enter your email address');
+    });
+
+    it('then a validation message will appear if the username is not present and set to allow usernames', async () => {
+      clientsGet.mockReset().mockReturnValue({
+        client_id: 'test',
+        params: {
+          supportsUsernameLogin: true,
+        },
+      });
+      req.body.username = '';
+
+      await postHandler(req, res);
+
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Please enter your email address or username');
     });
 
     it('then a validation message will appear if the email is not in the correct format', async () => {
@@ -143,6 +160,11 @@ describe('When user submits username/password', () => {
       usersAuthenticate.mockReturnValue({
         id: 'user1',
       });
+      osaAuthenticate.mockReturnValue({
+        email: 'test@test.com',
+        firstName: 'Test',
+        lastName: 'Tester',
+      });
     });
 
     it('then it should process interaction complete for uuid', async () => {
@@ -171,6 +193,37 @@ describe('When user submits username/password', () => {
 
       expect(interactionCompleteProcess.mock.calls[0][1]).not.toBeNull();
       expect(interactionCompleteProcess.mock.calls[0][1].status).toBe('success');
+    });
+
+    it('then it validates against the OSA api if client is configured and the username is not an email', async () => {
+      req.body.username = 'foo';
+      clientsGet.mockReset().mockReturnValue({
+        client_id: 'test',
+        params: {
+          supportsUsernameLogin: true,
+        },
+      });
+
+      await postHandler(req, res);
+
+      expect(osaAuthenticate.mock.calls).toHaveLength(1);
+      expect(osaAuthenticate.mock.calls[0][0]).toBe('foo');
+      expect(osaAuthenticate.mock.calls[0][1]).toBe('IAmIronman!');
+    });
+
+    it('then it redirects to the migration page if the login is successful through osa API', async () => {
+      req.body.username = 'foo';
+      clientsGet.mockReset().mockReturnValue({
+        client_id: 'test',
+        params: {
+          supportsUsernameLogin: true,
+        },
+      });
+
+      await postHandler(req, res);
+
+      expect(res.redirect.mock.calls).toHaveLength(1);
+      expect(res.redirect.mock.calls[0][0]).toBe('/some-uuid/migration?clientid=test&redirect_uri=http://test');
     });
 
     it('then it should audit a successful login attempt', async () => {
