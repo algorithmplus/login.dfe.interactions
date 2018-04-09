@@ -103,6 +103,12 @@ const post = async (req, res) => {
       allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
     });
   } else if (legacyUser) {
+    req.session.migrationUser = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      organisation: user.organisation,
+    };
     res.redirect(`/${req.params.uuid}/migration?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`);
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {

@@ -27,9 +27,7 @@ const authenticate = async (username, password, correlationId) => {
       json: true,
     });
 
-    return {
-      user,
-    };
+    return user;
   } catch (e) {
     const status = e.statusCode ? e.statusCode : 500;
     if (status === 404 || status === 403) {
