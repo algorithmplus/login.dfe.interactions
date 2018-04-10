@@ -20,9 +20,9 @@
             <dt>Organisation</dt>
             <dd><%=locals.user.organisation.name%>
             <% if(locals.user.organisation.type === '001') { %>
-              ,URN:<%=locals.user.organisation.urn%>
+, URN:<%=locals.user.organisation.urn%>
             <%} else if(locals.user.organisation.type === '010' || locals.user.organisation.type === '013') { %>
-                ,UID:<%=locals.user.organisation.uid%>
+, UID:<%=locals.user.organisation.uid%>
             <%} %>
             </dd>
         </dl>
