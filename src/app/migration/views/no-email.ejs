@@ -1,0 +1,25 @@
+<div class="js-back-link"></div>
+<div class="grid-row">
+    <div class="col-8">
+        <h1 class="heading-xlarge">
+            Enter an email address
+        </h1>
+        <p class="lede">To access your services through DfE Sign-in your email address will become your username.</p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="col-12">
+        <form>
+            <div class="form-group">
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+                <label class="form-label" for="new-email">New email address</label>
+                <p class="form-hint">We will send you an email to confirm your new address </p>
+                <input class="form-control" name="new-email" type="text" id="new-email">
+
+            </div>
+            <div class="form-submit">
+                <button type="submit" class="button">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
