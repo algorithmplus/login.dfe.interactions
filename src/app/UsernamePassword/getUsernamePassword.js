@@ -17,6 +17,8 @@ const get = async (req, res) => {
     throw new Error(details);
   }
 
+  req.session.migrationUser = null;
+
   res.render('UsernamePassword/views/index', {
     isFailedLogin: false,
     message: '',

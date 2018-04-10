@@ -103,9 +103,18 @@ const post = async (req, res) => {
       allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
     });
   } else if (legacyUser) {
+    req.session.migrationUser = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      organisation: user.organisation,
+      clientName: client.friendlyName,
+      clientId: req.query.clientid,
+      redirectUri: req.query.redirect_uri,
+    };
     sendRedirect(req, res, {
       redirect: true,
-      uri: `/${req.params.uuid}/migration?clientid=${req.query.clientid}&redirect_uri=${req.query.redirect_uri}`,
+      uri: `/${req.params.uuid}/migration`,
     });
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
