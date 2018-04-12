@@ -1,0 +1,26 @@
+<div class="js-back-link"></div>
+<div class="notification notification-success" tabindex="0">
+    <h2>Email confirmation sent</h2>
+    <p>We've sent an email to <%=locals.user.email%>. <a href="">Resend email</a>.</p>
+</div>
+<div class="row">
+    <div class="col-8">
+        <h1 class="heading-xlarge">Confirm your email address</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <form>
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+        <input type="hidden" name="emailConfId" value="<%=locals.emailConfId%>" />
+        <div class="col-6">
+            <p class="lede">Enter your verification code to confirm your email address.</p>
+            <div class="form-group">
+                <label class="form-label">Verification code</label>
+                <input type="text" class="form-control char-width-8" name="code" id="code">
+            </div>
+            <div class="form-group">
+                <a href="password.html" class="button">Continue</a>
+            </div>
+        </div>
+    </form>
+</div>
