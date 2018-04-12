@@ -9,12 +9,13 @@
 </div>
 <div class="grid-row">
     <div class="col-12">
-        <form>
+        <form method="post" action="email">
             <div class="form-group">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-                <label class="form-label" for="new-email">New email address</label>
+                <input type="hidden" name="viewToDisplay" value="<%=locals.viewToDisplay%>" />
+                <label class="form-label" for="email">New email address</label>
                 <p class="form-hint">We will send you an email to confirm your new address </p>
-                <input class="form-control" name="new-email" type="text" id="new-email">
+                <input class="form-control" name="email" type="text" id="email">
 
             </div>
             <div class="form-submit">
