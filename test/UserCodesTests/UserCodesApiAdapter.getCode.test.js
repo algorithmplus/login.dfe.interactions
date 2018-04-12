@@ -38,13 +38,23 @@ describe('When getting a reset code through the api', () => {
     userCodesApiAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
   });
 
-  it('then the user codes api endpoint is called', async () => {
+  it('then the user codes api endpoint is called with the default code type', async () => {
     const userId = 'user1@test.com';
 
     await userCodesApiAdapter.getCode(userId);
 
     expect(rp.mock.calls).toHaveLength(1);
     expect(rp.mock.calls[0][0].method).toBe('GET');
-    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/${userId}`);
+    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/${userId}/PasswordReset`);
+  });
+
+  it('then the user codes api endpoint is called with the passed in code type', async () => {
+    const userId = 'user1@test.com';
+
+    await userCodesApiAdapter.getCode(userId,'123abc342', 'ConfirmEmail');
+
+    expect(rp.mock.calls).toHaveLength(1);
+    expect(rp.mock.calls[0][0].method).toBe('GET');
+    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/${userId}/ConfirmEmail`);
   });
 });

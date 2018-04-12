@@ -10,7 +10,7 @@ const rp = require('request-promise').defaults({
 });
 const jwtStrategy = require('login.dfe.jwt-strategies');
 
-const upsertCode = async (userId, clientId, redirectUri, correlationId) => {
+const upsertCode = async (userId, clientId, redirectUri, correlationId, codeType = 'PasswordReset', email = '', contextData = '') => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -25,6 +25,9 @@ const upsertCode = async (userId, clientId, redirectUri, correlationId) => {
         uid: userId,
         clientId,
         redirectUri,
+        codeType,
+        email,
+        contextData,
       },
       json: true,
     });
@@ -92,12 +95,12 @@ const validateCode = async (userId, code, correlationId) => {
   }
 };
 
-const getCode = async (userId, correlationId) => {
+const getCode = async (userId, correlationId, codeType = 'PasswordReset') => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
   try {
     const userCode = await rp({
       method: 'GET',
-      uri: `${config.directories.service.url}/userCodes/${userId}`,
+      uri: `${config.directories.service.url}/userCodes/${userId}/${codeType}`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
