@@ -32,9 +32,7 @@ const upsertCode = async (userId, clientId, redirectUri, correlationId, codeType
       json: true,
     });
 
-    return {
-      user,
-    };
+    return user;
   } catch (e) {
     throw new Error(e);
   }
