@@ -3,7 +3,7 @@
 const userCodes = require('./../../infrastructure/UserCodes');
 
 const get = async (req, res) => {
-  const userCode = await userCodes.getCode(req.params.emailConfId);
+  const userCode = await userCodes.getCode(req.params.emailConfId, req.id, 'ConfirmMigratedEmail');
 
   if (!userCode) {
     throw new Error('Invalid Request');
@@ -15,7 +15,7 @@ const get = async (req, res) => {
     emailConfId: req.params.emailConfId,
     csrfToken: req.csrfToken(),
     validationMessages: {},
-    email: userCode.email,
+    email: userCode.userCode.email,
   });
 };
 
