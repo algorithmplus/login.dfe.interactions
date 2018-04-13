@@ -66,13 +66,13 @@ const deleteCode = async (userId, correlationId) => {
   }
 };
 
-const validateCode = async (userId, code, correlationId) => {
+const validateCode = async (userId, code, correlationId, codeType = 'PasswordReset') => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
     const userCode = await rp({
       method: 'GET',
-      uri: `${config.directories.service.url}/userCodes/validate/${userId}/${code}`,
+      uri: `${config.directories.service.url}/userCodes/validate/${userId}/${code}/${codeType}`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,

@@ -49,7 +49,7 @@ describe('When validating a reset code through the api', () => {
 
     expect(rp.mock.calls).toHaveLength(1);
     expect(rp.mock.calls[0][0].method).toBe('GET');
-    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/validate/${userId}/${code}`);
+    expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/validate/${userId}/${code}/PasswordReset`);
   });
 
   it('then the code is returned if the response is valid', async () => {
