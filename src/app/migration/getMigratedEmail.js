@@ -16,6 +16,7 @@ const get = (req, res) => {
     csrfToken: req.csrfToken(),
     user,
     validationMessages: {},
+    viewToDisplay,
   });
 };
 
