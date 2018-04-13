@@ -26,7 +26,6 @@ const validate = (email) => {
 };
 
 const action = async (req, res) => {
-
   const migrationUser = req.session.migrationUser;
   const currentEmail = req.body.radioEmailGroup;
   let email = req.body.email;
@@ -52,14 +51,7 @@ const action = async (req, res) => {
 
   const code = await userCodes.upsertCode(undefined, migrationUser.clientId, migrationUser.redirectUri, req.id, 'ConfirmMigratedEmail', email, migrationUser);
 
-  res.render('migration/views/confirmEmail', {
-    message: '',
-    title: 'DfE Sign-in',
-    emailConfId: code.uid,
-    csrfToken: req.csrfToken(),
-    validationMessages: {},
-    email,
-  });
+  res.redirect(`/${req.params.uuid}/migration/${code.uid}/confirm-email`);
 };
 
 module.exports = action;

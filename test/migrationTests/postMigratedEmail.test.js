@@ -78,8 +78,7 @@ describe('When posting to confirm the migration email view', () => {
   it('then the confirm email view is displayed when the request is valid and the code uid passed to the view', async () => {
     await getRequestPasswordReset(req, res);
 
-    expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][0]).toBe('migration/views/confirmEmail');
-    expect(res.render.mock.calls[0][1].emailConfId).toBe(expectedUserCodeId);
+    expect(res.redirect.mock.calls).toHaveLength(1);
+    expect(res.redirect.mock.calls[0][0]).toBe(`/${req.params.uuid}/migration/${expectedUserCodeId}/confirm-email`);
   });
 });
