@@ -14,6 +14,8 @@ const get = (req, res) => {
     csrfToken: req.csrfToken(),
     validationMessages: {},
     code: req.session.userCode,
+    newPassword: '',
+    confirmPassword: '',
   });
 };
 
