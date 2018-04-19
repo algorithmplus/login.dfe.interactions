@@ -34,6 +34,7 @@ const action = async (req, res) => {
     res.render('migration/views/confirmEmail', {
       csrfToken: req.csrfToken(),
       emailConfId: req.body.emailConfId,
+      backLink: true,
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
     });
@@ -46,6 +47,7 @@ const action = async (req, res) => {
     res.render('migration/views/confirmEmail', {
       csrfToken: req.csrfToken(),
       emailConfId: req.body.emailConfId,
+      backLink: true,
       validationFailed: true,
       validationMessages: {
         code: 'Please enter a valid code',
