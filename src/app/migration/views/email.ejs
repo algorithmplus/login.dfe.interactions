@@ -18,17 +18,21 @@
                     </legend>
 
                     <div class="multiple-choice">
-                        <input id="example-contact-by-email" type="radio" name="radioEmailGroup" value="Yes" checked>
-                        <label for="example-contact-by-email"><%=locals.user.email%></label>
+                        <input id="current-email" type="radio" name="radioEmailGroup" value="Yes" <% if (!locals.validationMessages.email !== undefined) { %>checked<%}%>>
+                        <label for="current-email"><%=locals.user.email%></label>
                     </div>
 
-                    <div class="multiple-choice" data-target="contact-by-text">
-                        <input id="example-contact-by-text" type="radio" name="radioEmailGroup" value="No">
-                        <label for="example-contact-by-text">Use a different email address</label>
+                    <div class="multiple-choice" data-target="new-email-address">
+                        <input id="new-email" type="radio" name="radioEmailGroup" value="No" <% if (locals.validationMessages.email !== undefined) { %>checked<%}%>>
+                        <label for="new-email">Use a different email address</label>
                     </div>
-                    <div class="panel panel-border-narrow js-hidden" id="contact-by-text">
+
+                    <div class="panel panel-border-narrow js-hidden form-group  <%= locals.validationMessages.email !== undefined ? "form-group-error" : "" %>" id="new-email-address">
                         <label class="form-label" for="email">New email address</label>
                         <p class="form-hint">We will send you an email to confirm your new address </p>
+                        <% if (locals.validationMessages.email !== undefined) { %>
+                        <p class="error-message" id="validation-code"><%= locals.validationMessages.email %></p>
+                        <% } %>
                         <input class="form-control" name="email" type="text" id="email">
                     </div>
 
