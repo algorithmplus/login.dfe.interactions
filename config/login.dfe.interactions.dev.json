@@ -38,6 +38,9 @@
   "directories": {
     "type": "static"
   },
+  "organisations": {
+    "type": "static"
+  },
   "hotConfig": {
     "url": "https://localhost:4433",
     "auth": {

@@ -14,6 +14,7 @@ const get = async (req, res) => {
     title: 'DfE Sign-in',
     emailConfId: req.params.emailConfId,
     csrfToken: req.csrfToken(),
+    backLink: true,
     validationMessages: {},
     email: userCode.userCode.email,
   });

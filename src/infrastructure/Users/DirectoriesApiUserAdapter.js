@@ -117,9 +117,38 @@ const getDevices = async (uid, correlationId) => {
   }
 };
 
+const create = async (username, password, firstName, lastName, correlationId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  try {
+    return await rp({
+      method: 'POST',
+      uri: `${config.directories.service.url}/users`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      body: {
+        email: username,
+        password,
+        firstName,
+        lastName,
+      },
+      json: true,
+    });
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 409) {
+      return null;
+    }
+    throw e;
+  }
+};
+
 module.exports = {
   authenticate,
   find,
   changePassword,
   getDevices,
+  create,
 };

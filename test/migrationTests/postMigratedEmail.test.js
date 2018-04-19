@@ -59,7 +59,7 @@ describe('When posting to confirm the migration email view', () => {
     expect(res.render.mock.calls).toHaveLength(1);
     expect(res.render.mock.calls[0][0]).toBe(expectedViewToDisplay);
     expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
-    expect(res.render.mock.calls[0][1].email).toBe('asd');
+    expect(res.render.mock.calls[0][1].user.email).toBe('asd');
   });
 
   it('then if the email is valid then the code is requested', async () => {

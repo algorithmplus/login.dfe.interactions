@@ -40,11 +40,12 @@ const action = async (req, res) => {
   if (validationResult.failed) {
     res.render(viewToDisplay, {
       csrfToken: req.csrfToken(),
-      email,
       uuid: req.params.uuid,
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
+      backLink: true,
       viewToDisplay,
+      user: req.session.migrationUser,
     });
     return;
   }

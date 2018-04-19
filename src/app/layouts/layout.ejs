@@ -71,7 +71,7 @@
                     </p>
                 </div>
             </div>
-            <% if (locals.user !== undefined) { %>
+            <% if (locals.user !== undefined && !locals.hideUserNav) { %>
             <div class="account-information" role="navigation">
                 <p class="signed-in-as"><span class="vh">You are signed in as</span> <%= locals.displayName %></p>
                 <nav id="user-nav">
@@ -86,6 +86,10 @@
     </div>
 
     <main id="content" tabindex="-1">
+
+        <% if (locals.backLink !== undefined) { %>
+        <div class="js-back-link"></div>
+        <% } %>
 
         <% if (locals.validationMessages !== undefined) { %>
 

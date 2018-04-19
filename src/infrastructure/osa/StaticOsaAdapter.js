@@ -23,7 +23,7 @@ const authenticate = async (username, password) => {
       organisation: {
         id: '72711ff9-2da1-4135-8a20-3de1fea31073',
         name: 'Some School - Establishment',
-        urn: '12345',
+        urn: '138711',
         localAuthority: null,
         type: '001',
         uid: null,

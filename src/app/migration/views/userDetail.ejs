@@ -1,3 +1,4 @@
+<div class="js-back-link"></div>
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
@@ -18,12 +19,13 @@
                 <dd><em>No email address found</em></dd>
             <%}%>
             <dt>Organisation</dt>
-            <dd><%=locals.user.organisation.name%>
-            <% if(locals.user.organisation.type === '001') { %>
-, URN:<%=locals.user.organisation.urn%>
-            <%} else if(locals.user.organisation.type === '010' || locals.user.organisation.type === '013') { %>
-, UID:<%=locals.user.organisation.uid%>
-            <%} %>
+            <dd>
+                <%=locals.user.organisation.name%>
+                <% if(locals.user.organisation.type === '001') { %>
+                    URN: <%=locals.user.organisation.urn%>
+                <%} else if(locals.user.organisation.type === '010' || locals.user.organisation.type === '013') { %>
+                    UID: <%=locals.user.organisation.uid%>
+                <%} %>
             </dd>
         </dl>
         <p><a href="/<%=locals.uuid%>/migration/email" class="button">Continue</a> </p>

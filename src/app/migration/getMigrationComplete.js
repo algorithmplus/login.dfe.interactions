@@ -1,15 +1,12 @@
 'use strict';
 
 const get = (req, res) => {
-  const user = req.session.migrationUser;
-  res.render('migration/views/userDetail', {
-    message: '',
+  res.render('migration/views/complete', {
     title: 'DfE Sign-in',
     uuid: req.params.uuid,
     csrfToken: req.csrfToken(),
-    hideUserNav: true,
-    user,
     validationMessages: {},
+    redirectUri: req.session.redirectUri,
   });
 };
 
