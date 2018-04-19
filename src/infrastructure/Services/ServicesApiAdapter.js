@@ -29,6 +29,10 @@ const create = async (userId, serviceId, organisationId, orgType, correlationId)
 
     return true;
   } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 403) {
+      return false;
+    }
     throw e;
   }
 };

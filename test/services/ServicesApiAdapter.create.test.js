@@ -70,6 +70,24 @@ describe('When creating a user with the api', () => {
     expect(rp.mock.calls[0][0].body.org_type).toBe(orgType);
   });
 
+  it('then false is returned if a 403 is returned from the API', async () => {
+    rp.mockImplementation(() => {
+      const error = new Error();
+      error.statusCode = 403;
+      throw error;
+    });
+
+    const actual = await servicesApiUserAdapter.create(userId, serviceId, organisationId, orgType, expectedCorrelationId);
+
+    expect(actual).toBe(false);
+  });
+
+  it('then true is returned when the request is accepted', async () => {
+    const actual = await servicesApiUserAdapter.create(userId, serviceId, organisationId, orgType, expectedCorrelationId);
+
+    expect(actual).toBe(true);
+  });
+
   it('then an error is thrown if the api call failed', async () => {
     rp.mockImplementation(() => {
       const error = new Error();
