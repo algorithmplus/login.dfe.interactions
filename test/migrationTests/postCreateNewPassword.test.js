@@ -19,6 +19,7 @@ describe('When posting to create a user from migration', () => {
   let userCodesGetCode;
   let userCodesDeleteCode;
   let createUser;
+  let findUser;
   let createOrg;
   const expectedUserCodeId = 'some-uid';
   const expectedPassword = 'my-super-strong-password-for-test';
@@ -42,8 +43,10 @@ describe('When posting to create a user from migration', () => {
     userCodes.deleteCode = userCodesDeleteCode;
 
     createUser = jest.fn().mockReset().mockReturnValue({ id: expectedUserId });
+    findUser = jest.fn().mockReset().mockReturnValue({ id: expectedUserId });
     const users = require('./../../src/infrastructure/Users');
     users.create = createUser;
+    users.find = findUser;
 
     createOrg = jest.fn().mockReset();
     const services = require('./../../src/infrastructure/Services');
@@ -133,6 +136,21 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(userCodesDeleteCode.mock.calls).toHaveLength(1);
+  });
+
+  it('then the user org to service assocation is still created if the user exists', async () => {
+    createUser.mockReset().mockReturnValue(null);
+
+    await postCreateNewPassword(req, res);
+
+    expect(findUser.mock.calls).toHaveLength(1);
+    expect(findUser.mock.calls[0][0]).toBe(expectedEmail);
+    expect(createOrg.mock.calls).toHaveLength(1);
+    expect(createOrg.mock.calls[0][0]).toBe(expectedUserId);
+    expect(createOrg.mock.calls[0][1]).toBe('svc1');
+    expect(createOrg.mock.calls[0][2]).toBe('MAT1234');
+    expect(createOrg.mock.calls[0][3]).toBe('010');
+    expect(createOrg.mock.calls[0][4]).toBe(req.id);
   });
 
   it('then the user is redirected to the migration complete view when the request is valid', async () => {
