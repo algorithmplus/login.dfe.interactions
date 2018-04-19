@@ -7,11 +7,11 @@ switch (organisationType.toLowerCase()) {
   case 'static':
     adapter = require('./StaticServicesAdapter');
     break;
-  case 'directoriesapi':
+  case 'api':
     adapter = require('./ServicesApiAdapter');
     break;
   default:
-    throw new Error(`Unsupported organisation type ${organisationType}. Supported types are static or organisations api`);
+    throw new Error(`Unsupported organisation type ${organisationType}. Supported types are static or api`);
 }
 
 module.exports = adapter;
