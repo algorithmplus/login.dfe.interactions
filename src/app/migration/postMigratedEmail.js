@@ -44,6 +44,7 @@ const action = async (req, res) => {
       uuid: req.params.uuid,
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
+      backLink: true, 
       viewToDisplay,
     });
     return;

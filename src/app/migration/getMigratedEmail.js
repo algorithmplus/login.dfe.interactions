@@ -15,6 +15,8 @@ const get = (req, res) => {
     uuid: req.params.uuid,
     csrfToken: req.csrfToken(),
     user,
+    hideUserNav: true,
+    backLink: true,
     validationMessages: {},
     viewToDisplay,
   });
