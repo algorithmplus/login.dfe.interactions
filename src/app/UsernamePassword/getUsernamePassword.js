@@ -18,6 +18,7 @@ const get = async (req, res) => {
   }
 
   req.session.migrationUser = null;
+  req.session.redirectUri = null;
 
   res.render('UsernamePassword/views/index', {
     isFailedLogin: false,

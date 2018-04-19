@@ -43,6 +43,15 @@ const action = async (req, res) => {
 
   const user = await users.create(userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName, req.id);
 
+  let orgId;
+  if(userToMigrate.organisation.type === '001') {
+    orgId = userToMigrate.organisation.urn;
+  } else {
+    orgId = userToMigrate.organisation.uid;
+  }
+
+  services.create(user.id, userToMigrate.serviceId, orgId, userToMigrate.organisation.type, req.id);
+
   await userCodes.deleteCode(req.body.emailConfId, req.id, 'ConfirmMigratedEmail');
 
   if (!user) {
@@ -59,15 +68,6 @@ const action = async (req, res) => {
     });
     return;
   }
-
-  let orgId;
-  if(userToMigrate.organisation.type === '001') {
-    orgId = userToMigrate.organisation.urn;
-  } else {
-    orgId = userToMigrate.organisation.uid;
-  }
-
-  services.create(user.id, userToMigrate.serviceId, orgId, userToMigrate.organisation.type, req.id);
 
   req.session.migrationUser = undefined;
 
