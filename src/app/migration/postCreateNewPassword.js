@@ -50,7 +50,17 @@ const action = async (req, res) => {
     orgId = userToMigrate.organisation.uid;
   }
 
-  services.create(user.id, userToMigrate.serviceId, orgId, userToMigrate.organisation.type, req.id);
+  let userId;
+  if(user) {
+    userId = user.id;
+  } else {
+    const existingUser = await users.find(userCode.userCode.email, req.id);
+    if(existingUser) {
+      userId = existingUser.id;
+    }
+  }
+
+  await services.create(userId, userToMigrate.serviceId, orgId, userToMigrate.organisation.type, req.id);
 
   await userCodes.deleteCode(req.body.emailConfId, req.id, 'ConfirmMigratedEmail');
 
