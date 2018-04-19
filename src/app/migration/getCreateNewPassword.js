@@ -13,6 +13,7 @@ const get = (req, res) => {
     emailConfId: req.params.emailConfId,
     csrfToken: req.csrfToken(),
     validationMessages: {},
+    backLink: true,
     code: req.session.userCode,
     newPassword: '',
     confirmPassword: '',
