@@ -16,6 +16,7 @@ const action = async (req, res) => {
       confirmPassword: '',
       validationFailed: true,
       validationMessages: validationResult.messages,
+      emailConfId: req.body.emailConfId,
     });
     return;
   }
@@ -28,6 +29,7 @@ const action = async (req, res) => {
       newPassword: '',
       confirmPassword: '',
       validationFailed: true,
+      emailConfId: req.body.emailConfId,
       validationMessages: {
         general: 'An error has occurred.',
       },
@@ -47,6 +49,7 @@ const action = async (req, res) => {
       newPassword: '',
       confirmPassword: '',
       validationFailed: true,
+      emailConfId: req.body.emailConfId,
       validationMessages: {
         general: 'Email address has already been registered. Please sign in using your email address',
       },
