@@ -9,6 +9,7 @@ jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementatio
 jest.mock('./../../src/infrastructure/logger', () => ({
   info: jest.fn(),
   audit: jest.fn(),
+  warn: jest.fn(),
 }));
 const utils = require('./../utils');
 const postCreateNewPassword = require('./../../src/app/migration/postCreateNewPassword');
@@ -43,12 +44,12 @@ describe('When posting to create a user from migration', () => {
     userCodes.deleteCode = userCodesDeleteCode;
 
     createUser = jest.fn().mockReset().mockReturnValue({ id: expectedUserId });
-    findUser = jest.fn().mockReset().mockReturnValue({ id: expectedUserId });
+    findUser = jest.fn().mockReset().mockReturnValue({ sub: expectedUserId });
     const users = require('./../../src/infrastructure/Users');
     users.create = createUser;
     users.find = findUser;
 
-    createOrg = jest.fn().mockReset();
+    createOrg = jest.fn().mockReset().mockReturnValue(true);
     const services = require('./../../src/infrastructure/Services');
     services.create = createOrg;
   });
