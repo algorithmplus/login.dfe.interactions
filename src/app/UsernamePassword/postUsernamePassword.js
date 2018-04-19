@@ -111,6 +111,7 @@ const post = async (req, res) => {
       clientName: client.friendlyName,
       clientId: req.query.clientid,
       redirectUri: req.query.redirect_uri,
+      serviceId: client.params.serviceId,
     };
     sendRedirect(req, res, {
       redirect: true,
