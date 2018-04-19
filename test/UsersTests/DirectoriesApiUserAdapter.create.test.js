@@ -54,7 +54,7 @@ describe('When creating a user with the api', () => {
   it('it should send entered user information', async () => {
     await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
 
-    expect(rp.mock.calls[0][0].body.username).toBe(username);
+    expect(rp.mock.calls[0][0].body.email).toBe(username);
     expect(rp.mock.calls[0][0].body.password).toBe(password);
     expect(rp.mock.calls[0][0].body.firstName).toBe(firstName);
     expect(rp.mock.calls[0][0].body.lastName).toBe(lastName);

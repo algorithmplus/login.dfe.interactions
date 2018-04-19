@@ -129,7 +129,7 @@ const create = async (username, password, firstName, lastName, correlationId) =>
         'x-correlation-id': correlationId,
       },
       body: {
-        username,
+        email: username,
         password,
         firstName,
         lastName,
