@@ -12,11 +12,13 @@ const get = async (req, res) => {
   res.render('migration/views/confirmEmail', {
     message: '',
     title: 'DfE Sign-in',
+    uuid: req.params.uuid,
     emailConfId: req.params.emailConfId,
     csrfToken: req.csrfToken(),
     backLink: true,
     validationMessages: {},
     email: userCode.userCode.email,
+    resend: req.session.resend,
   });
 };
 
