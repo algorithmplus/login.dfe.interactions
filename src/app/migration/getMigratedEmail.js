@@ -2,6 +2,7 @@
 
 const get = (req, res) => {
   const user = req.session.migrationUser;
+  req.session.resend = undefined;
 
   let viewToDisplay = 'migration/views/email';
 
