@@ -38,7 +38,7 @@ describe('When posting to create a user from migration', () => {
     };
 
     userCodesDeleteCode = jest.fn();
-    userCodesGetCode = jest.fn().mockReset().mockReturnValue({ userCode: { email: expectedEmail, code: '', contextData: '{"firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234"},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1"}', redirectUri: 'https://localhost:4431' } });
+    userCodesGetCode = jest.fn().mockReset().mockReturnValue({ userCode: { email: expectedEmail, code: '', contextData: '{"firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234"},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}', redirectUri: 'https://localhost:4431' } });
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.getCode = userCodesGetCode;
     userCodes.deleteCode = userCodesDeleteCode;
@@ -99,7 +99,8 @@ describe('When posting to create a user from migration', () => {
     expect(createUser.mock.calls[0][1]).toBe(expectedPassword);
     expect(createUser.mock.calls[0][2]).toBe('Roger');
     expect(createUser.mock.calls[0][3]).toBe('Johnson');
-    expect(createUser.mock.calls[0][4]).toBe(req.id);
+    expect(createUser.mock.calls[0][4]).toBe('old_user_name');
+    expect(createUser.mock.calls[0][5]).toBe(req.id);
   });
 
   it('then if an error is returned while creating the user an error is returned', async () => {

@@ -147,7 +147,7 @@ const getDevices = async (uid, correlationId) => {
   }
 };
 
-const create = async (username, password, firstName, lastName, correlationId) => {
+const create = async (username, password, firstName, lastName, legacyUsername, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -163,6 +163,7 @@ const create = async (username, password, firstName, lastName, correlationId) =>
         password,
         firstName,
         lastName,
+        legacy_username: legacyUsername,
       },
       json: true,
     });

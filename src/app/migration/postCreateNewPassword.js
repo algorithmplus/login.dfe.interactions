@@ -42,7 +42,7 @@ const action = async (req, res) => {
 
   const userToMigrate = JSON.parse(userCode.userCode.contextData);
 
-  const user = await users.create(userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName, req.id);
+  const user = await users.create(userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName, userToMigrate.userName, req.id);
 
   let orgId;
   if (userToMigrate.organisation.type === '001') {
