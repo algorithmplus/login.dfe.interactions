@@ -40,6 +40,12 @@ const create = async () =>{
   return Promise.resolve({ id: '33421d3e-54ba-44ac-c453-2d42b9a05492' });
 };
 
+const findByLegacyUsername = async (username) => {
+  if (username.toLowerCase() !== 'foo2@example.com') {
+    return null;
+  }
+  return { id: '23121d3c-84df-44ac-b458-3d63a9a05497' };
+};
 
 module.exports = {
   authenticate,
@@ -47,4 +53,5 @@ module.exports = {
   changePassword,
   getDevices,
   create,
+  findByLegacyUsername,
 };

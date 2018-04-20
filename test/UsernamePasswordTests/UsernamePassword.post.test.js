@@ -16,6 +16,7 @@ describe('When user submits username/password', () => {
   let interactionCompleteProcess;
   let usersAuthenticate;
   let osaAuthenticate;
+  let findByLegacyUsername;
   let clientsGet;
   let loggerAudit;
 
@@ -37,8 +38,11 @@ describe('When user submits username/password', () => {
     interactionComplete.process = interactionCompleteProcess;
 
     usersAuthenticate = jest.fn();
+    findByLegacyUsername = jest.fn();
     const users = require('./../../src/infrastructure/Users');
     users.authenticate = usersAuthenticate;
+    users.findByLegacyUsername = findByLegacyUsername;
+    findByLegacyUsername.mockReset().mockReturnValue(null);
 
     osaAuthenticate = jest.fn();
     const osaAuth = require('./../../src/infrastructure/osa');
@@ -209,6 +213,38 @@ describe('When user submits username/password', () => {
       expect(osaAuthenticate.mock.calls).toHaveLength(1);
       expect(osaAuthenticate.mock.calls[0][0]).toBe('foo');
       expect(osaAuthenticate.mock.calls[0][1]).toBe('IAmIronman!');
+    });
+
+    it('then it checks to see if the username is already migrated if successfully authenticated', async () => {
+      req.body.username = 'foo';
+      clientsGet.mockReset().mockReturnValue({
+        client_id: 'test',
+        params: {
+          supportsUsernameLogin: true,
+        },
+      });
+
+      await postHandler(req, res);
+
+      expect(findByLegacyUsername.mock.calls).toHaveLength(1);
+      expect(findByLegacyUsername.mock.calls[0][0]).toBe('foo');
+    });
+
+    it('then if the username has been authenticated and migrated an error is returned and an audit record created', async () => {
+      findByLegacyUsername.mockReset().mockReturnValue({ sub: '1234' });
+      req.body.username = 'foo';
+      clientsGet.mockReset().mockReturnValue({
+        client_id: 'test',
+        params: {
+          supportsUsernameLogin: true,
+        },
+      });
+
+      await postHandler(req, res);
+
+      expect(res.render.mock.calls[0][1].isFailedLogin).toBe(true);
+      expect(res.render.mock.calls[0][1].validationMessages.username).toBe('Username has already been migrated, please sign in using your email address.');
+      expect(loggerAudit.mock.calls).toHaveLength(1)
     });
 
     it('then it redirects to the migration page if the login is successful through osa API', async () => {
