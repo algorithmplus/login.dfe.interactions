@@ -13,6 +13,7 @@ describe('When creating a user with the api', () => {
   const password = 'mary-had-a-little-lamb';
   const firstName = 'Tester';
   const lastName = 'Testing';
+  const legacyUsername = 'old_login_name';
   const bearerToken = 'some-token';
   const expectedCorrelationId = 'some-uid';
 
@@ -45,29 +46,30 @@ describe('When creating a user with the api', () => {
   });
 
   it('it should post to the directories api', async () => {
-    await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
+    await directoriesApiUserAdapter.create(username, password, firstName, lastName,legacyUsername, expectedCorrelationId);
 
     expect(rp.mock.calls[0][0].method).toBe('POST');
     expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/users');
   });
 
   it('it should send entered user information', async () => {
-    await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
+    await directoriesApiUserAdapter.create(username, password, firstName, lastName,legacyUsername, expectedCorrelationId);
 
     expect(rp.mock.calls[0][0].body.email).toBe(username);
     expect(rp.mock.calls[0][0].body.password).toBe(password);
     expect(rp.mock.calls[0][0].body.firstName).toBe(firstName);
     expect(rp.mock.calls[0][0].body.lastName).toBe(lastName);
+    expect(rp.mock.calls[0][0].body.legacy_username).toBe(legacyUsername);
   });
 
   it('then the correlation id is passed in the header', async () => {
-    await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
+    await directoriesApiUserAdapter.create(username, password, firstName, lastName,legacyUsername, expectedCorrelationId);
 
     expect(rp.mock.calls[0][0].headers['x-correlation-id']).toBe(expectedCorrelationId);
   });
 
   it('it should user the jwt token for authorization', async () => {
-    await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
+    await directoriesApiUserAdapter.create(username, password, firstName, lastName,legacyUsername, expectedCorrelationId);
 
     expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
   });
@@ -79,7 +81,7 @@ describe('When creating a user with the api', () => {
       throw error;
     });
 
-    const actual = await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
+    const actual = await directoriesApiUserAdapter.create(username, password, firstName, lastName,legacyUsername, expectedCorrelationId);
 
     expect(actual).toBe(null);
   });
@@ -92,7 +94,7 @@ describe('When creating a user with the api', () => {
     });
 
     try {
-      await directoriesApiUserAdapter.create(username, password, firstName, lastName, expectedCorrelationId);
+      await directoriesApiUserAdapter.create(username, password, firstName, lastName,legacyUsername, expectedCorrelationId);
       throw new Error('No error thrown!');
     } catch (e) {
       if (e.message === 'No error thrown!') {

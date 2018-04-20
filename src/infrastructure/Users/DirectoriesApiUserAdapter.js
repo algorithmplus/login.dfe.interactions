@@ -74,6 +74,36 @@ const find = async (username, correlationId) => {
   }
 };
 
+const findByLegacyUsername = async(username, correlationId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  try {
+    const res = await rp({
+      method: 'GET',
+      uri: `${config.directories.service.url}/users/by-legacyusername/${username}`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+
+    return {
+      sub: res.sub,
+      email: res.email,
+      given_name: res.given_name,
+      family_name: res.family_name,
+      legacy_username: res.legacy_username,
+    };
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw new Error(e);
+  }
+};
+
 const changePassword = async (uid, password, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
@@ -117,7 +147,7 @@ const getDevices = async (uid, correlationId) => {
   }
 };
 
-const create = async (username, password, firstName, lastName, correlationId) => {
+const create = async (username, password, firstName, lastName, legacyUsername, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -133,6 +163,7 @@ const create = async (username, password, firstName, lastName, correlationId) =>
         password,
         firstName,
         lastName,
+        legacy_username: legacyUsername,
       },
       json: true,
     });
@@ -151,4 +182,5 @@ module.exports = {
   changePassword,
   getDevices,
   create,
+  findByLegacyUsername,
 };

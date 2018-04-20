@@ -41,14 +41,42 @@ const post = async (req, res) => {
 
   let user = null;
   let legacyUser = false;
+
   const supportsUsernameLogin = client.params && client.params.supportsUsernameLogin;
   const validation = validateBody(req.body, supportsUsernameLogin);
+
   if (!validation.failedValidation) {
     if (emailValidator.validate(req.body.username)) {
       user = await Users.authenticate(req.body.username, req.body.password, req.id);
     } else {
       legacyUser = true;
       user = await osaAuthenticate.authenticate(req.body.username, req.body.password, req.id);
+      if (user) {
+        const migrationComplete = await Users.findByLegacyUsername(req.body.username, req.id);
+        if (migrationComplete) {
+          logger.audit(`Attempt login to already migrated account for ${req.body.username}`, {
+            type: 'sign-in',
+            subType: 'username-password',
+            success: false,
+            userEmail: req.body.username,
+          });
+          sendResult(req, res, 'UsernamePassword/views/index', {
+            isFailedLogin: true,
+            title: 'DfE Sign-in',
+            clientId: req.query.clientid,
+            uuid: req.params.uuid,
+            csrfToken: req.csrfToken(),
+            redirectUri: req.query.redirect_uri,
+            validationMessages: {
+              username: 'Username has already been migrated, please sign in using your email address.',
+            },
+            username: req.body.username,
+            header: !client.params || client.params.header,
+            headerMessage: !client.params || client.params.headerMessage,
+            allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
+          });
+        }
+      }
     }
   }
 
