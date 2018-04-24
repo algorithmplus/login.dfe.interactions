@@ -13,6 +13,7 @@ const getCreateNewPassword = require('./getCreateNewPassword');
 const getMigrationComplete = require('./getMigrationComplete');
 const postCreateNewPassword = require('./postCreateNewPassword');
 const postConfirmMigratedEmail = require('./postConfirmMigratedEmail');
+const getEmailInUse = require('./getEmailInUse');
 
 
 const router = express.Router({ mergeParams: true });
@@ -22,6 +23,7 @@ const registerRoutes = (csrf) => {
   router.get('/', csrf, asyncWrapper(get));
   router.get('/userDetails', csrf, asyncWrapper(migratedUserDetails));
   router.get('/email', csrf, asyncWrapper(migratedEmail));
+  router.get('/email-in-use', csrf, asyncWrapper(getEmailInUse));
   router.post('/email', csrf, asyncWrapper(postMigratedEmail));
   router.get('/:emailConfId/confirm-email', csrf, asyncWrapper(getConfirmMigratedEmail));
   router.post('/:emailConfId/confirm-email', csrf, asyncWrapper(postConfirmMigratedEmail));
