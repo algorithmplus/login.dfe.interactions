@@ -2,11 +2,15 @@
 
 const org = require('./../../infrastructure/Organisations');
 
+const establishment = '001';
+const multiAcademyTrust = '010';
+const singleAcademyTrust = '013';
+
 const validate = async (user) => {
   let orgId;
-  if (user.organisation.type === '001') {
+  if (user.organisation.type === establishment) {
     orgId = user.organisation.urn;
-  } else if (user.organisation.type === '010' || user.organisation.type === '013') {
+  } else if (user.organisation.type === multiAcademyTrust || user.organisation.type === singleAcademyTrust) {
     orgId = user.organisation.uid;
   }
 
