@@ -1,7 +1,33 @@
 'use strict';
 
-const get = (req, res) => {
+const org = require('./../../infrastructure/Organisations');
+
+const establishment = '001';
+const multiAcademyTrust = '010';
+const singleAcademyTrust = '013';
+
+const validate = async (user) => {
+  let orgId;
+  if (user.organisation.type === establishment) {
+    orgId = user.organisation.urn;
+  } else if (user.organisation.type === multiAcademyTrust || user.organisation.type === singleAcademyTrust) {
+    orgId = user.organisation.uid;
+  }
+
+  if (!orgId) {
+    return true;
+  }
+
+  const organisation = await org.getOrganisationByExternalId(orgId, user.organisation.type);
+
+  return !organisation;
+};
+
+const get = async (req, res) => {
   const user = req.session.migrationUser;
+
+  const validationResult = await validate(user);
+
   res.render('migration/views/userDetail', {
     message: '',
     title: 'DfE Sign-in',
@@ -10,6 +36,7 @@ const get = (req, res) => {
     hideUserNav: true,
     user,
     validationMessages: {},
+    failedValidation: validationResult,
   });
 };
 
