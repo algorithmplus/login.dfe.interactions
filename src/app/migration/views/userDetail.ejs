@@ -1,14 +1,15 @@
-<div class="js-back-link"></div>
 
 <% if (locals.failedValidation) { %>
+    <a class=“link-back” href="<%=locals.user.redirectUri%>">Back</a>
     <div class="notification notification-information with-icon">
         <h2>Your organisation details do not exist </h2>
         <p>We have found your account details from Secure Access.
             Unfortunately the details of the organisation you work for have not been created in our system
             so we cannot continue with your DfE Sign-in account setup. <a href="<%=locals.urls.help%>/contact">Contact the help desk</a> for assistance.</p>
     </div>
-<%}%>
-
+<%} else {%>
+    <div class="js-back-link"></div>
+<%} %>
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
