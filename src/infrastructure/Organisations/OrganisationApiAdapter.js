@@ -36,6 +36,32 @@ const getOrganisationByExternalId = async (organisationId, orgType, correlationI
   }
 };
 
+
+const associatedWithUser = async (userId, correlationId) => {
+  const token = await jwtStrategy(config.organisations.service).getBearerToken();
+
+  try {
+    const data = await rp({
+      method: 'GET',
+      uri: `${config.organisations.service.url}/organisations/associated-with-user/${userId}`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+
+    return data;
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw e;
+  }
+};
+
 module.exports = {
   getOrganisationByExternalId,
+  associatedWithUser,
 };

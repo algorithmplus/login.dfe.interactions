@@ -23,6 +23,7 @@ const usernamePassword = require('./app/UsernamePassword');
 const migrationUser = require('./app/migration');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
+const selectOrganisation = require('./app/select-organisation');
 const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
@@ -119,6 +120,7 @@ app.use('/:uuid/usernamepassword', usernamePassword(csrf));
 app.use('/:uuid/migration', migrationUser(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
+app.use('/:uuid/select-organisation', selectOrganisation(csrf));
 
 if (config.hostingEnvironment.useDevViews) {
     app.use('/dev/', devLauncher(csrf));
