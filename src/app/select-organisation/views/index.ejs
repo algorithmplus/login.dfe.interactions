@@ -19,7 +19,7 @@
 
                     <% locals.orgsForUser.forEach((org) => { %>
                     <div class="multiple-choice">
-                        <input id="<%= org.organisation.id %>" type="radio" name="selected-organisation" value="<%= JSON.stringify(org.organisation)%>">
+                        <input id="<%= org.organisation.id %>" type="radio" name="selected-organisation" value="<%= encodeURIComponent(JSON.stringify(org.organisation))%>">
                         <label for="<%= org.organisation.id %>"><%- org.organisation.name %></label>
                     </div>
 
