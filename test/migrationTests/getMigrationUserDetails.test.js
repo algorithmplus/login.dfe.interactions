@@ -20,6 +20,7 @@ describe('When getting the migration user details view', () => {
         type: '013',
         urn: '',
         uid: '123',
+        localAuthority: '',
       },
     };
 
@@ -78,6 +79,16 @@ describe('When getting the migration user details view', () => {
     expect(res.render.mock.calls[0][1].failedValidation).toBe(true);
   });
 
+  it('then if there is no localAuthority for org_type 002 then a warning is shown', async () => {
+    req.session.migrationUser.organisation.type = '001';
+    req.session.migrationUser.organisation.localAuthority = '';
+
+    await getMigratedUserDetails(req, res);
+
+    expect(getOrganisationByExternalIdStub.mock.calls).toHaveLength(0);
+    expect(res.render.mock.calls[0][1].failedValidation).toBe(true);
+  });
+
   it('then if the org_type is not recognised a warning is shown', async () => {
     req.session.migrationUser.organisation.type = '002';
 
@@ -121,6 +132,18 @@ describe('When getting the migration user details view', () => {
     expect(getOrganisationByExternalIdStub.mock.calls).toHaveLength(1);
     expect(getOrganisationByExternalIdStub.mock.calls[0][0]).toBe('456');
     expect(getOrganisationByExternalIdStub.mock.calls[0][1]).toBe('013');
+    expect(res.render.mock.calls[0][1].failedValidation).toBe(false);
+  });
+
+  it('then the org is checked against the api to see if it exists for org type 002', async () => {
+    req.session.migrationUser.organisation.type = '002';
+    req.session.migrationUser.organisation.localAuthority = '987';
+
+    await getMigratedUserDetails(req, res);
+
+    expect(getOrganisationByExternalIdStub.mock.calls).toHaveLength(1);
+    expect(getOrganisationByExternalIdStub.mock.calls[0][0]).toBe('987');
+    expect(getOrganisationByExternalIdStub.mock.calls[0][1]).toBe('002');
     expect(res.render.mock.calls[0][1].failedValidation).toBe(false);
   });
 
