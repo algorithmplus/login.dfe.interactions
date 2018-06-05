@@ -5,6 +5,7 @@ const services = require('./../../infrastructure/Services');
 const userCodes = require('./../../infrastructure/UserCodes');
 const logger = require('./../../infrastructure/logger');
 const { validate } = require('./../utils/validatePassword');
+const org = require('./../../infrastructure/Organisations');
 
 const action = async (req, res) => {
   const validationResult = validate(req.body.newPassword, req.body.confirmPassword);
@@ -25,7 +26,7 @@ const action = async (req, res) => {
   const userCode = await userCodes.getCode(req.body.emailConfId, req.id, 'ConfirmMigratedEmail');
 
   if (!userCode || !userCode.userCode || !userCode.userCode.contextData) {
-    logger.warn(`Usercode no longer exists for ${req.body.emailConfId}`)
+    logger.warn(`Usercode no longer exists for ${req.body.emailConfId}`);
     res.render('migration/views/createPassword', {
       csrfToken: req.csrfToken(),
       newPassword: '',
@@ -60,8 +61,15 @@ const action = async (req, res) => {
       userId = existingUser.sub;
     }
   }
+  const organisation = await org.getOrganisationByExternalId(orgId, userToMigrate.organisation.type);
 
-  const servicesResult = await services.create(userId, userToMigrate.serviceId, orgId, userToMigrate.organisation.type, req.id);
+  const externalIdentifiers = [];
+  externalIdentifiers.push({ key: 'organisationId', value: userToMigrate.organisation.osaId });
+  externalIdentifiers.push({ key: 'groups', value: (userToMigrate.service.roles ? userToMigrate.service.roles : []).join(',') });
+  externalIdentifiers.push({ key: 'saUserId', value: userToMigrate.osaUserId });
+
+  const servicesResult = await services.create(userId, userToMigrate.serviceId, organisation.id, externalIdentifiers, req.id);
+
 
   if (!servicesResult) {
     logger.audit(`Unsuccessful migration for ${userToMigrate.userName} to ${userCode.userCode.email} (id: ${userId}) - unable to link user to organisation ${orgId} and to service id ${userToMigrate.serviceId}`, {

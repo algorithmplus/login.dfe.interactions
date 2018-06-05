@@ -168,6 +168,7 @@ describe('When user submits username/password', () => {
         email: 'test@test.com',
         firstName: 'Test',
         lastName: 'Tester',
+        services: [],
       });
     });
 
