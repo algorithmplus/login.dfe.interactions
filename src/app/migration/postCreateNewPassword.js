@@ -65,7 +65,7 @@ const action = async (req, res) => {
 
   const externalIdentifiers = [];
   externalIdentifiers.push({ key: 'organisationId', value: userToMigrate.organisation.osaId });
-  externalIdentifiers.push({ key: 'groups', value: (userToMigrate.service.roles ? userToMigrate.service.roles.join(',') : []) });
+  externalIdentifiers.push({ key: 'groups', value: (userToMigrate.service.roles ? userToMigrate.service.roles : []).join(',') });
   externalIdentifiers.push({ key: 'saUserId', value: userToMigrate.osaUserId });
 
   const servicesResult = await services.create(userId, userToMigrate.serviceId, organisation.id, externalIdentifiers, req.id);
