@@ -141,6 +141,9 @@ const post = async (req, res) => {
       redirectUri: req.query.redirect_uri,
       serviceId: client.params.serviceId,
       userName: req.body.username,
+      osaUserId: user.osaId,
+      service: user.services.find(s => s.id.toLowerCase() === client.params.serviceId.toLowerCase()),
+
     };
     sendRedirect(req, res, {
       redirect: true,

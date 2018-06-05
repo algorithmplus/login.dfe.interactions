@@ -10,19 +10,20 @@ const rp = require('request-promise').defaults({
 });
 const jwtStrategy = require('login.dfe.jwt-strategies');
 
-const create = async (userId, serviceId, organisationId, orgType, correlationId) =>{
+
+const create = async (userId, serviceId, organisationId, externalIdentifiers = [], correlationId) => {
   const token = await jwtStrategy(config.organisations.service).getBearerToken();
 
   try {
     await rp({
-      method: 'POST',
-      uri: `${config.organisations.service.url}/organisations/${organisationId}/services/${serviceId}/create/${userId}`,
+      method: 'PUT',
+      uri: `${config.organisations.service.url}/organisations/${organisationId}/services/${serviceId}/users/${userId}`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
       },
       body: {
-        org_type: orgType,
+        externalIdentifiers,
       },
       json: true,
     });

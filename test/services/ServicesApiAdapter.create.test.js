@@ -13,6 +13,7 @@ describe('When creating a user with the api', () => {
   const userId = 'user-1';
   const serviceId = 'svc-1';
   const organisationId = 'org-1';
+  const externalIdentifiers = [{ key: 'foo', value: 'bar' }];
   const orgType = '001';
   const bearerToken = 'some-token';
   const expectedCorrelationId = 'some-uid';
@@ -48,8 +49,8 @@ describe('When creating a user with the api', () => {
   it('then the data is posted to the organisations api', async () => {
     await servicesApiUserAdapter.create(userId, serviceId, organisationId, orgType, expectedCorrelationId);
 
-    expect(rp.mock.calls[0][0].method).toBe('POST');
-    expect(rp.mock.calls[0][0].uri).toBe(`https://organisations.login.dfe.test/organisations/${organisationId}/services/${serviceId}/create/${userId}`);
+    expect(rp.mock.calls[0][0].method).toBe('PUT');
+    expect(rp.mock.calls[0][0].uri).toBe(`https://organisations.login.dfe.test/organisations/${organisationId}/services/${serviceId}/users/${userId}`);
   });
 
   it('then the bearer token is passed in the header', async () => {
@@ -65,9 +66,9 @@ describe('When creating a user with the api', () => {
   });
 
   it('then the body parameters are passed to the API', async () => {
-    await servicesApiUserAdapter.create(userId, serviceId, organisationId, orgType, expectedCorrelationId);
+    await servicesApiUserAdapter.create(userId, serviceId, organisationId, externalIdentifiers, expectedCorrelationId);
 
-    expect(rp.mock.calls[0][0].body.org_type).toBe(orgType);
+    expect(rp.mock.calls[0][0].body.externalIdentifiers).toBe(externalIdentifiers);
   });
 
   it('then false is returned if a 403 is returned from the API', async () => {

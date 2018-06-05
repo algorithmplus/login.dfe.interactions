@@ -26,6 +26,7 @@ describe('When posting to create a user from migration', () => {
   const expectedPassword = 'my-super-strong-password-for-test';
   const expectedEmail = 'test@local';
   const expectedUserId = 'user-1';
+  const expectedOrgId = '33421d3e-54ba-44ac-c453-2d42b9a05492';
 
   beforeEach(() => {
     req = utils.mockRequest();
@@ -38,7 +39,7 @@ describe('When posting to create a user from migration', () => {
     };
 
     userCodesDeleteCode = jest.fn();
-    userCodesGetCode = jest.fn().mockReset().mockReturnValue({ userCode: { email: expectedEmail, code: '', contextData: '{"firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234"},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}', redirectUri: 'https://localhost:4431' } });
+    userCodesGetCode = jest.fn().mockReset().mockReturnValue({ userCode: { email: expectedEmail, code: '', contextData: '{"service":{}, "firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234"},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}', redirectUri: 'https://localhost:4431' } });
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.getCode = userCodesGetCode;
     userCodes.deleteCode = userCodesDeleteCode;
@@ -118,8 +119,7 @@ describe('When posting to create a user from migration', () => {
     expect(createOrg.mock.calls).toHaveLength(1);
     expect(createOrg.mock.calls[0][0]).toBe(expectedUserId);
     expect(createOrg.mock.calls[0][1]).toBe('svc1');
-    expect(createOrg.mock.calls[0][2]).toBe('MAT1234');
-    expect(createOrg.mock.calls[0][3]).toBe('010');
+    expect(createOrg.mock.calls[0][2]).toBe(expectedOrgId);
     expect(createOrg.mock.calls[0][4]).toBe(req.id);
   });
 
@@ -150,8 +150,7 @@ describe('When posting to create a user from migration', () => {
     expect(createOrg.mock.calls).toHaveLength(1);
     expect(createOrg.mock.calls[0][0]).toBe(expectedUserId);
     expect(createOrg.mock.calls[0][1]).toBe('svc1');
-    expect(createOrg.mock.calls[0][2]).toBe('MAT1234');
-    expect(createOrg.mock.calls[0][3]).toBe('010');
+    expect(createOrg.mock.calls[0][2]).toBe(expectedOrgId);
     expect(createOrg.mock.calls[0][4]).toBe(req.id);
   });
 
