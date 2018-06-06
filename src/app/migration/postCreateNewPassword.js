@@ -7,6 +7,11 @@ const logger = require('./../../infrastructure/logger');
 const { validate } = require('./../utils/validatePassword');
 const org = require('./../../infrastructure/Organisations');
 
+const establishment = '001';
+const localAuthority = '002';
+const multiAcademyTrust = '010';
+const singleAcademyTrust = '013';
+
 const action = async (req, res) => {
   const validationResult = validate(req.body.newPassword, req.body.confirmPassword);
 
@@ -46,9 +51,11 @@ const action = async (req, res) => {
   const user = await users.create(userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName, userToMigrate.userName, req.id);
 
   let orgId;
-  if (userToMigrate.organisation.type === '001') {
+  if (userToMigrate.organisation.type === establishment) {
     orgId = userToMigrate.organisation.urn;
-  } else {
+  } else if (userToMigrate.organisation.type === localAuthority) {
+    orgId = userToMigrate.organisation.localAuthority;
+  } else if (userToMigrate.organisation.type === multiAcademyTrust || userToMigrate.organisation.type === singleAcademyTrust) {
     orgId = userToMigrate.organisation.uid;
   }
 
