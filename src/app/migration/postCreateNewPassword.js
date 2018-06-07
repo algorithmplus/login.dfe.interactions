@@ -63,7 +63,7 @@ const createOrFindUser = async (email, password, firstName, lastName, emailConfI
     existing: false,
   };
 };
-const addUserToOrganisation = async (saOrganisation) => {
+const addUserToOrganisation = async (userId, saOrganisation, correlationId) => {
   let orgId;
   if (saOrganisation.type === establishment) {
     orgId = saOrganisation.urn;
@@ -74,7 +74,7 @@ const addUserToOrganisation = async (saOrganisation) => {
   }
   const organisation = await org.getOrganisationByExternalId(orgId, saOrganisation.type);
 
-  // TODO: Add user/org/role mapping to DSI
+  await org.setUsersRoleAtOrg(userId, organisation.id, saOrganisation.role.id, correlationId);
 
   return organisation;
 };
@@ -103,7 +103,7 @@ const action = async (req, res) => {
   const user = await createOrFindUser(userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName, userToMigrate.userName, req.id);
   const userId = user.userId;
 
-  const organisation = await addUserToOrganisation(userToMigrate.organisation);
+  const organisation = await addUserToOrganisation(userId, userToMigrate.organisation, req.id);
 
   const servicesResult = await addUserToService(userId, organisation, userToMigrate.organisation, userToMigrate.serviceId,
     userToMigrate.service.roles, userToMigrate.osaUserId, req.id);
