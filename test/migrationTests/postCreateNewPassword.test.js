@@ -61,7 +61,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then if the confirm password does not match the password an error is returned', async () => {
@@ -71,7 +71,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then the code is checked against the API', async () => {
@@ -89,7 +89,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then the user is created if the request is valid', async () => {
@@ -110,7 +110,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then the user is mapped to the organisation', async () => {
