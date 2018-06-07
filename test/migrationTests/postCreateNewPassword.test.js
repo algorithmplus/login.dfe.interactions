@@ -1,6 +1,7 @@
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/Services');
+jest.mock('./../../src/infrastructure/Organisations');
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
     agentKeepAlive: {},
@@ -11,17 +12,17 @@ jest.mock('./../../src/infrastructure/logger', () => ({
   audit: jest.fn(),
   warn: jest.fn(),
 }));
+
+const { getCode: userCodesGetCode, deleteCode: userCodesDeleteCode } = require('./../../src/infrastructure/UserCodes');
+const { create: createUser, find: findUser } = require('./../../src/infrastructure/Users');
+const { create: addServiceMapping } = require('./../../src/infrastructure/Services');
+const { getOrganisationByExternalId, setUsersRoleAtOrg } = require('./../../src/infrastructure/Organisations');
 const utils = require('./../utils');
 const postCreateNewPassword = require('./../../src/app/migration/postCreateNewPassword');
 
 describe('When posting to create a user from migration', () => {
   let req;
   let res;
-  let userCodesGetCode;
-  let userCodesDeleteCode;
-  let createUser;
-  let findUser;
-  let createOrg;
   const expectedUserCodeId = 'some-uid';
   const expectedPassword = 'my-super-strong-password-for-test';
   const expectedEmail = 'test@local';
@@ -38,21 +39,26 @@ describe('When posting to create a user from migration', () => {
       emailConfId: expectedUserCodeId,
     };
 
-    userCodesDeleteCode = jest.fn();
-    userCodesGetCode = jest.fn().mockReset().mockReturnValue({ userCode: { email: expectedEmail, code: '', contextData: '{"service":{}, "firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234"},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}', redirectUri: 'https://localhost:4431' } });
-    const userCodes = require('./../../src/infrastructure/UserCodes');
-    userCodes.getCode = userCodesGetCode;
-    userCodes.deleteCode = userCodesDeleteCode;
+    userCodesDeleteCode.mockReset();
+    userCodesGetCode.mockReset().mockReturnValue({
+      userCode: {
+        email: expectedEmail,
+        code: '',
+        contextData: '{"service":{}, "firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234","role":{"id":10000}},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}',
+        redirectUri: 'https://localhost:4431',
+      },
+    });
 
-    createUser = jest.fn().mockReset().mockReturnValue({ id: expectedUserId });
-    findUser = jest.fn().mockReset().mockReturnValue({ sub: expectedUserId });
-    const users = require('./../../src/infrastructure/Users');
-    users.create = createUser;
-    users.find = findUser;
 
-    createOrg = jest.fn().mockReset().mockReturnValue(true);
-    const services = require('./../../src/infrastructure/Services');
-    services.create = createOrg;
+    createUser.mockReset().mockReturnValue({ id: expectedUserId });
+    findUser.mockReset().mockReturnValue({ sub: expectedUserId });
+
+    addServiceMapping.mockReset().mockReturnValue(true);
+
+    getOrganisationByExternalId.mockReset().mockReturnValue({
+      id: expectedOrgId,
+    });
+    setUsersRoleAtOrg.mockReset().mockReturnValue(true);
   });
 
   it('then if the password is empty an error is returned', async () => {
@@ -61,7 +67,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then if the confirm password does not match the password an error is returned', async () => {
@@ -71,7 +77,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then the code is checked against the API', async () => {
@@ -89,7 +95,7 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then the user is created if the request is valid', async () => {
@@ -110,17 +116,17 @@ describe('When posting to create a user from migration', () => {
     await postCreateNewPassword(req, res);
 
     expect(res.render.mock.calls).toHaveLength(1);
-    expect(res.render.mock.calls[0][1].validationFailed).toBe(true);
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages).length).toBeGreaterThanOrEqual(1);
   });
 
   it('then the user is mapped to the organisation', async () => {
     await postCreateNewPassword(req, res);
 
-    expect(createOrg.mock.calls).toHaveLength(1);
-    expect(createOrg.mock.calls[0][0]).toBe(expectedUserId);
-    expect(createOrg.mock.calls[0][1]).toBe('svc1');
-    expect(createOrg.mock.calls[0][2]).toBe(expectedOrgId);
-    expect(createOrg.mock.calls[0][4]).toBe(req.id);
+    expect(addServiceMapping.mock.calls).toHaveLength(1);
+    expect(addServiceMapping.mock.calls[0][0]).toBe(expectedUserId);
+    expect(addServiceMapping.mock.calls[0][1]).toBe('svc1');
+    expect(addServiceMapping.mock.calls[0][2]).toBe(expectedOrgId);
+    expect(addServiceMapping.mock.calls[0][4]).toBe(req.id);
   });
 
   it('then if the user is successfully created the usercode is deleted', async () => {
@@ -147,11 +153,11 @@ describe('When posting to create a user from migration', () => {
 
     expect(findUser.mock.calls).toHaveLength(1);
     expect(findUser.mock.calls[0][0]).toBe(expectedEmail);
-    expect(createOrg.mock.calls).toHaveLength(1);
-    expect(createOrg.mock.calls[0][0]).toBe(expectedUserId);
-    expect(createOrg.mock.calls[0][1]).toBe('svc1');
-    expect(createOrg.mock.calls[0][2]).toBe(expectedOrgId);
-    expect(createOrg.mock.calls[0][4]).toBe(req.id);
+    expect(addServiceMapping.mock.calls).toHaveLength(1);
+    expect(addServiceMapping.mock.calls[0][0]).toBe(expectedUserId);
+    expect(addServiceMapping.mock.calls[0][1]).toBe('svc1');
+    expect(addServiceMapping.mock.calls[0][2]).toBe(expectedOrgId);
+    expect(addServiceMapping.mock.calls[0][4]).toBe(req.id);
   });
 
   it('then the user is redirected to the migration complete view when the request is valid', async () => {
@@ -159,5 +165,14 @@ describe('When posting to create a user from migration', () => {
 
     expect(res.redirect.mock.calls).toHaveLength(1);
     expect(res.redirect.mock.calls[0][0]).toBe(`/${req.params.uuid}/migration/complete`);
+  });
+
+  it('then the users role is set with the organisation', async () => {
+    await postCreateNewPassword(req, res);
+
+    expect(setUsersRoleAtOrg).toHaveBeenCalledTimes(1);
+    expect(setUsersRoleAtOrg.mock.calls[0][0]).toBe(expectedUserId);
+    expect(setUsersRoleAtOrg.mock.calls[0][1]).toBe(expectedOrgId);
+    expect(setUsersRoleAtOrg.mock.calls[0][2]).toBe(10000);
   });
 });
