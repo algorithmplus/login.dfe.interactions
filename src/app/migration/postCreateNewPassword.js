@@ -83,7 +83,7 @@ const addUserToOrganisation = async (userId, saOrganisation, correlationId) => {
 
   return organisation;
 };
-const addUserToService = async (userId, organisation, saOrganisation, currentServiceId, currentServiceRoles, saUserId, correlationId) => {
+const addUserToService = async (userId, organisation, saOrganisation, currentServiceId, currentServiceRoles, saUserId, saUserName, correlationId) => {
   const externalIdentifiers = [];
   externalIdentifiers.push({ key: 'organisationId', value: saOrganisation.osaId });
   externalIdentifiers.push({
@@ -91,6 +91,7 @@ const addUserToService = async (userId, organisation, saOrganisation, currentSer
     value: (currentServiceRoles || []).join(','),
   });
   externalIdentifiers.push({ key: 'saUserId', value: saUserId });
+  externalIdentifiers.push({ key: 'saUserName', value: saUserId });
 
   const servicesResult = await services.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
   return servicesResult;
@@ -112,7 +113,7 @@ const action = async (req, res) => {
     const organisation = await addUserToOrganisation(userId, userToMigrate.organisation, req.id);
 
     const servicesResult = await addUserToService(userId, organisation, userToMigrate.organisation, userToMigrate.serviceId,
-      userToMigrate.service.roles, userToMigrate.osaUserId, req.id);
+      userToMigrate.service.roles, userToMigrate.osaUserId, userToMigrate.userName, req.id);
 
 
     if (!servicesResult) {
