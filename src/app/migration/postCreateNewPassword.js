@@ -91,7 +91,7 @@ const addUserToService = async (userId, organisation, saOrganisation, currentSer
     value: (currentServiceRoles || []).join(','),
   });
   externalIdentifiers.push({ key: 'saUserId', value: saUserId });
-  externalIdentifiers.push({ key: 'saUserName', value: saUserId });
+  externalIdentifiers.push({ key: 'saUserName', value: saUserName });
 
   const servicesResult = await services.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
   return servicesResult;
