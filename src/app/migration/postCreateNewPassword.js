@@ -65,17 +65,9 @@ const createOrFindUser = async (email, password, firstName, lastName, emailConfI
   throw new Error(`Failed to create or find a user for SA user ${saUsername} (email: ${email})`);
 };
 const addUserToOrganisation = async (userId, saOrganisation, correlationId) => {
-  let orgId;
-  if (saOrganisation.type === establishment) {
-    orgId = saOrganisation.urn;
-  } else if (saOrganisation.type === localAuthority) {
-    orgId = saOrganisation.localAuthority;
-  } else if (saOrganisation.type === multiAcademyTrust || saOrganisation.type === singleAcademyTrust) {
-    orgId = saOrganisation.uid;
-  }
-  const organisation = await org.getOrganisationByExternalId(orgId, saOrganisation.type);
+  const organisation = await org.getOrganisationByExternalId(saOrganisation.osaId, '000');
   if (!organisation) {
-    throw new Error(`Failed to find an organisation of type ${saOrganisation.type} with id ${orgId} for user ${userId}`);
+    throw new Error(`Failed to find an organisation of type ${saOrganisation.type} with SA id ${saOrganisation.osaId} for user ${userId}`);
   }
 
   logger.info(`Adding user ${userId} to organisation ${organisation.id} with role ${saOrganisation.role.id}`, { correlationId });
