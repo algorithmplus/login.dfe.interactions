@@ -27,5 +27,10 @@ module.exports = () => {
       title: 'Help',
     });
   });
+  router.get('/faqs', (req, res) => {
+    res.render('Content/views/faqs', {
+      title: 'Frequently Asked Questions',
+    });
+  });
   return router;
 };
