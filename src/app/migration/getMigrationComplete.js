@@ -7,6 +7,7 @@ const get = (req, res) => {
     csrfToken: req.csrfToken(),
     validationMessages: {},
     redirectUri: req.session.redirectUri,
+    clientId: req.session.clientId,
   });
 };
 

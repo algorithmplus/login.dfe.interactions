@@ -138,6 +138,8 @@ const action = async (req, res) => {
 
     req.session.migrationUser = undefined;
     req.session.redirectUri = userCode.userCode.redirectUri;
+    req.session.clientId = userCode.userCode.clientId;
+    logger.info(userCode.userCode)
     return res.redirect(`/${req.params.uuid}/migration/complete`);
   } catch (e) {
     logger.error(`Error migrating SA user ${userToMigrate.userName} - ${e.messge}`, { correlationId: req.id });
