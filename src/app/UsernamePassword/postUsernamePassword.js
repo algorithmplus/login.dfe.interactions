@@ -60,20 +60,12 @@ const post = async (req, res) => {
             success: false,
             userEmail: req.body.username,
           });
-          sendResult(req, res, 'UsernamePassword/views/index', {
-            isFailedLogin: true,
-            title: 'DfE Sign-in',
-            clientId: req.query.clientid,
-            uuid: req.params.uuid,
-            csrfToken: req.csrfToken(),
+          req.session.migrationUser = {
             redirectUri: req.query.redirect_uri,
-            validationMessages: {
-              username: 'Username has already been migrated, please sign in using your email address.',
-            },
-            username: req.body.username,
-            header: !client.params || client.params.header,
-            headerMessage: !client.params || client.params.headerMessage,
-            allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
+          };
+          sendRedirect(req, res, {
+            redirect: true,
+            uri: `/${req.params.uuid}/migration/already-migrated`,
           });
         }
       }
