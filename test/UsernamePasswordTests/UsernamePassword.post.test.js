@@ -244,6 +244,7 @@ describe('When user submits username/password', () => {
       await postHandler(req, res);
 
       expect(loggerAudit.mock.calls).toHaveLength(1);
+      expect(res.redirect.mock.calls).toHaveLength(1);
       expect(res.redirect.mock.calls[0][0]).toBe('/some-uuid/migration/already-migrated');
 
     });
