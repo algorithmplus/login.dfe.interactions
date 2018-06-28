@@ -63,7 +63,7 @@ const post = async (req, res) => {
           req.session.migrationUser = {
             redirectUri: req.query.redirect_uri,
           };
-          sendRedirect(req, res, {
+          return sendRedirect(req, res, {
             redirect: true,
             uri: `/${req.params.uuid}/migration/already-migrated`,
           });
