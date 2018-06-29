@@ -1,3 +1,5 @@
+<a href="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>" class="link-back">Back</a>
+
 <% if (locals.resend) { %>
 <div class="notification notification-success" tabindex="0">
     <h2>Password reset code email resent</h2>
@@ -5,17 +7,18 @@
 <% } %>
 <% if (locals.email) { %>
 <div class="notification notification-success" tabindex="0">
-    <h2>Email verification sent</h2>
-    <p>We've sent you an email containing a verification code.</p>
-
-    <form method="post" class="inline" id="form-resend-reset-password" action="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>">
-        <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-        <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
-        <input type="hidden" name="resend" id="resend" value="true" />
-        <input type="hidden" name="clientId" id="clientId" value="<%=locals.clientId%>" />
-        <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
-        <button type="submit" class="button-text">Resend code</button>
-    </form>
+    <h2>Please confirm your email address</h2>
+    <div class="inline-wrap">
+        <p>If there is a DfE Sign-in account associated with the email address <b><%=locals.email%></b>, then we will have sent you an email containing a verifcation code &ndash;</p>
+        <form method="post" class="inline" id="form-resend-reset-password" action="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
+            <input type="hidden" name="resend" id="resend" value="true" />
+            <input type="hidden" name="clientId" id="clientId" value="<%=locals.clientId%>" />
+            <input type="hidden" name="redirectUri" id="redirectUri" value="<%=locals.redirectUri%>" />
+            <button type="submit" class="button-text">Resend code</button>
+        </form>
+    </div>
 </div>
 <% } %>
 
@@ -43,7 +46,6 @@
                     <input class="form-control char-width-8" id="code" name="code" type="text" value="<%=code%>" maxlength="8" <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
                 </div>
                 <div class="form-submit submit-buttons">
-                    <a href="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>" class="button button-secondary">Go back</a>
                     <button type="submit" class="button">Continue</button>
                 </div>
 
