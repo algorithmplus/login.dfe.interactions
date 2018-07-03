@@ -69,6 +69,7 @@
     </div>
     <div class="row">
         <div class="col-8">
+            <% if(locals.supportsUsernameLogin) {%>
             <details class="helpdesk">
                 <summary><span class="summary">Having problems?</span></summary>
                 <div class="panel panel-border-narrow">
@@ -76,6 +77,9 @@
                         If you are still having problems, read our <a href="<%=locals.urls.help%>/contact">FAQs</a>.</p>
                 </div>
             </details>
+            <%} else {%>
+            <%- include('../../includes/helpdesk'); %>
+            <%}%>
         </div>
     </div>
 
