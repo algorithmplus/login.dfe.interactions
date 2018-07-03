@@ -91,6 +91,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(sanitization({
   sanitizer: (key, value) => {
+    const fieldToNotSanitize = ['username', 'password', 'confirmPassword'];
+
+    if (fieldToNotSanitize.find(x => x.toLowerCase() === key.toLowerCase())) {
+      return value;
+    }
+
     if (key.toLowerCase() === 'clientid') {
       return !/^[A-Za-z0-9]+$/.test(value) ? '' : value;
     }
@@ -120,7 +126,7 @@ app.use('/:uuid/digipass', digipass(csrf));
 app.use('/:uuid/select-organisation', selectOrganisation(csrf));
 
 if (config.hostingEnvironment.useDevViews) {
-    app.use('/dev/', devLauncher(csrf));
+  app.use('/dev/', devLauncher(csrf));
 }
 
 // Setup global locals for layouts and views
