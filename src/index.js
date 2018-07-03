@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const csurf = require('csurf');
-const morgan = require('morgan');
 const session = require('cookie-session');
 const http = require('http');
 const https = require('https');
@@ -99,8 +98,6 @@ app.use(sanitization({
   },
 }));
 
-app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
-app.use(morgan('dev'));
 
 // Set view engine
 app.set('view engine', 'ejs');
