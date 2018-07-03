@@ -81,7 +81,7 @@ const post = async (req, res) => {
     });
 
     if (Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
-      validation.validationMessages.loginError = 'Invalid email address or password. Try again.';
+      validation.validationMessages.loginError = 'Invalid credentials, please try again.';
     }
 
     sendResult(req, res, 'UsernamePassword/views/index', {
