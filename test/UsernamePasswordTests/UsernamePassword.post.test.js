@@ -168,7 +168,11 @@ describe('When user submits username/password', () => {
         email: 'test@test.com',
         firstName: 'Test',
         lastName: 'Tester',
-        services: [],
+        services: [
+          {
+            id: 'service1',
+          },
+        ],
       });
     });
 
@@ -206,6 +210,7 @@ describe('When user submits username/password', () => {
         client_id: 'test',
         params: {
           supportsUsernameLogin: true,
+          serviceId: 'service1',
         },
       });
 
@@ -222,6 +227,7 @@ describe('When user submits username/password', () => {
         client_id: 'test',
         params: {
           supportsUsernameLogin: true,
+          serviceId: 'service1',
         },
       });
 
@@ -255,6 +261,7 @@ describe('When user submits username/password', () => {
         client_id: 'test',
         params: {
           supportsUsernameLogin: true,
+          serviceId: 'service1',
         },
       });
 
