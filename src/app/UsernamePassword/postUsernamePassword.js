@@ -137,10 +137,18 @@ const post = async (req, res) => {
       service: user.services.find(s => s.id.toLowerCase() === client.params.serviceId.toLowerCase()),
 
     };
-    sendRedirect(req, res, {
-      redirect: true,
-      uri: `/${req.params.uuid}/migration`,
-    });
+    if (req.session.migrationUser.service) {
+      sendRedirect(req, res, {
+        redirect: true,
+        uri: `/${req.params.uuid}/migration`,
+      });
+    } else {
+      req.session.migrationUser.redirectUri = req.query.redirect_uri;
+      sendRedirect(req, res, {
+        redirect: true,
+        uri: `/${req.params.uuid}/migration/service-access-denied`,
+      });
+    }
   } else {
     logger.audit(`Successful login attempt for ${req.body.username} (id: ${user.id})`, {
       type: 'sign-in',
