@@ -15,6 +15,7 @@ const postCreateNewPassword = require('./postCreateNewPassword');
 const postConfirmMigratedEmail = require('./postConfirmMigratedEmail');
 const getEmailInUse = require('./getEmailInUse');
 const getAlreadyMigrated = require('./getAlreadyMigrated');
+const getServiceAccessDenied = require('./getServiceAccessDenied');
 
 
 const router = express.Router({ mergeParams: true });
@@ -32,6 +33,7 @@ const registerRoutes = (csrf) => {
   router.get('/complete', csrf, asyncWrapper(getMigrationComplete));
   router.post('/:emailConfId/new-password', csrf, asyncWrapper(postCreateNewPassword));
   router.get('/already-migrated', csrf, asyncWrapper(getAlreadyMigrated));
+  router.get('/service-access-denied', csrf, asyncWrapper(getServiceAccessDenied));
 
 
   return router;
