@@ -141,7 +141,7 @@ const action = async (req, res) => {
     req.session.clientId = userCode.userCode.clientId;
     return res.redirect(`/${req.params.uuid}/migration/complete`);
   } catch (e) {
-    logger.error(`Error migrating SA user ${userToMigrate.userName} - ${e.messge}`, { correlationId: req.id });
+    logger.error(`Error migrating SA user ${userToMigrate.userName} - ${e.message}`, { correlationId: req.id });
     validationResult.model.validationMessages.general = 'An error has occurred.';
     return res.render('migration/views/createPassword', validationResult.model);
   }
