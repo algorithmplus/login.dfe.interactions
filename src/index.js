@@ -91,7 +91,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(sanitization({
   sanitizer: (key, value) => {
-    const fieldToNotSanitize = ['email', 'username', 'password', 'confirmPassword', 'newPassword'];
+    const fieldToNotSanitize = ['givenName', 'familyName', 'email', 'username', 'password', 'confirmPassword', 'newPassword'];
 
     if (fieldToNotSanitize.find(x => x.toLowerCase() === key.toLowerCase())) {
       return value;
