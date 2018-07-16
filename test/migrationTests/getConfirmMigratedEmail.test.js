@@ -15,9 +15,9 @@ describe('When getting the confirm migrated email view', () => {
 
   beforeEach(() => {
     req = utils.mockRequest();
-    res = utils.mockResponse();
+    res = utils.mockResponse().mockResetAll();
 
-    getCodeStub = jest.fn().mockReset().mockReturnValue({userCode:{ code: 'ABC123', email: exepectedEmailAddress }});
+    getCodeStub = jest.fn().mockReset().mockReturnValue({ userCode: { code: 'ABC123', email: exepectedEmailAddress } });
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.getCode = getCodeStub;
   });
@@ -47,16 +47,14 @@ describe('When getting the confirm migrated email view', () => {
     expect(res.render.mock.calls[0][1].email).toBe(exepectedEmailAddress);
   });
 
-  it('then if the code is not in the url an error is thrown', async () => {
-    let message;
-    getCodeStub.mockReset().mockReturnValue(null)
+  it('then if the code is not in the url a 410 result is returned', async () => {
+    getCodeStub.mockReset().mockReturnValue(null);
 
-    try {
-      await getRequestPasswordReset(req, res);
-    } catch (e) {
-      message = e.message;
+    await getRequestPasswordReset(req, res);
 
-    }
-    expect(message).toBe('Invalid Request');
+    expect(res.status).toHaveBeenCalledTimes(1);
+    expect(res.status).toHaveBeenCalledWith(410);
+    expect(res.render).toHaveBeenCalledTimes(1);
+    expect(res.render.mock.calls[0][0]).toBe('migration/views/alreadyMigrated');
   });
 });
