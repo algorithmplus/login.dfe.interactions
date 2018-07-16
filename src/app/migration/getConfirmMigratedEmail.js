@@ -6,7 +6,11 @@ const get = async (req, res) => {
   const userCode = await userCodes.getCode(req.params.emailConfId, req.id, 'ConfirmMigratedEmail');
 
   if (!userCode) {
-    throw new Error('Invalid Request');
+    return res.status(410).render('migration/views/alreadyMigrated', {
+      title: 'Sign in with your new details',
+      user: undefined,
+      hideUserNav: true,
+    });
   }
 
   res.render('migration/views/confirmEmail', {

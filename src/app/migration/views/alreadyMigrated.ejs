@@ -8,7 +8,8 @@
         <p>Please sign-in with the email address and password you gave when creating your new DfE Sign-in account.
             If you have forgotten your password, use the link provided on the sign-in screen.</p>
 
+        <% if (locals.user) {%>
         <p><a href="<%=locals.user.redirectUri%>" class="button">Back to sign-in screen</a></p>
-
+        <% } %>
     </div>
 </div>
