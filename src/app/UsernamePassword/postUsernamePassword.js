@@ -81,7 +81,10 @@ const post = async (req, res) => {
     });
 
     if (Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
-      validation.validationMessages.loginError = 'Invalid credentials, please try again.';
+      validation.validationMessages.loginError = 'Sorry, we did not recognise your sign-in details, please try again.';
+      if (legacyUser) {
+        validation.validationMessages.loginError = 'Sorry, we did not recognise your sign-in details, please try again. <br>If you have changed your password on Secure Access today, please try again tomorrow.';
+      }
     }
 
     sendResult(req, res, 'UsernamePassword/views/index', {
@@ -95,7 +98,7 @@ const post = async (req, res) => {
       username: req.body.username,
       header: !client.params || client.params.header,
       headerMessage: !client.params || client.params.headerMessage,
-      allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
+      supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
     });
   } else if (user.status === 'Deactivated') {
     logger.audit(`Attempt login to deactivated account for ${req.body.username}`, {
@@ -120,7 +123,7 @@ const post = async (req, res) => {
       username: req.body.username,
       header: !client.params || client.params.header,
       headerMessage: !client.params || client.params.headerMessage,
-      allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
+      supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
     });
   } else if (legacyUser) {
     req.session.migrationUser = {
