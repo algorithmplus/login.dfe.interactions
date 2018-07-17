@@ -81,7 +81,7 @@ const post = async (req, res) => {
     });
 
     if (Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
-      validation.validationMessages.loginError = 'Invalid credentials, please try again.';
+      validation.validationMessages.loginError = 'Sorry, we did not recognise your sign-in details, please try again.';
     }
 
     sendResult(req, res, 'UsernamePassword/views/index', {
