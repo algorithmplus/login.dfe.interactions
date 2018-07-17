@@ -1,5 +1,6 @@
-const mockRequest = () => {
-  return {
+const mockRequest = (customRequest = {}) => {
+  return Object.assign({
+    method: 'GET',
     accepts: () => {
       return ['text/html'];
     },
@@ -12,7 +13,7 @@ const mockRequest = () => {
     body: {},
     query: {},
     csrfToken: jest.fn().mockReturnValue('token'),
-  };
+  }, customRequest);
 };
 const mockResponse = () => {
   return {
