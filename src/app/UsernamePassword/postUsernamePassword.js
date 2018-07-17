@@ -95,7 +95,7 @@ const post = async (req, res) => {
       username: req.body.username,
       header: !client.params || client.params.header,
       headerMessage: !client.params || client.params.headerMessage,
-      allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
+      supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
     });
   } else if (user.status === 'Deactivated') {
     logger.audit(`Attempt login to deactivated account for ${req.body.username}`, {
@@ -120,7 +120,7 @@ const post = async (req, res) => {
       username: req.body.username,
       header: !client.params || client.params.header,
       headerMessage: !client.params || client.params.headerMessage,
-      allowUserNameLogin: !client.params || client.params.allowUserNameLogin,
+      supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
     });
   } else if (legacyUser) {
     req.session.migrationUser = {
