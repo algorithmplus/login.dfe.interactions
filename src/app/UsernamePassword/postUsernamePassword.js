@@ -83,7 +83,7 @@ const post = async (req, res) => {
     if (Object.keys(validation.validationMessages).length === 0 && validation.validationMessages.constructor === Object) {
       validation.validationMessages.loginError = 'Sorry, we did not recognise your sign-in details, please try again.';
       if (legacyUser) {
-        validation.validationMessages.loginError = 'Sorry, we did not recognise your sign-in details, please try again. If you have changed your password on Secure Access today, please try again tomorrow.';
+        validation.validationMessages.loginError = 'Sorry, we did not recognise your sign-in details, please try again. <br>If you have changed your password on Secure Access today, please try again tomorrow.';
       }
     }
 
