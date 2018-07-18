@@ -38,13 +38,18 @@ const upsertCode = async (userId, clientId, redirectUri, correlationId, codeType
   }
 };
 
-const deleteCode = async (userId, correlationId) => {
+const deleteCode = async (userId, correlationId, codeType = undefined) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  let uri = `${config.directories.service.url}/userCodes/${userId}`;
+  if (codeType) {
+    uri += `/${codeType}`;
+  }
 
   try {
     const user = await rp({
       method: 'DELETE',
-      uri: `${config.directories.service.url}/userCodes/${userId}`,
+      uri,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
