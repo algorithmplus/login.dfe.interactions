@@ -2,6 +2,7 @@
 
 const clients = require('./../../infrastructure/Clients');
 const { upsertCode } = require('./../../infrastructure/UserCodes');
+const cache = require('./../../infrastructure/cache');
 
 const validateRequest = async (req) => {
   if (!req.query.clientid) {
@@ -29,8 +30,15 @@ const sendCode = async (req) => {
   const uuid = req.params.uuid;
   const uid = req.query.uid;
   const clientId = req.query.clientid;
+  const cacheKey = `SMSSent:${uuid}`;
+
+  if (await cache.get(cacheKey)) {
+    return;
+  }
 
   await upsertCode(uid, clientId, 'na', req.id, 'SmsLogin');
+
+  await cache.set(cacheKey, true, 600);
 };
 
 const get = async (req, res) => {

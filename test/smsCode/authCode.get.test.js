@@ -4,9 +4,15 @@ jest.mock('./../../src/infrastructure/Clients', () => ({
 jest.mock('./../../src/infrastructure/UserCodes', () => ({
   upsertCode: jest.fn(),
 }));
+jest.mock('./../../src/infrastructure/cache', () => ({
+  get: jest.fn(),
+  set: jest.fn(),
+  remove: jest.fn(),
+}));
 
 const { mockRequest, mockResponse } = require('./../utils');
 const clients = require('./../../src/infrastructure/Clients');
+const cache = require('./../../src/infrastructure/cache');
 const { upsertCode } = require('./../../src/infrastructure/UserCodes');
 const { get } = require('./../../src/app/smsCode/authCode');
 
@@ -23,9 +29,14 @@ describe('when prompting user for sms code', () => {
       return null;
     });
 
+    cache.get.mockReset();
+
     upsertCode.mockReset();
 
     req = mockRequest({
+      params: {
+        uuid: 'interaction-id',
+      },
       query: {
         clientid: 'client1',
         uid: 'user1',
@@ -89,5 +100,20 @@ describe('when prompting user for sms code', () => {
 
     expect(upsertCode).toHaveBeenCalledTimes(1);
     expect(upsertCode).toHaveBeenCalledWith('user1', 'client1', 'na', '123', 'SmsLogin');
+  });
+
+  it('then it should cache that code has been sent', async () => {
+    await get(req, res);
+
+    expect(cache.set).toHaveBeenCalledTimes(1);
+    expect(cache.set).toHaveBeenCalledWith('SMSSent:interaction-id', true, 600);
+  });
+
+  it('then it should not send code if has already been sent in last 10 minutes', async () => {
+    cache.get.mockReturnValue({});
+
+    await get(req, res);
+
+    expect(upsertCode).toHaveBeenCalledTimes(0);
   });
 });
