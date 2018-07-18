@@ -3,6 +3,7 @@ jest.mock('./../../src/infrastructure/Clients', () => ({
   get: jest.fn(),
 }));
 jest.mock('./../../src/infrastructure/UserCodes', () => ({
+  upsertCode: jest.fn(),
   validateCode: jest.fn(),
   deleteCode: jest.fn(),
 }));
@@ -14,7 +15,8 @@ jest.mock('./../../src/infrastructure/cache', () => ({
 
 const { mockRequest, mockResponse } = require('./../utils');
 const clients = require('./../../src/infrastructure/Clients');
-const { validateCode, deleteCode } = require('./../../src/infrastructure/UserCodes');
+const cache = require('./../../src/infrastructure/cache');
+const { upsertCode, validateCode, deleteCode } = require('./../../src/infrastructure/UserCodes');
 const InteractionComplete = require('./../../src/app/InteractionComplete');
 const { post } = require('./../../src/app/smsCode/authCode');
 
@@ -31,6 +33,9 @@ describe('when validating user sms code', () => {
       return null;
     });
 
+    cache.set.mockReset();
+
+    upsertCode.mockReset();
     validateCode.mockReset().mockReturnValue({ userCode: {} });
     deleteCode.mockReset();
 
@@ -191,5 +196,26 @@ describe('when validating user sms code', () => {
 
     expect(validateCode).toHaveBeenCalledTimes(1);
     expect(validateCode).toHaveBeenCalledWith('user1', '123456', '123', 'SmsLogin');
+  });
+
+  it('and resend true, then it should upsert code (even if cached)', async () => {
+    cache.set.mockReturnValue(true);
+    req.body.resend = true;
+
+    await post(req, res);
+
+    expect(upsertCode).toHaveBeenCalledTimes(1);
+    expect(upsertCode).toHaveBeenCalledWith('user1', 'client1', 'na', '123', 'SmsLogin');
+  });
+
+  it('and resend true, then it should render view with errors cleared', async () => {
+    req.body.resend = true;
+
+    await post(req, res);
+
+    expect(res.render).toHaveBeenCalledTimes(1);
+    expect(res.render.mock.calls[0][0]).toBe('smsCode/views/code');
+    expect(res.render.mock.calls[0][1].validationMessages).toBeDefined();
+    expect(Object.keys(res.render.mock.calls[0][1].validationMessages)).toHaveLength(0);
   });
 });

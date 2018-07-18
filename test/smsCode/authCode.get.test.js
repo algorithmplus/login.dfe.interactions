@@ -30,6 +30,7 @@ describe('when prompting user for sms code', () => {
     });
 
     cache.get.mockReset();
+    cache.set.mockReset();
 
     upsertCode.mockReset();
 

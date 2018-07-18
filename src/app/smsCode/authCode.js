@@ -22,12 +22,15 @@ const parseModel = (req) => {
   const model = {
     userId: req.query.uid,
     code: undefined,
+    resend: false,
     csrfToken: req.csrfToken(),
     validationMessages: {},
   };
 
   if (req.method.toUpperCase() === 'POST') {
     model.code = req.body.code;
+    model.resend = req.body.resend || false;
+
     if (!model.code) {
       model.validationMessages.code = 'Please enter a text message code';
     } else if (!model.code.match(/^[0-9]{6}$/)) {
@@ -41,13 +44,13 @@ const validateEnteredCode = async (userId, code, correlationId) => {
   const result = await validateCode(userId, code, correlationId, 'SmsLogin');
   return result && result.userCode ? true : false;
 };
-const sendCode = async (req) => {
+const sendCode = async (req, bypassCacheCheck = false) => {
   const uuid = req.params.uuid;
   const uid = req.query.uid;
   const clientId = req.query.clientid;
   const cacheKey = `SMSSent:${uuid}`;
 
-  if (await cache.get(cacheKey)) {
+  if (!bypassCacheCheck && await cache.get(cacheKey)) {
     return;
   }
 
@@ -55,6 +58,7 @@ const sendCode = async (req) => {
 
   await cache.set(cacheKey, true, 600);
 };
+
 
 const get = async (req, res) => {
   const validationResult = await validateRequest(req);
@@ -80,20 +84,31 @@ const post = async (req, res) => {
   }
 
   const model = parseModel(req);
-  const modelValid = Object.keys(model.validationMessages).length === 0;
-  if (!modelValid) {
+
+  if (model.resend) {
+    await sendCode(req, true);
+    model.validationMessages = {};
     return res.render('smsCode/views/code', model);
+  } else {
+    const modelValid = Object.keys(model.validationMessages).length === 0;
+    if (!modelValid) {
+      return res.render('smsCode/views/code', model);
+    }
+
+    const codeValid = modelValid ? await validateEnteredCode(model.userId, model.code, req.id) : false;
+    if (!codeValid) {
+      model.validationMessages.code = 'Please enter a valid text message code';
+      return res.render('smsCode/views/code', model);
+    }
+
+    await deleteCode(model.userId, req.id, 'SmsLogin');
+
+    return InteractionComplete.process(req.params.uuid, {
+      status: 'success',
+      uid: model.userId,
+      type: 'sms',
+    }, req, res);
   }
-
-  const codeValid = modelValid ? await validateEnteredCode(model.userId, model.code, req.id) : false;
-  if (!codeValid) {
-    model.validationMessages.code = 'Please enter a valid text message code';
-    return res.render('smsCode/views/code', model);
-  }
-
-  await deleteCode(model.userId, req.id, 'SmsLogin');
-
-  return InteractionComplete.process(req.params.uuid, { status: 'success', uid: model.userId, type: 'sms' }, req, res);
 };
 
 module.exports = {

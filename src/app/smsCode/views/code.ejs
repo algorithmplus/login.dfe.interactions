@@ -1,17 +1,26 @@
+<div class="notification notification-success" tabindex="0">
+    <h2>Check your phone <%=locals.resend ? 'again' : ''%></h2>
+    <div class="inline-wrap">
+        <p>We have <%=locals.resend ? 're-sent' : 'sent'%> you a text message containing an authentication code &dash;</p>
+        <form method="post" class="inline" id="form-resend-sms-code">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <input type="hidden" name="resend" id="resend" value="true" />
+            <button type="submit" class="button-text">Resend code <%=locals.resend ? 'again' : ''%></button>
+        </form>
+    </div>
+</div>
+
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
-            Check your phone
+            Enter your text message code
         </h1>
-        <p class="lede">We’ve sent you a text message with a security code.</p>
+        <p class="lede">For additional security please enter your 6-digit authentication code.</p>
     </div>
 </div>
 <div class="grid-row">
-
-
-
-    <div class="col-6">
-        <form method="post" id="form-reset-your-password">
+    <div class="col-12">
+        <form method="post" id="form-sms-code">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
 
                 <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
@@ -30,7 +39,6 @@
                 <div class="form-submit">
                     <button type="submit" class="button">Continue</button>
                 </div>
-
         </form>
     </div>
 </div>
