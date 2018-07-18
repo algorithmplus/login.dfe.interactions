@@ -1,9 +1,13 @@
 jest.mock('./../../src/infrastructure/Clients', () => ({
   get: jest.fn(),
 }));
+jest.mock('./../../src/infrastructure/UserCodes', () => ({
+  upsertCode: jest.fn(),
+}));
 
 const { mockRequest, mockResponse } = require('./../utils');
 const clients = require('./../../src/infrastructure/Clients');
+const { upsertCode } = require('./../../src/infrastructure/UserCodes');
 const { get } = require('./../../src/app/smsCode/authCode');
 
 const res = mockResponse();
@@ -18,6 +22,8 @@ describe('when prompting user for sms code', () => {
       }
       return null;
     });
+
+    upsertCode.mockReset();
 
     req = mockRequest({
       query: {
@@ -76,5 +82,12 @@ describe('when prompting user for sms code', () => {
     expect(res.render.mock.calls[0][1]).toEqual({
       errorMessage: 'Invalid client id. Cannot find client with id client2',
     });
+  });
+
+  it('then it should send code to user', async () => {
+    await get(req, res);
+
+    expect(upsertCode).toHaveBeenCalledTimes(1);
+    expect(upsertCode).toHaveBeenCalledWith('user1', 'client1', 'na', '123', 'SmsLogin');
   });
 });

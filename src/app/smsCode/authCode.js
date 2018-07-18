@@ -1,6 +1,7 @@
 'use strict';
 
 const clients = require('./../../infrastructure/Clients');
+const { upsertCode } = require('./../../infrastructure/UserCodes');
 
 const validateRequest = async (req) => {
   if (!req.query.clientid) {
@@ -24,6 +25,13 @@ const parseModel = (req) => {
 
   return model;
 };
+const sendCode = async (req) => {
+  const uuid = req.params.uuid;
+  const uid = req.query.uid;
+  const clientId = req.query.clientid;
+
+  await upsertCode(uid, clientId, 'na', req.id, 'SmsLogin');
+};
 
 const get = async (req, res) => {
   const validationResult = await validateRequest(req);
@@ -34,6 +42,8 @@ const get = async (req, res) => {
   }
 
   const model = parseModel(req);
+
+  await sendCode(req);
 
   return res.render('smsCode/views/code', model);
 };
