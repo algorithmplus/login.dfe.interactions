@@ -29,9 +29,9 @@ const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
 
-const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
+const { interactionsSchema, validateConfig } = require('login.dfe.config.schema');
 
-validateConfigAndQuitOnError(interactionsSchema, config, logger);
+validateConfig(interactionsSchema, config, logger, config.hostingEnvironment.env !== 'dev');
 
 http.GlobalAgent = new KeepAliveAgent({
   maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
