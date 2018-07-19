@@ -9,13 +9,12 @@
         </form>
     </div>
 </div>
-
 <div class="grid-row">
     <div class="col-8">
         <h1 class="heading-xlarge">
             Enter your text message code
         </h1>
-        <p class="lede">For additional security please enter your 6-digit authentication code.</p>
+        <p class="lede">We have sent you a text message with your authentication code. Enter the code below to verify your identity.</p>
     </div>
 </div>
 <div class="grid-row">
@@ -25,14 +24,14 @@
 
                 <div class="form-group <%= locals.validationMessages.code !== undefined ? "form-group-error" : "" %>">
 
-                    <label class="form-label" for="code">Text message code</label>
+                    <label class="form-label" for="code">Authentication code</label>
 
                     <% if (locals.validationMessages.code !== undefined) { %>
                         <p class="error-message" id="validation-code"><%= locals.validationMessages.code %></p>
                     <% } %>
 
-                    <input class="form-control char-width-8" id="code" name="code" type="text"
-                           pattern="[0-9]{6}" required aria-required="true" maxlength="6" autocomplete="off"
+                    <input class="form-control char-width-6" id="code" name="code" type="text"
+                           required aria-required="true" maxlength="6" autocomplete="off"
                             <% if (locals.validationMessages.code !== undefined) { %> aria-invalid="true" aria-describedby="validation-code" <% } %>>
 
                 </div>
