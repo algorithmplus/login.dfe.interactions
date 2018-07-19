@@ -130,7 +130,7 @@ describe('when validating user sms code', () => {
     expect(res.render.mock.calls[0][0]).toBe('smsCode/views/code');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       validationMessages: {
-        code: 'Please enter a text message code',
+        code: 'Please enter your authentication code',
       },
     });
   });
@@ -144,7 +144,7 @@ describe('when validating user sms code', () => {
     expect(res.render.mock.calls[0][0]).toBe('smsCode/views/code');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       validationMessages: {
-        code: 'Please enter a valid text message code',
+        code: 'Please enter a valid authentication code',
       },
     });
   });
@@ -158,7 +158,7 @@ describe('when validating user sms code', () => {
     expect(res.render.mock.calls[0][0]).toBe('smsCode/views/code');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       validationMessages: {
-        code: 'Please enter a valid text message code',
+        code: 'Please enter a valid authentication code',
       },
     });
   });
@@ -172,7 +172,7 @@ describe('when validating user sms code', () => {
     expect(res.render.mock.calls[0][0]).toBe('smsCode/views/code');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       validationMessages: {
-        code: 'Please enter a valid text message code',
+        code: 'Please enter a valid authentication code',
       },
     });
   });
@@ -186,7 +186,7 @@ describe('when validating user sms code', () => {
     expect(res.render.mock.calls[0][0]).toBe('smsCode/views/code');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       validationMessages: {
-        code: 'Please enter a valid text message code',
+        code: 'Please enter a valid authentication code',
       },
     });
   });

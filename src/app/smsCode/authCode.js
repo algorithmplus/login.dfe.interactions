@@ -32,9 +32,9 @@ const parseModel = (req) => {
     model.resend = req.body.resend || false;
 
     if (!model.code) {
-      model.validationMessages.code = 'Please enter a text message code';
+      model.validationMessages.code = 'Please enter your authentication code';
     } else if (!model.code.match(/^[0-9]{6}$/)) {
-      model.validationMessages.code = 'Please enter a valid text message code';
+      model.validationMessages.code = 'Please enter a valid authentication code';
     }
   }
 
@@ -97,7 +97,7 @@ const post = async (req, res) => {
 
     const codeValid = modelValid ? await validateEnteredCode(model.userId, model.code, req.id) : false;
     if (!codeValid) {
-      model.validationMessages.code = 'Please enter a valid text message code';
+      model.validationMessages.code = 'Please enter a valid authentication code';
       return res.render('smsCode/views/code', model);
     }
 
