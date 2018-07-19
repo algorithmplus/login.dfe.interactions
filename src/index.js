@@ -19,6 +19,7 @@ const KeepAliveAgent = require('agentkeepalive');
 // const rateLimiter = require('./app/rateLimit');
 
 const usernamePassword = require('./app/UsernamePassword');
+const smsCode = require('./app/smsCode');
 const migrationUser = require('./app/migration');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
@@ -28,9 +29,9 @@ const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
 
-const { interactionsSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
+const { interactionsSchema, validateConfig } = require('login.dfe.config.schema');
 
-validateConfigAndQuitOnError(interactionsSchema, config, logger);
+validateConfig(interactionsSchema, config, logger, config.hostingEnvironment.env !== 'dev');
 
 http.GlobalAgent = new KeepAliveAgent({
   maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
@@ -113,13 +114,14 @@ app.set('logger', logger);
 
 // Setup express layouts
 app.use(expressLayouts);
-app.set('layout', 'layouts/layout');
+app.set('layout', 'shared/layout');
 
 // Setup routes
 app.use('/healthcheck', healthCheck({ config }));
 app.use('/', content(csrf));
 
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
+app.use('/:uuid/sms', smsCode(csrf));
 app.use('/:uuid/migration', migrationUser(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
