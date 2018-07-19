@@ -136,7 +136,7 @@ describe('When user submits username/password', () => {
       await postHandler(req, res);
 
       expect(res.render.mock.calls[0][1].isFailedLogin).toBe(true);
-      expect(res.render.mock.calls[0][1].validationMessages.loginError).toBe('Invalid credentials, please try again.');
+      expect(res.render.mock.calls[0][1].validationMessages.loginError).toBe('Sorry, we did not recognise your sign-in details, please try again.');
     });
 
     it('then it should include the csrf token', async () => {
