@@ -60,7 +60,7 @@ const action = async (req, res) => {
 
   if (existingUser) {
     req.session.migrationUser.newEmail = userCode.userCode.email;
-    return res.redirect(`/${req.params.uuid}/migration/email-in-use`);
+    return res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/email-in-use`);
   }
 
   return res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/new-password`);

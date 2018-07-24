@@ -88,15 +88,4 @@ describe('When posting to confirm the migration email userCode', () => {
     expect(findUserStub.mock.calls[0][0]).toBe(expectedEmail);
     expect(findUserStub.mock.calls[0][1]).toBe(req.id);
   });
-
-  it('then if the email address is in use the user is redirected to the email in use page', async () => {
-    findUserStub = jest.fn().mockReset().mockReturnValue({ sub: expectedUserId });
-    const users = require('./../../src/infrastructure/Users');
-    users.find = findUserStub;
-
-    await postConfirmMigratedEmail(req, res);
-
-    expect(res.redirect.mock.calls).toHaveLength(1);
-    expect(res.redirect.mock.calls[0][0]).toBe(`/${req.params.uuid}/migration/email-in-use`);
-  });
 });

@@ -14,6 +14,7 @@ const getMigrationComplete = require('./getMigrationComplete');
 const postCreateNewPassword = require('./postCreateNewPassword');
 const postConfirmMigratedEmail = require('./postConfirmMigratedEmail');
 const getEmailInUse = require('./getEmailInUse');
+const postEmailInUse = require('./postEmailInUse');
 const getAlreadyMigrated = require('./getAlreadyMigrated');
 const getServiceAccessDenied = require('./getServiceAccessDenied');
 
@@ -25,7 +26,8 @@ const registerRoutes = (csrf) => {
   router.get('/', csrf, asyncWrapper(get));
   router.get('/userDetails', csrf, asyncWrapper(migratedUserDetails));
   router.get('/email', csrf, asyncWrapper(migratedEmail));
-  router.get('/email-in-use', csrf, asyncWrapper(getEmailInUse));
+  router.get('/:emailConfId/email-in-use', csrf, asyncWrapper(getEmailInUse));
+  router.post('/:emailConfId/email-in-use', csrf, asyncWrapper(postEmailInUse));
   router.post('/email', csrf, asyncWrapper(postMigratedEmail));
   router.get('/:emailConfId/confirm-email', csrf, asyncWrapper(getConfirmMigratedEmail));
   router.post('/:emailConfId/confirm-email', csrf, asyncWrapper(postConfirmMigratedEmail));
