@@ -7,8 +7,8 @@ const logger = require('./../../../infrastructure/logger');
 const org = require('./../../../infrastructure/Organisations');
 
 
-const createOrFindUser = async (email, password, firstName, lastName, emailConfId, saUsername, correlationId) => {
-  if(password) { // Will not have password when we have checked user exists
+const createOrUpdateUser = async (email, password, firstName, lastName, emailConfId, saUsername, correlationId) => {
+  if (password) { // Will not have password when we have checked user exists
     logger.info(`Attempting to create user for ${saUsername} (email = ${email}, firstName = ${firstName}, lastName = ${lastName})`, { correlationId });
     const user = await users.create(email, password, firstName, lastName, emailConfId, saUsername, correlationId);
     if (user) {
@@ -24,6 +24,16 @@ const createOrFindUser = async (email, password, firstName, lastName, emailConfI
   const existingUser = await users.find(email, correlationId);
   if (existingUser) {
     logger.info(`Found existing user for SA user ${saUsername} with id ${existingUser.sub}`, { correlationId });
+
+    if (!existingUser.legacyUsernames) {
+      existingUser.legacyUsernames = [];
+    }
+    if (!existingUser.legacyUsernames.find(x => x.toLowerCase() === saUsername.toLowerCase())) {
+      existingUser.legacyUsernames.push(saUsername.toLowerCase());
+      await users.update(existingUser.sub, undefined, undefined, undefined, existingUser.legacyUsernames, correlationId);
+      logger.info(`Updated exsiting user ${existingUser.sub} with SA user ${saUsername}`);
+    }
+
     return {
       userId: existingUser.sub,
       existing: true,
@@ -61,7 +71,7 @@ const completeMigration = async (emailConfId, correlationId) => {
 };
 
 const migrate = async (emailConfId, email, password, firstName, lastName, saOrganisation, serviceId, serviceRoles, saUserId, saUsername, correlationId) => {
-  const user = await createOrFindUser(email, password, firstName, lastName, saUsername, correlationId);
+  const user = await createOrUpdateUser(email, password, firstName, lastName, saUsername, correlationId);
 
   const organisation = await addUserToOrganisation(user.userId, saOrganisation, correlationId);
 

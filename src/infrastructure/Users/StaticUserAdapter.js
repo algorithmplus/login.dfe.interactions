@@ -40,6 +40,10 @@ const create = async () =>{
   return Promise.resolve({ id: '33421d3e-54ba-44ac-c453-2d42b9a05492' });
 };
 
+const update = async () =>{
+  return Promise.resolve();
+};
+
 const findByLegacyUsername = async (username) => {
   if (username.toLowerCase() !== 'foo2@example.com') {
     return null;
@@ -54,4 +58,5 @@ module.exports = {
   getDevices,
   create,
   findByLegacyUsername,
+  update,
 };
