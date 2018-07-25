@@ -52,13 +52,13 @@ const action = async (req, res) => {
     return;
   }
 
-  const existingUser = await users.find(email, req.id);
-
-  if (existingUser) {
-    req.session.migrationUser.newEmail = email;
-    res.redirect(`/${req.params.uuid}/migration/email-in-use`);
-    return;
-  }
+  // const existingUser = await users.find(email, req.id);
+  //
+  // if (existingUser) {
+  //   req.session.migrationUser.newEmail = email;
+  //   res.redirect(`/${req.params.uuid}/migration/email-in-use`);
+  //   return;
+  // }
 
   const code = await userCodes.upsertCode(undefined, migrationUser.clientId, migrationUser.redirectUri, req.id, 'ConfirmMigratedEmail', email, migrationUser);
 

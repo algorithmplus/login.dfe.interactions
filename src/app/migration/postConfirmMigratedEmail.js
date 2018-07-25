@@ -1,7 +1,7 @@
 'use strict';
 
 const userCodes = require('./../../infrastructure/UserCodes');
-
+const users = require('./../../infrastructure/Users');
 
 const validate = (code) => {
   const messages = {
@@ -31,20 +31,19 @@ const action = async (req, res) => {
 
 
   if (validationResult.failed) {
-    res.render('migration/views/confirmEmail', {
+    return res.render('migration/views/confirmEmail', {
       csrfToken: req.csrfToken(),
       emailConfId: req.body.emailConfId,
       backLink: true,
       validationFailed: validationResult.failed,
       validationMessages: validationResult.messages,
     });
-    return;
   }
 
   const userCode = await userCodes.validateCode(uid, code, req.id, 'ConfirmMigratedEmail');
 
   if (!userCode) {
-    res.render('migration/views/confirmEmail', {
+    return res.render('migration/views/confirmEmail', {
       csrfToken: req.csrfToken(),
       emailConfId: req.body.emailConfId,
       backLink: true,
@@ -53,12 +52,18 @@ const action = async (req, res) => {
         code: 'Please enter a valid code',
       },
     });
-    return;
   }
 
   req.session.userCode = code;
 
-  res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/new-password`);
+  const existingUser = await users.find(userCode.userCode.email, req.id);
+
+  if (existingUser) {
+    req.session.migrationUser.newEmail = userCode.userCode.email;
+    return res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/email-in-use`);
+  }
+
+  return res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/new-password`);
 };
 
 module.exports = action;

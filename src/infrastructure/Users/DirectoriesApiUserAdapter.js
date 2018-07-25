@@ -64,6 +64,7 @@ const find = async (username, correlationId) => {
       email: res.email,
       given_name: res.given_name,
       family_name: res.family_name,
+      legacyUsernames: res.legacyUsernames,
     };
   } catch (e) {
     const status = e.statusCode ? e.statusCode : 500;
@@ -74,7 +75,7 @@ const find = async (username, correlationId) => {
   }
 };
 
-const findByLegacyUsername = async(username, correlationId) => {
+const findByLegacyUsername = async (username, correlationId) => {
   const token = await jwtStrategy(config.directories.service).getBearerToken();
 
   try {
@@ -176,6 +177,43 @@ const create = async (username, password, firstName, lastName, legacyUsername, c
   }
 };
 
+const update = async (uid, email, firstName, lastName, legacyUsernames, correlationId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  const body = {};
+  if (email) {
+    body.email = email;
+  }
+  if (firstName) {
+    body.given_name = firstName;
+  }
+  if (lastName) {
+    body.family_name = lastName;
+  }
+  if (legacyUsernames) {
+    body.legacyUsernames = legacyUsernames;
+  }
+
+  try {
+    return await rp({
+      method: 'PATCH',
+      uri: `${config.directories.service.url}/users/${uid}`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      body,
+      json: true,
+    });
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 409) {
+      return null;
+    }
+    throw e;
+  }
+};
+
 module.exports = {
   authenticate,
   find,
@@ -183,4 +221,5 @@ module.exports = {
   getDevices,
   create,
   findByLegacyUsername,
+  update,
 };

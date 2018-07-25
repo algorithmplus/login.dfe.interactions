@@ -11,10 +11,12 @@ const postConfirmMigratedEmail = require('./../../src/app/migration/postConfirmM
 describe('When posting to confirm the migration email userCode', () => {
   let req;
   let res;
+  let findUserStub;
   let userCodesValidateCode;
   const expectedCode = 'ZXY123';
   const expectedEmail = 'test@tester.local';
   const expectedUserCodeId = 'some-uid';
+  const expectedUserId = 'some-user-uid';
 
   beforeEach(() => {
     req = utils.mockRequest();
@@ -25,10 +27,16 @@ describe('When posting to confirm the migration email userCode', () => {
       email: expectedEmail,
       emailConfId: expectedUserCodeId,
     };
+    req.session.migrationUser = {};
 
-    userCodesValidateCode = jest.fn().mockReset().mockReturnValue({code: ''});
+    userCodesValidateCode = jest.fn().mockReset().mockReturnValue({code: '', userCode: {email: expectedEmail}});
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.validateCode = userCodesValidateCode;
+
+
+    findUserStub = jest.fn().mockReset().mockReturnValue(null);
+    const users = require('./../../src/infrastructure/Users');
+    users.find = findUserStub;
   });
 
   it('then if the code is empty an error is returned', async () => {
@@ -71,5 +79,13 @@ describe('When posting to confirm the migration email userCode', () => {
     await postConfirmMigratedEmail(req, res);
 
     expect(req.session.userCode).toBe(expectedCode);
+  });
+
+  it('then the email address is checked to see if it is already registered', async () => {
+    await postConfirmMigratedEmail(req, res);
+
+    expect(findUserStub.mock.calls).toHaveLength(1);
+    expect(findUserStub.mock.calls[0][0]).toBe(expectedEmail);
+    expect(findUserStub.mock.calls[0][1]).toBe(req.id);
   });
 });
