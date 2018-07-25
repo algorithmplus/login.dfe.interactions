@@ -18,7 +18,7 @@ const post = async (req, res) => {
   }
 
   if (req.body.radioEmailGroup && req.body.radioEmailGroup.toLowerCase() === 'no') {
-    return res.redirect('email');
+    return res.redirect(`/${req.params.uuid}/email`);
   }
 
   const user = req.session.migrationUser;
