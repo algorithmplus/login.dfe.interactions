@@ -1,17 +1,9 @@
 'use strict';
 
-const users = require('./../../infrastructure/Users');
-const services = require('./../../infrastructure/Services');
 const userCodes = require('./../../infrastructure/UserCodes');
 const logger = require('./../../infrastructure/logger');
 const { validate } = require('./../utils/validatePassword');
-const org = require('./../../infrastructure/Organisations');
-
-const establishment = '001';
-const localAuthority = '002';
-const multiAcademyTrust = '010';
-const singleAcademyTrust = '013';
-
+const { migrate } = require('./workflow');
 
 const validateInputAndUserCode = async (newPassword, confirmPassword, emailConfId, csrfToken, correlationId) => {
   const validationResult = {
@@ -41,53 +33,6 @@ const validateInputAndUserCode = async (newPassword, confirmPassword, emailConfI
 
   return validationResult;
 };
-const createOrFindUser = async (email, password, firstName, lastName, emailConfId, saUsername, correlationId) => {
-  logger.info(`Attempting to create user for ${saUsername} (email = ${email}, firstName = ${firstName}, lastName = ${lastName})`, { correlationId });
-  const user = await users.create(email, password, firstName, lastName, emailConfId, saUsername, correlationId);
-  if (user) {
-    logger.info(`Created new user for SA user ${saUsername} with id ${user.id}`, { correlationId });
-    return {
-      userId: user.id,
-      existing: false,
-    };
-  }
-
-  logger.info(`Did not create user for SA user ${saUsername}. Seeing if user already exists with email (${email})`, { correlationId });
-  const existingUser = await users.find(email, correlationId);
-  if (existingUser) {
-    logger.info(`Found existing user for SA user ${saUsername} with id ${existingUser.sub}`, { correlationId });
-    return {
-      userId: existingUser.sub,
-      existing: true,
-    };
-  }
-
-  throw new Error(`Failed to create or find a user for SA user ${saUsername} (email: ${email})`);
-};
-const addUserToOrganisation = async (userId, saOrganisation, correlationId) => {
-  const organisation = await org.getOrganisationByExternalId(saOrganisation.osaId, '000');
-  if (!organisation) {
-    throw new Error(`Failed to find an organisation of type ${saOrganisation.type} with SA id ${saOrganisation.osaId} for user ${userId}`);
-  }
-
-  logger.info(`Adding user ${userId} to organisation ${organisation.id} with role ${saOrganisation.role.id}`, { correlationId });
-  await org.setUsersRoleAtOrg(userId, organisation.id, saOrganisation.role.id, correlationId);
-
-  return organisation;
-};
-const addUserToService = async (userId, organisation, saOrganisation, currentServiceId, currentServiceRoles, saUserId, saUserName, correlationId) => {
-  const externalIdentifiers = [];
-  externalIdentifiers.push({ key: 'organisationId', value: saOrganisation.osaId });
-  externalIdentifiers.push({
-    key: 'groups',
-    value: (currentServiceRoles || []).join(','),
-  });
-  externalIdentifiers.push({ key: 'saUserId', value: saUserId });
-  externalIdentifiers.push({ key: 'saUserName', value: saUserName });
-
-  const servicesResult = await services.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
-  return servicesResult;
-};
 
 const action = async (req, res) => {
   const validationResult = await validateInputAndUserCode(req.body.newPassword, req.body.confirmPassword, req.body.emailConfId, req.csrfToken(), req.id);
@@ -99,42 +44,8 @@ const action = async (req, res) => {
   const userToMigrate = JSON.parse(userCode.userCode.contextData);
 
   try {
-    const user = await createOrFindUser(userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName, userToMigrate.userName, req.id);
-    const userId = user.userId;
-
-    const organisation = await addUserToOrganisation(userId, userToMigrate.organisation, req.id);
-
-    const servicesResult = await addUserToService(userId, organisation, userToMigrate.organisation, userToMigrate.serviceId,
-      userToMigrate.service.roles, userToMigrate.osaUserId, userToMigrate.userName, req.id);
-
-
-    if (!servicesResult) {
-      logger.audit(`Unsuccessful migration for ${userToMigrate.userName} to ${userCode.userCode.email} (id: ${userId}) - unable to link user to organisation ${organisation.id} and to service id ${userToMigrate.serviceId}`, {
-        type: 'sign-in',
-        subType: 'migration',
-        success: false,
-        userId,
-        userEmail: userCode.userCode.email,
-      });
-
-      validationResult.model.validationMessages.general = 'An error has occurred.';
-      return res.render('migration/views/createPassword', validationResult.model);
-    }
-
-    logger.audit(`Successful migration for ${userToMigrate.userName} to ${userCode.userCode.email} (id: ${userId})`, {
-      type: 'sign-in',
-      subType: 'migration',
-      success: true,
-      userId,
-      userEmail: userCode.userCode.email,
-    });
-
-    await userCodes.deleteCode(req.body.emailConfId, req.id, 'ConfirmMigratedEmail');
-
-    if (user.existing) {
-      validationResult.model.validationMessages.general = 'Email address has already been registered. Please sign in using your email address';
-      return res.render('migration/views/createPassword', validationResult.model);
-    }
+    await migrate(req.body.emailConfId, userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName,
+      userToMigrate.organisation, userToMigrate.serviceId, userToMigrate.service.roles, userToMigrate.osaUserId, userToMigrate.userName, req.id);
 
     req.session.migrationUser = undefined;
     req.session.redirectUri = userCode.userCode.redirectUri;

@@ -11,6 +11,7 @@ jest.mock('./../../src/infrastructure/logger', () => ({
   info: jest.fn(),
   audit: jest.fn(),
   warn: jest.fn(),
+  error: jest.fn(),
 }));
 
 const { getCode: userCodesGetCode, deleteCode: userCodesDeleteCode } = require('./../../src/infrastructure/UserCodes');
@@ -111,7 +112,11 @@ describe('When posting to create a user from migration', () => {
   });
 
   it('then if an error is returned while creating the user an error is returned', async () => {
-    createUser.mockReset().mockReturnValue(null);
+    createUser.mockReset().mockImplementation(() => {
+      const e = new Error('test error');
+      e.statusCode = 500;
+      throw e;
+    });
 
     await postCreateNewPassword(req, res);
 
