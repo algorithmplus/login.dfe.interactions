@@ -5,12 +5,12 @@ const services = require('./../../../infrastructure/Services');
 const userCodes = require('./../../../infrastructure/UserCodes');
 const logger = require('./../../../infrastructure/logger');
 const org = require('./../../../infrastructure/Organisations');
-
+const osa = require('./../../../infrastructure/osa');
 
 const createOrUpdateUser = async (email, password, firstName, lastName, emailConfId, saUsername, correlationId) => {
   if (password) { // Will not have password when we have checked user exists
     logger.info(`Attempting to create user for ${saUsername} (email = ${email}, firstName = ${firstName}, lastName = ${lastName})`, { correlationId });
-    const user = await users.create(email, password, firstName, lastName, emailConfId, saUsername, correlationId);
+    const user = await users.create(email, password, firstName, lastName, saUsername, correlationId);
     if (user) {
       logger.info(`Created new user for SA user ${saUsername} with id ${user.id}`, { correlationId });
       return {
@@ -66,12 +66,14 @@ const addUserToService = async (userId, organisation, saOrganisation, currentSer
   const servicesResult = await services.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
   return servicesResult;
 };
-const completeMigration = async (emailConfId, correlationId) => {
+const completeMigration = async (emailConfId, saUserName, correlationId) => {
   await userCodes.deleteCode(emailConfId, correlationId, 'ConfirmMigratedEmail');
+
+  await osa.requestSync(saUserName, correlationId);
 };
 
 const migrate = async (emailConfId, email, password, firstName, lastName, saOrganisation, serviceId, serviceRoles, saUserId, saUsername, correlationId) => {
-  const user = await createOrUpdateUser(email, password, firstName, lastName, saUsername, correlationId);
+  const user = await createOrUpdateUser(email, password, firstName, lastName, emailConfId, saUsername, correlationId);
 
   const organisation = await addUserToOrganisation(user.userId, saOrganisation, correlationId);
 
@@ -97,7 +99,7 @@ const migrate = async (emailConfId, email, password, firstName, lastName, saOrga
     userEmail: email,
   });
 
-  await completeMigration(emailConfId, correlationId);
+  await completeMigration(emailConfId, saUsername, correlationId);
 };
 
 module.exports = {

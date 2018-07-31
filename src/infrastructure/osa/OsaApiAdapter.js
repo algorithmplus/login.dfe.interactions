@@ -37,7 +37,25 @@ const authenticate = async (username, password, correlationId) => {
   }
 };
 
+const requestSync = async (username, correlationId) => {
+  const token = await jwtStrategy(config.osaApi.service).getBearerToken();
+  try {
+    await rp({
+      method: 'PUT',
+      uri: `${config.osaApi.service.url}/sync/users/${username}`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+  } catch (e) {
+    throw new Error(`Error requesting user sync ${e.statusCode} - ${e.message} (correlation id ${correlationId})`);
+  }
+};
+
 
 module.exports = {
   authenticate,
+  requestSync,
 };

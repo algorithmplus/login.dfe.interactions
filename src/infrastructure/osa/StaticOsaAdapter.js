@@ -63,6 +63,11 @@ const authenticate = async (username, password) => {
   return null;
 };
 
+const requestSync = async (username, correlationId) => {
+  return Promise.resolve();
+};
+
 module.exports = {
   authenticate,
+  requestSync,
 };
