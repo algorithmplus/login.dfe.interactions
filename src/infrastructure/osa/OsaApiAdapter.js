@@ -54,8 +54,29 @@ const requestSync = async (username, correlationId) => {
   }
 };
 
+const getSaUser = async (id, correlationId) => {
+  const token = await jwtStrategy(config.osaApi.service).getBearerToken();
+  try {
+    return await rp({
+      method: 'GET',
+      uri: `${config.osaApi.service.url}/users/${id}`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+  } catch (e) {
+    if (e.statusCode === 404) {
+      return undefined;
+    }
+    throw new Error(e);
+  }
+};
+
 
 module.exports = {
   authenticate,
   requestSync,
+  getSaUser,
 };
