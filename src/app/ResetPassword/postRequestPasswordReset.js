@@ -2,9 +2,13 @@
 
 const emailValidator = require('email-validator');
 const directoriesApi = require('./../../infrastructure/Users');
+const { getSaUser } = require('./../../infrastructure/osa');
 const userCodes = require('./../../infrastructure/UserCodes');
 const logger = require('./../../infrastructure/logger');
 const uuid = require('uuid/v4');
+const NotificationClient = require('login.dfe.notifications.client');
+const config = require('./../../infrastructure/Config')();
+const { getServiceById } = require('./../../infrastructure/applications');
 
 const validate = (email) => {
   const messages = {
@@ -31,7 +35,9 @@ const validate = (email) => {
 const action = async (req, res) => {
   const email = req.body.email;
   const validationResult = validate(email);
-
+  const client = new NotificationClient({
+    connectionString: config.notifications.connectionString,
+  });
   req.session.email = email;
   req.session.resend = req.body.resend;
 
@@ -50,12 +56,21 @@ const action = async (req, res) => {
 
   try {
     const user = await directoriesApi.find(email, req.id);
-    await userCodes.upsertCode(user.sub, req.body.clientId, req.body.redirectUri, req.id);
-    res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+    if (user) {
+      await userCodes.upsertCode(user.sub, req.body.clientId, req.body.redirectUri, req.id);
+      res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+    }
+    const saUser = await getSaUser(email, req.id);
+    if (saUser) {
+      const service = await getServiceById(req.body.clientId);
+      const serviceHome = service ? (service.relyingParty.service_home || service.relyingParty.redirect_uris[0]) : '#';
+      await client.sendSAPasswordReset(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
+      res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+    }
+    res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   } catch (e) {
     logger.info(`Password reset requested for ${email} and failed correlationId: ${req.id}`);
     logger.info(e);
-    res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   }
 };
 

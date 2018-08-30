@@ -4,13 +4,23 @@ jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/logger', () => {
-  return {  };
+  return {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  };
 });
+jest.mock('./../../src/infrastructure/applications', () => ({
+  getServiceById: jest.fn(),
+}));
 jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
     return {
       hostingEnvironment: {
         agentKeepAlive: {},
+      },
+      notifications: {
+        connectionString: {},
       },
     };
   });
