@@ -2,6 +2,7 @@
 
 const users = require('./../../../infrastructure/Users');
 const services = require('./../../../infrastructure/Services');
+const access = require('./../../../infrastructure/access');
 const userCodes = require('./../../../infrastructure/UserCodes');
 const logger = require('./../../../infrastructure/logger');
 const org = require('./../../../infrastructure/Organisations');
@@ -63,7 +64,7 @@ const addUserToService = async (userId, organisation, saOrganisation, currentSer
   externalIdentifiers.push({ key: 'saUserId', value: saUserId });
   externalIdentifiers.push({ key: 'saUserName', value: saUserName });
 
-  const servicesResult = await services.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
+  const servicesResult = await access.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
   return servicesResult;
 };
 const completeMigration = async (emailConfId, saUserName, correlationId) => {

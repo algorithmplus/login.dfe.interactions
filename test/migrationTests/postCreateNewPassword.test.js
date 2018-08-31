@@ -1,6 +1,9 @@
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/Services');
+jest.mock('./../../src/infrastructure/access', () => ({
+  create: jest.fn(),
+}));
 jest.mock('./../../src/infrastructure/Organisations');
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
@@ -16,7 +19,7 @@ jest.mock('./../../src/infrastructure/logger', () => ({
 
 const { getCode: userCodesGetCode, deleteCode: userCodesDeleteCode } = require('./../../src/infrastructure/UserCodes');
 const { create: createUser, find: findUser } = require('./../../src/infrastructure/Users');
-const { create: addServiceMapping } = require('./../../src/infrastructure/Services');
+const { create: addServiceMapping } = require('./../../src/infrastructure/access');
 const { getOrganisationByExternalId, setUsersRoleAtOrg } = require('./../../src/infrastructure/Organisations');
 const utils = require('./../utils');
 const postCreateNewPassword = require('./../../src/app/migration/postCreateNewPassword');
