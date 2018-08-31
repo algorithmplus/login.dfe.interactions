@@ -17,7 +17,7 @@ const create = async (userId, serviceId, organisationId, externalIdentifiers = [
   try {
     await rp({
       method: 'PUT',
-      uri: `${config.access.service.url}/users/${userId}/services/${serviceId}/users/${organisationId}`,
+      uri: `${config.access.service.url}/users/${userId}/services/${serviceId}/organisations/${organisationId}`,
       headers: {
         authorization: `bearer ${token}`,
         'x-correlation-id': correlationId,
