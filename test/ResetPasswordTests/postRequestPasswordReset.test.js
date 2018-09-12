@@ -13,6 +13,7 @@ jest.mock('./../../src/infrastructure/logger', () => {
 jest.mock('./../../src/infrastructure/applications', () => ({
   getServiceById: jest.fn(),
 }));
+
 jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
     return {
