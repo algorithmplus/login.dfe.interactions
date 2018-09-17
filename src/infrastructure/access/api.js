@@ -23,7 +23,7 @@ const create = async (userId, serviceId, organisationId, externalIdentifiers = [
         'x-correlation-id': correlationId,
       },
       body: {
-        externalIdentifiers,
+        identifiers: externalIdentifiers,
       },
       json: true,
     });
