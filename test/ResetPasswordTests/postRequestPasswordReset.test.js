@@ -3,6 +3,7 @@ jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
+jest.mock('./../../src/infrastructure/osa');
 jest.mock('./../../src/infrastructure/logger', () => {
   return {
     info: jest.fn(),
@@ -33,6 +34,7 @@ describe('when handling the posting of a password reset request', () => {
   let clientsGet;
   let userCodesUpsertCode;
   let usersFind;
+  let saUsersFind;
 
   let postRequestPasswordReset;
 
@@ -51,6 +53,10 @@ describe('when handling the posting of a password reset request', () => {
     usersFind = jest.fn().mockReturnValue({ sub: '12345' });
     const users = require('./../../src/infrastructure/Users');
     users.find = usersFind;
+
+    saUsersFind = jest.fn().mockReturnValue(null);
+    const saUsers = require('./../../src/infrastructure/osa');
+    saUsers.getSaUser = saUsersFind;
 
     postRequestPasswordReset = require('./../../src/app/ResetPassword/postRequestPasswordReset');
   });
