@@ -9,7 +9,7 @@
 <div class="notification notification-success" tabindex="0">
     <h2>Please confirm your email address</h2>
     <div class="inline-wrap">
-        <p>If there is a DfE Sign-in account associated with the email address <b><%=locals.email%></b>, then we will have sent you an email containing a verifcation code &ndash;</p>
+        <p>If there is a DfE Sign-in account associated with the email address <b><%=locals.email%></b>, then we will have sent you an email containing a verification code &ndash;</p>
         <form method="post" class="inline" id="form-resend-reset-password" action="/<%= locals.uid %>/resetpassword/request?clientid=<%= locals.clientId %>&redirect_uri=<%= locals.redirectUri %>">
             <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
             <input type="hidden" name="email" id="email" value="<%=locals.email%>"/>
