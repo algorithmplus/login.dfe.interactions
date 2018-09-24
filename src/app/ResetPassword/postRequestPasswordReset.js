@@ -59,13 +59,13 @@ const action = async (req, res) => {
     if (user) {
       await userCodes.upsertCode(user.sub, req.body.clientId, req.body.redirectUri, req.id);
       res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+      return;
     }
     const saUser = await getSaUser(email, req.id);
     if (saUser) {
       const service = await getServiceById(req.body.clientId);
       const serviceHome = service ? (service.relyingParty.service_home || service.relyingParty.redirect_uris[0]) : '#';
       await client.sendSAPasswordReset(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
-      res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
     }
     res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   } catch (e) {
