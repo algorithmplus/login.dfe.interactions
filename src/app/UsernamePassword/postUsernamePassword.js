@@ -4,7 +4,14 @@ const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
 const { sendRedirect, sendResult } = require('./../../infrastructure/utils');
-const osaAuthenticate = require('./../../infrastructure/osa');
+const osaApi = require('./../../infrastructure/osa');
+const { getServiceById } = require('./../../infrastructure/applications');
+const NotificationClient = require('login.dfe.notifications.client');
+const config = require('./../../infrastructure/Config')();
+
+const notificationClient = new NotificationClient({
+  connectionString: config.notifications.connectionString,
+});
 
 const validateBody = (body, allowUserName) => {
   const validationMessages = {};
@@ -48,9 +55,17 @@ const post = async (req, res) => {
   if (!validation.failedValidation) {
     if (emailValidator.validate(req.body.username)) {
       user = await Users.authenticate(req.body.username, req.body.password, req.id);
+      if (!user) {
+        const saUser = await osaApi.getSaUser(req.body.username, req.id);
+        if (saUser) {
+          const service = await getServiceById(req.query.clientId);
+          const serviceHome = service ? (service.relyingParty.service_home || service.relyingParty.redirect_uris[0]) : '#';
+          await notificationClient.sendUnmigratedSaUser(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
+        }
+      }
     } else {
       legacyUser = true;
-      user = await osaAuthenticate.authenticate(req.body.username, req.body.password, req.id);
+      user = await osaApi.authenticate(req.body.username, req.body.password, req.id);
       if (user) {
         const migrationComplete = await Users.findByLegacyUsername(req.body.username, req.id);
         if (migrationComplete) {
@@ -72,7 +87,7 @@ const post = async (req, res) => {
     }
   }
 
-  if (user === null) {
+  if (user === null || user === undefined) {
     logger.audit(`Failed login attempt for ${req.body.username}`, {
       type: 'sign-in',
       subType: 'username-password',
