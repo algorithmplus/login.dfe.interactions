@@ -8,6 +8,22 @@ jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementatio
     type: 'static',
   },
 })));
+
+jest.mock('./../../src/infrastructure/applications', () => ({
+  getServiceById: jest.fn(),
+}));
+jest.mock('./../../src/infrastructure/Config', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      hostingEnvironment: {
+        agentKeepAlive: {},
+      },
+      notifications: {
+        connectionString: {},
+      },
+    };
+  });
+});
 const utils = require('./../utils');
 
 describe('When user submits username/password', () => {
@@ -19,6 +35,7 @@ describe('When user submits username/password', () => {
   let findByLegacyUsername;
   let clientsGet;
   let loggerAudit;
+  let saUsersFind;
 
   let postHandler;
 
@@ -47,6 +64,9 @@ describe('When user submits username/password', () => {
     osaAuthenticate = jest.fn();
     const osaAuth = require('./../../src/infrastructure/osa');
     osaAuth.authenticate = osaAuthenticate;
+
+    saUsersFind = jest.fn().mockReturnValue(null);
+    osaAuth.getSaUser = saUsersFind;
 
     clientsGet = jest.fn().mockReturnValue({
       client_id: 'test',
