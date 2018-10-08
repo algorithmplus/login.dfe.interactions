@@ -85,7 +85,7 @@ const post = async (req, res) => {
     }
   }
 
-  if (user === null || user === undefined) {
+  if (user === null || user === undefined || user.status === 'invalid_credentials') {
     logger.audit(`Failed login attempt for ${req.body.username}`, {
       type: 'sign-in',
       subType: 'username-password',
