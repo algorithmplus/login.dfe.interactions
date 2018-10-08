@@ -5,7 +5,6 @@ const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
 const { sendRedirect, sendResult } = require('./../../infrastructure/utils');
 const osaApi = require('./../../infrastructure/osa');
-const { getServiceById } = require('./../../infrastructure/applications');
 const NotificationClient = require('login.dfe.notifications.client');
 const config = require('./../../infrastructure/Config')();
 
@@ -58,8 +57,7 @@ const post = async (req, res) => {
       if (!user) {
         const saUser = await osaApi.getSaUser(req.body.username, req.id);
         if (saUser) {
-          const service = await getServiceById(req.query.clientId);
-          const serviceHome = service ? (service.relyingParty.service_home || service.relyingParty.redirect_uris[0]) : '#';
+          const serviceHome = client ? (client.service_home || client.redirect_uris[0]) : '#';
           await notificationClient.sendUnmigratedSaUser(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
         }
       }
@@ -87,7 +85,7 @@ const post = async (req, res) => {
     }
   }
 
-  if (user === null || user === undefined) {
+  if (user === null || user === undefined || user.status === 'invalid_credentials') {
     logger.audit(`Failed login attempt for ${req.body.username}`, {
       type: 'sign-in',
       subType: 'username-password',
