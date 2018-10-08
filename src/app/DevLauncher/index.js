@@ -42,5 +42,13 @@ module.exports = () => {
     res.redirect(`/${req.query.uuid}/resetpassword/complete?clientid=local&redirect_uri=https://localhost:4431`);
   });
 
+
+  router.get('/:uuid/check', (req, res) => {
+    return res.json({
+      client_id: 'local',
+      redirect_uri: 'https://localhost:4431',
+    });
+  });
+
   return router;
 };

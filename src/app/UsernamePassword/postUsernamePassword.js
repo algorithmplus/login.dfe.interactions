@@ -5,6 +5,7 @@ const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
 const { sendRedirect, sendResult } = require('./../../infrastructure/utils');
 const osaApi = require('./../../infrastructure/osa');
+const oidc = require('./../../infrastructure/oidc');
 const NotificationClient = require('login.dfe.notifications.client');
 const config = require('./../../infrastructure/Config')();
 
@@ -165,10 +166,17 @@ const handleValidSigninUser = (req, res, user) => {
 };
 
 const post = async (req, res) => {
+  const interactionDetails = await oidc.getInteractionById(req.params.uuid);
+  if (!interactionDetails) {
+    return sendRedirect(req, res, {
+      redirect: true,
+      uri: `${req.query.redirect_uri}?error=sessionexpired`,
+    });
+  }
+
   const client = await clients.get(req.query.clientid, req.id);
   if (client === null) {
-    InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, req, res);
-    return;
+    return InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, req, res);
   }
 
   let user = null;

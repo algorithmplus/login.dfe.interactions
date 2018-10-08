@@ -1,5 +1,5 @@
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/logger', () => ({ }));
+jest.mock('./../../src/infrastructure/logger', () => ({}));
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
     agentKeepAlive: {},
@@ -8,7 +8,9 @@ jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementatio
     type: 'static',
   },
 })));
-
+jest.mock('./../../src/infrastructure/oidc', () => ({
+  getInteractionById: jest.fn(),
+}));
 jest.mock('./../../src/infrastructure/applications', () => ({
   getServiceById: jest.fn(),
 }));
@@ -36,6 +38,7 @@ describe('When user submits username/password', () => {
   let clientsGet;
   let loggerAudit;
   let saUsersFind;
+  let getInteractionById;
 
   let postHandler;
 
@@ -78,6 +81,12 @@ describe('When user submits username/password', () => {
     const logger = require('./../../src/infrastructure/logger');
     logger.audit = loggerAudit;
     logger.info = jest.fn();
+
+    getInteractionById = require('./../../src/infrastructure/oidc').getInteractionById;
+    getInteractionById.mockReset().mockReturnValue({
+      client_id: 'test',
+      redirect_uri: 'http://test',
+    });
 
     postHandler = require('./../../src/app/UsernamePassword/postUsernamePassword');
   });
@@ -324,6 +333,19 @@ describe('When user submits username/password', () => {
       expect(interactionCompleteProcess.mock.calls[0][1]).not.toBeNull();
       expect(interactionCompleteProcess.mock.calls[0][1].status).toBe('failed');
       expect(interactionCompleteProcess.mock.calls[0][1].reason).toBe('invalid clientid');
+    });
+  });
+
+  describe('with an invalid interation id', () => {
+    beforeEach(() => {
+      getInteractionById.mockReturnValue(undefined);
+    });
+
+    it('then it should redirect to origin with error', async () => {
+      await postHandler(req, res);
+
+      expect(res.redirect.mock.calls).toHaveLength(1);
+      expect(res.redirect.mock.calls[0][0]).toBe('http://test?error=sessionexpired');
     });
   });
 });
