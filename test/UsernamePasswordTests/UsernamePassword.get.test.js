@@ -1,6 +1,6 @@
 jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/infrastructure/logger', () => {
-  return {  };
+  return {};
 });
 jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
@@ -11,12 +11,16 @@ jest.mock('./../../src/infrastructure/Config', () => {
     };
   });
 });
+jest.mock('./../../src/infrastructure/oidc', () => ({
+  getInteractionById: jest.fn(),
+}));
 const utils = require('./../utils');
 
 describe('When user is shown username/password', () => {
   let req;
   let res;
   let clientsGet;
+  let getInteractionById;
   let loggerAudit;
 
   let getHandler;
@@ -24,6 +28,7 @@ describe('When user is shown username/password', () => {
   beforeEach(() => {
     req = utils.mockRequest();
     req.query.clientid = 'test';
+    req.query.redirect_uri = 'http://test';
     req.params.uuid = 'some-uuid';
     req.csrfToken.mockReturnValue('my-secure-token');
 
@@ -44,6 +49,12 @@ describe('When user is shown username/password', () => {
     const logger = require('./../../src/infrastructure/logger');
     logger.audit = loggerAudit;
     logger.info = jest.fn();
+
+    getInteractionById = require('./../../src/infrastructure/oidc').getInteractionById;
+    getInteractionById.mockReset().mockReturnValue({
+      client_id: 'test',
+      redirect_uri: 'http://test',
+    });
 
     getHandler = require('./../../src/app/UsernamePassword/getUsernamePassword');
   });
@@ -83,6 +94,19 @@ describe('When user is shown username/password', () => {
       }
 
       expect(error).not.toBeNull();
+    });
+  });
+
+  describe('with an invalid interation id', () => {
+    beforeEach(() => {
+      getInteractionById.mockReturnValue(undefined);
+    });
+
+    it('then it should redirect to origin with error', async () => {
+      await getHandler(req, res);
+
+      expect(res.redirect.mock.calls).toHaveLength(1);
+      expect(res.redirect.mock.calls[0][0]).toBe('http://test?error=sessionexpired');
     });
   });
 });

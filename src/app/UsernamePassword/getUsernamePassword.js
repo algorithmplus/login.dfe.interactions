@@ -1,12 +1,16 @@
 'use strict';
 
 const clients = require('./../../infrastructure/Clients');
+const oidc = require('./../../infrastructure/oidc');
 
 const get = async (req, res) => {
+  const interactionDetails = await oidc.getInteractionById(req.params.uuid);
+  if (!interactionDetails) {
+    return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
+  }
+
   const clientId = req.query.clientid;
-
   const client = await clients.get(clientId);
-
   if (!client) {
     let details = `Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - `;
     if (!client) {
