@@ -63,7 +63,7 @@ const action = async (req, res) => {
     }
     const saUser = await getSaUser(email, req.id);
     if (saUser) {
-      const service = await getServiceById(req.body.clientId);
+      const service = await getServiceById(req.body.clientId, req.id);
       const serviceHome = service ? (service.relyingParty.service_home || service.relyingParty.redirect_uris[0]) : '#';
       await client.sendSAPasswordReset(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
     }

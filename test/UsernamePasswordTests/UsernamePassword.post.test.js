@@ -23,6 +23,9 @@ jest.mock('./../../src/infrastructure/Config', () => {
       notifications: {
         connectionString: {},
       },
+      applications: {
+        type: 'static',
+      },
     };
   });
 });
@@ -72,10 +75,12 @@ describe('When user submits username/password', () => {
     osaAuth.getSaUser = saUsersFind;
 
     clientsGet = jest.fn().mockReturnValue({
-      client_id: 'test',
+      relyingParty: {
+        client_id: 'test',
+      }
     });
-    const clients = require('./../../src/infrastructure/Clients');
-    clients.get = clientsGet;
+    const applications = require('./../../src/infrastructure/applications');
+    applications.getServiceById = clientsGet;
 
     loggerAudit = jest.fn();
     const logger = require('./../../src/infrastructure/logger');
@@ -113,9 +118,11 @@ describe('When user submits username/password', () => {
 
     it('then a validation message will appear if the username is not present and set to allow usernames', async () => {
       clientsGet.mockReset().mockReturnValue({
-        client_id: 'test',
-        params: {
-          supportsUsernameLogin: true,
+        relyingParty: {
+          client_id: 'test',
+          params: {
+            supportsUsernameLogin: true,
+          },
         },
       });
       req.body.username = '';
@@ -236,10 +243,13 @@ describe('When user submits username/password', () => {
     it('then it validates against the OSA api if client is configured and the username is not an email', async () => {
       req.body.username = 'foo';
       clientsGet.mockReset().mockReturnValue({
-        client_id: 'test',
-        params: {
-          supportsUsernameLogin: true,
-          serviceId: 'service1',
+        id: 'service1',
+        relyingParty: {
+          client_id: 'test',
+          params: {
+            supportsUsernameLogin: true,
+            serviceId: 'service1',
+          },
         },
       });
 
@@ -253,10 +263,13 @@ describe('When user submits username/password', () => {
     it('then it checks to see if the username is already migrated if successfully authenticated', async () => {
       req.body.username = 'foo';
       clientsGet.mockReset().mockReturnValue({
-        client_id: 'test',
-        params: {
-          supportsUsernameLogin: true,
-          serviceId: 'service1',
+        id: 'service1',
+        relyingParty: {
+          client_id: 'test',
+          params: {
+            supportsUsernameLogin: true,
+            serviceId: 'service1',
+          },
         },
       });
 
@@ -270,10 +283,12 @@ describe('When user submits username/password', () => {
       findByLegacyUsername.mockReset().mockReturnValue({ sub: '1234' });
       req.body.username = 'foo';
       clientsGet.mockReset().mockReturnValue({
-        client_id: 'test',
-        params: {
-          supportsUsernameLogin: true,
-        },
+        relyingParty: {
+          client_id: 'test',
+          params: {
+            supportsUsernameLogin: true,
+          },
+        }
       });
 
       await postHandler(req, res);
@@ -287,10 +302,13 @@ describe('When user submits username/password', () => {
     it('then it redirects to the migration page if the login is successful through osa API', async () => {
       req.body.username = 'foo';
       clientsGet.mockReset().mockReturnValue({
-        client_id: 'test',
-        params: {
-          supportsUsernameLogin: true,
-          serviceId: 'service1',
+        id: 'service1',
+        relyingParty: {
+          client_id: 'test',
+          params: {
+            supportsUsernameLogin: true,
+            serviceId: 'service1',
+          },
         },
       });
 
