@@ -151,6 +151,10 @@ app.use(getErrorHandler({
   errorPageRenderer,
 }));
 
+app.get('*', (req, res) => {
+  res.status(404).render('errors/views/notFound');
+});
+
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {
   app.proxy = true;
