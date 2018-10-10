@@ -1,6 +1,6 @@
 'use strict';
 
-const clients = require('./../../infrastructure/Clients');
+const applicationsApi = require('./../../infrastructure/applications');
 const { upsertCode, validateCode, deleteCode } = require('./../../infrastructure/UserCodes');
 const cache = require('./../../infrastructure/cache');
 const InteractionComplete = require('./../InteractionComplete');
@@ -8,7 +8,7 @@ const InteractionComplete = require('./../InteractionComplete');
 const validateRequest = async (req) => {
   if (!req.query.clientid) {
     return 'Must specify clientid param';
-  } else if (!await clients.get(req.query.clientid)) {
+  } else if (!await applicationsApi.getServiceById(req.query.clientid, req.id)) {
     return `Invalid client id. Cannot find client with id ${req.query.clientid}`;
   }
 

@@ -1,5 +1,5 @@
-jest.mock('./../../src/infrastructure/Clients', () => ({
-  get: jest.fn(),
+jest.mock('./../../src/infrastructure/applications', () => ({
+  getServiceById: jest.fn(),
 }));
 jest.mock('./../../src/infrastructure/UserCodes', () => ({
   upsertCode: jest.fn(),
@@ -9,9 +9,16 @@ jest.mock('./../../src/infrastructure/cache', () => ({
   set: jest.fn(),
   remove: jest.fn(),
 }));
-
+jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
+  hostingEnvironment: {
+    agentKeepAlive: {},
+  },
+  applications: {
+    type: 'static',
+  },
+})));
 const { mockRequest, mockResponse } = require('./../utils');
-const clients = require('./../../src/infrastructure/Clients');
+const applications = require('./../../src/infrastructure/applications');
 const cache = require('./../../src/infrastructure/cache');
 const { upsertCode } = require('./../../src/infrastructure/UserCodes');
 const { get } = require('./../../src/app/smsCode/authCode');
@@ -22,7 +29,7 @@ describe('when prompting user for sms code', () => {
   let req;
 
   beforeEach(() => {
-    clients.get.mockReset().mockImplementation((clientId) => {
+    applications.getServiceById.mockReset().mockImplementation((clientId) => {
       if (clientId === 'client1') {
         return {};
       }

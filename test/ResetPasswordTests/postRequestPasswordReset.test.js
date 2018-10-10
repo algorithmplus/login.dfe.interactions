@@ -1,6 +1,5 @@
 const utils = require('./../utils');
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/osa');
@@ -31,7 +30,6 @@ describe('when handling the posting of a password reset request', () => {
 
   let req;
   let res;
-  let clientsGet;
   let userCodesUpsertCode;
   let usersFind;
   let saUsersFind;
@@ -42,9 +40,7 @@ describe('when handling the posting of a password reset request', () => {
     req = utils.mockRequest();
     res = utils.mockResponse();
 
-    clientsGet = jest.fn();
-    const clients = require('./../../src/infrastructure/Clients');
-    clients.get = clientsGet;
+
 
     userCodesUpsertCode = jest.fn();
     const userCodes = require('./../../src/infrastructure/UserCodes');
