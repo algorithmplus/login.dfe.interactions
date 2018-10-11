@@ -6,8 +6,9 @@ const expiryInMilliseconds = (26 * 60) * 60 * 1000; // 26 hours
 
 const SessionCookies = class {
   constructor(req, res, opts) {
-    this.context = { req, res };
-    this.options = Object.assign({}, opts);
+    this.options = Object.assign({
+      encrypt: false,
+    }, opts);
 
     let keys = this.options.signingKeys;
     if (!keys && this.options.signingSecret) {
@@ -25,8 +26,10 @@ const SessionCookies = class {
     let json = this._cookies.get(name, { signed: true });
     if (json) {
       if (this.options.encrypt) {
-        const decipher = crypto.createDecipher('aes-256-ctr', this.options.encryptionSecret);
-        let decrypted = decipher.update(json, 'hex', 'utf8');
+        const iv = json.slice(0, 16);
+        const data = json.slice(16);
+        const decipher = crypto.createDecipheriv('aes-256-ctr', this.options.encryptionSecret, iv);
+        let decrypted = decipher.update(data, 'hex', 'utf8');
         decrypted += decipher.final('utf8');
         json = decrypted;
       }
@@ -38,10 +41,11 @@ const SessionCookies = class {
   set(name, value) {
     let data = JSON.stringify(value);
     if (this.options.encrypt) {
-      const cipher = crypto.createCipher('aes-256-ctr', this.options.encryptionSecret);
+      const iv = Buffer.from(crypto.randomBytes(16)).toString('hex').slice(0, 16);
+      const cipher = crypto.createCipheriv('aes-256-ctr', this.options.encryptionSecret, iv);
       let encrypted = cipher.update(data, 'utf8', 'hex');
       encrypted += cipher.final('hex');
-      data = encrypted;
+      data = iv + encrypted;
     }
     this._cookies.set(name, data, {
       httpOnly: true,
@@ -52,13 +56,9 @@ const SessionCookies = class {
   }
 };
 
-const migratingUserMiddleware = () => {
+const migratingUserMiddleware = (opts) => {
   return (req, res, next) => {
-    const cookies = new SessionCookies(req, res, {
-      signingSecret: 'isfnmw98mnwcnw9w',
-      encrypt: true,
-      encryptionSecret: 'sdfo89wfncqsdnu9a',
-    });
+    const cookies = new SessionCookies(req, res, opts);
 
     try {
       req.migrationUser = cookies.get('msa');

@@ -87,7 +87,11 @@ if (config.hostingEnvironment.env !== 'dev') {
 
 // app.use(rateLimiter);
 app.use(session(sess));
-app.use(migratingUserMiddleware(sess));
+app.use(migratingUserMiddleware({
+  signingSecret: config.session.secret,
+  encrypt: true,
+  encryptionSecret: config.session.encryptionSecret,
+}));
 
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
