@@ -28,7 +28,7 @@ const SessionCookies = class {
       if (this.options.encrypt) {
         const iv = json.slice(0, 16);
         const data = json.slice(16);
-        const decipher = crypto.createDecipheriv('aes-256-ctr', this.options.encryptionSecret, iv);
+        const decipher = crypto.createDecipheriv('aes-256-ctr', this.options.encryptionSecret.slice(0, 32), iv);
         let decrypted = decipher.update(data, 'hex', 'utf8');
         decrypted += decipher.final('utf8');
         json = decrypted;
@@ -42,7 +42,7 @@ const SessionCookies = class {
     let data = JSON.stringify(value);
     if (this.options.encrypt) {
       const iv = Buffer.from(crypto.randomBytes(16)).toString('hex').slice(0, 16);
-      const cipher = crypto.createCipheriv('aes-256-ctr', this.options.encryptionSecret, iv);
+      const cipher = crypto.createCipheriv('aes-256-ctr', this.options.encryptionSecret.slice(0, 32), iv);
       let encrypted = cipher.update(data, 'utf8', 'hex');
       encrypted += cipher.final('hex');
       data = iv + encrypted;
