@@ -10,7 +10,7 @@ describe('When getting the migration intro view', () => {
     req = utils.mockRequest();
     res = utils.mockResponse();
 
-    req.session.migrationUser = {
+    req.migrationUser = {
       clientName: 'TestClient',
     };
   });

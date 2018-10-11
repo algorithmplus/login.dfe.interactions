@@ -1,7 +1,7 @@
 'use strict';
 
 const get = (req, res) => {
-  const user = req.session.migrationUser;
+  const user = req.migrationUser;
   req.session.resend = undefined;
 
   let viewToDisplay = 'migration/views/email';
