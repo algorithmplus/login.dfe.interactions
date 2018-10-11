@@ -11,7 +11,7 @@ const post = async (req, res) => {
     await migrate(req.params.emailConfId, userCode.userCode.email, undefined, userToMigrate.firstName, userToMigrate.lastName,
       userToMigrate.organisation, userToMigrate.serviceId, userToMigrate.service.roles, userToMigrate.osaUserId, userToMigrate.userName, req.id);
 
-    req.session.migrationUser = undefined;
+    req.migrationUser = undefined;
     req.session.redirectUri = userCode.userCode.redirectUri;
     req.session.clientId = userCode.userCode.clientId;
     return res.redirect(`/${req.params.uuid}/migration/complete`);
@@ -21,7 +21,7 @@ const post = async (req, res) => {
     return res.redirect(`/${req.params.uuid}/email`);
   }
 
-  const user = req.session.migrationUser;
+  const user = req.migrationUser;
   return res.render('migration/views/email-in-use', {
     message: '',
     title: 'DfE Sign-in',

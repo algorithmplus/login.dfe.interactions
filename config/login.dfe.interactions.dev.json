@@ -27,7 +27,8 @@
     }
   },
   "session": {
-    "secret": "super-secret"
+    "secret": "super-secret",
+    "encryptionSecret": "another-super-secret-for-encrypting"
   },
   "userCodes": {
     "type": "static"

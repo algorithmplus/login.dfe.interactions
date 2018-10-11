@@ -10,7 +10,7 @@ describe('When getting the migration email view', () => {
     req = utils.mockRequest();
     res = utils.mockResponse();
 
-    req.session.migrationUser = {
+    req.migrationUser = {
       clientName: 'TestClient',
       firstName: 'Test',
       lastName: 'Tester',
@@ -25,7 +25,7 @@ describe('When getting the migration email view', () => {
   });
 
   it('then it should render the migration email view when the user has an email', () => {
-    req.session.migrationUser.email = 'test@tester.local';
+    req.migrationUser.email = 'test@tester.local';
 
     getRequestPasswordReset(req, res);
 
@@ -42,7 +42,7 @@ describe('When getting the migration email view', () => {
   it('then it should pass the user from the session to the view', () => {
     getRequestPasswordReset(req, res);
 
-    expect(res.render.mock.calls[0][1].user).toMatchObject(req.session.migrationUser);
+    expect(res.render.mock.calls[0][1].user).toMatchObject(req.migrationUser);
   });
 
   it('then it should pass the view being displayed to the view', () => {

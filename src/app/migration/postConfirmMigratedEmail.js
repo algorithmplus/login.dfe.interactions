@@ -59,7 +59,7 @@ const action = async (req, res) => {
   const existingUser = await users.find(userCode.userCode.email, req.id);
 
   if (existingUser) {
-    req.session.migrationUser.newEmail = userCode.userCode.email;
+    req.migrationUser.newEmail = userCode.userCode.email;
     return res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/email-in-use`);
   }
 

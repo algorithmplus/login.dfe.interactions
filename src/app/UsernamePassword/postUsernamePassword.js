@@ -121,7 +121,7 @@ const handleDeactivated = (req, res, validation, client) => {
   });
 };
 const handleValidLegacyUser = (req, res, user, client) => {
-  req.session.migrationUser = {
+  req.migrationUser = {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
@@ -135,13 +135,13 @@ const handleValidLegacyUser = (req, res, user, client) => {
     service: user.services.find(s => s.id.toLowerCase() === client.id.toLowerCase()),
 
   };
-  if (req.session.migrationUser.service) {
+  if (req.migrationUser.service) {
     sendRedirect(req, res, {
       redirect: true,
       uri: `/${req.params.uuid}/migration`,
     });
   } else {
-    req.session.migrationUser.redirectUri = req.query.redirect_uri;
+    req.migrationUser.redirectUri = req.query.redirect_uri;
     sendRedirect(req, res, {
       redirect: true,
       uri: `/${req.params.uuid}/migration/service-access-denied`,
@@ -203,7 +203,7 @@ const post = async (req, res) => {
         success: false,
         userEmail: req.body.username,
       });
-      req.session.migrationUser = {
+      req.migrationUser = {
         redirectUri: req.query.redirect_uri,
       };
       return sendRedirect(req, res, {

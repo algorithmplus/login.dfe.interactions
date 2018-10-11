@@ -27,7 +27,7 @@ const validate = (email) => {
 };
 
 const action = async (req, res) => {
-  const migrationUser = req.session.migrationUser;
+  const migrationUser = req.migrationUser;
   const currentEmail = req.body.radioEmailGroup;
 
   let email = req.body.email;
@@ -47,7 +47,7 @@ const action = async (req, res) => {
       validationMessages: validationResult.messages,
       backLink: true,
       viewToDisplay,
-      user: req.session.migrationUser,
+      user: req.migrationUser,
     });
     return;
   }
