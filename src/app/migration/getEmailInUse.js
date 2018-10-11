@@ -1,7 +1,7 @@
 'use strict';
 
 const get = (req, res) => {
-  const user = req.session.migrationUser;
+  const user = req.migrationUser;
 
   res.render('migration/views/email-in-use', {
     message: '',

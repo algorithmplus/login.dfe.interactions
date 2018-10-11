@@ -6,13 +6,13 @@ describe('When getting the migration user details view', () => {
   let req;
   let res;
   let getOrganisationByExternalIdStub;
-  let getMigratedUserDetails
+  let getMigratedUserDetails;
 
   beforeEach(() => {
     req = utils.mockRequest();
     res = utils.mockResponse();
 
-    req.session.migrationUser = {
+    req.migrationUser = {
       clientName: 'TestClient',
       firstName: 'Test',
       lastName: 'Tester',
@@ -47,7 +47,7 @@ describe('When getting the migration user details view', () => {
   it('then it should pass the user from the session to the view', async () => {
     await getMigratedUserDetails(req, res);
 
-    expect(res.render.mock.calls[0][1].user).toMatchObject(req.session.migrationUser);
+    expect(res.render.mock.calls[0][1].user).toMatchObject(req.migrationUser);
   });
 
   it('then if there is no org with osaId then a warning is shown', async () => {

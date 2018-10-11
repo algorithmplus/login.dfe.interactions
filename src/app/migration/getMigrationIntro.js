@@ -1,7 +1,7 @@
 'use strict';
 
 const get = (req, res) => {
-  const serviceName = req.session.migrationUser.clientName;
+  const serviceName = req.migrationUser.clientName;
 
   res.render('migration/views/migrationIntro', {
     message: '',
