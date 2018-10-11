@@ -39,9 +39,9 @@ const validateBody = (body, allowUserName) => {
   };
 };
 
-const authenticateWithEmail = async (req, client) => {
+const authenticateWithEmail = async (req, client, allowUserName) => {
   const user = await Users.authenticate(req.body.username, req.body.password, req.id);
-  if (!user) {
+  if (!user && allowUserName) {
     const saUser = await osaApi.getSaUser(req.body.username, req.id);
     if (saUser) {
       const serviceHome = client && client.relyingParty ? (client.relyingParty.service_home || client.relyingParty.redirect_uris[0]) : '#';
@@ -189,7 +189,7 @@ const post = async (req, res) => {
     let result;
 
     if (emailValidator.validate(req.body.username)) {
-      result = await authenticateWithEmail(req, client);
+      result = await authenticateWithEmail(req, client, supportsUsernameLogin);
     } else {
       result = await authenticateWithUsername(req);
     }
