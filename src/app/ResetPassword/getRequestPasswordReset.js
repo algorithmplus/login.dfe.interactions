@@ -1,21 +1,21 @@
 'use strict';
 
-const hotConfig = require('./../../infrastructure/Clients');
+const applicationsApi = require('./../../infrastructure/applications');
 const config = require('./../../infrastructure/Config')();
 const { ejsErrorPages } = require('login.dfe.express-error-handling');
 
 const action = async (req, res) => {
-  const client = await hotConfig.get(req.query.clientid, req.id);
+  const client = await applicationsApi.getServiceById(req.query.clientid, req.id);
 
   let isValidRedirect = false;
   let redirectUri = req.query.redirect_uri;
 
-  if (client) {
-    if (client.postResetUrl) {
-      redirectUri = client.postResetUrl;
+  if (client && client.relyingParty) {
+    if (client.relyingParty.postResetUrl) {
+      redirectUri = client.relyingParty.postResetUrl;
       isValidRedirect = true;
     } else {
-      const validUriResult = client.redirect_uris.find(c => c === req.query.redirect_uri);
+      const validUriResult = client.relyingParty.redirect_uris.find(c => c === req.query.redirect_uri);
       if (validUriResult) {
         isValidRedirect = true;
       }

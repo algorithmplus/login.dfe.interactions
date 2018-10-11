@@ -1,9 +1,9 @@
-jest.mock('./../../src/infrastructure/Clients', () => ({
-  get: jest.fn(),
+jest.mock('./../../src/infrastructure/applications', () => ({
+  getServiceById: jest.fn(),
 }));
 
 const utils = require('./../utils');
-const hotConfig = require('./../../src/infrastructure/Clients');
+const applications = require('./../../src/infrastructure/applications');
 const getRequestPasswordReset = require('./../../src/app/ResetPassword/getRequestPasswordReset');
 
 describe('When getting the request password reset view', () => {
@@ -15,11 +15,13 @@ describe('When getting the request password reset view', () => {
     res = utils.mockResponse();
     req.query.clientid = 'client-1';
     req.query.redirect_uri = 'https://sometest.local/redirect';
-    hotConfig.get.mockReset();
-    hotConfig.get.mockReturnValue({
-      client_id: req.query.clientId,
-      client_secret: 'secret',
-      redirect_uris: ['https://sometest.local/redirect'],
+    applications.getServiceById.mockReset();
+    applications.getServiceById.mockReturnValue({
+      relyingParty: {
+        client_id: req.query.clientId,
+        client_secret: 'secret',
+        redirect_uris: ['https://sometest.local/redirect'],
+      },
     });
   });
 
@@ -51,13 +53,13 @@ describe('When getting the request password reset view', () => {
   it('then the client is retrieved from hotconfig api', async () => {
     await getRequestPasswordReset(req, res);
 
-    expect(hotConfig.get.mock.calls).toHaveLength(1);
-    expect(hotConfig.get.mock.calls[0][0]).toBe(req.query.clientid);
-    expect(hotConfig.get.mock.calls[0][1]).toBe(req.id);
+    expect(applications.getServiceById.mock.calls).toHaveLength(1);
+    expect(applications.getServiceById.mock.calls[0][0]).toBe(req.query.clientid);
+    expect(applications.getServiceById.mock.calls[0][1]).toBe(req.id);
   });
 
   it('then if the return url does not match the client information a bad request is returned', async () => {
-    hotConfig.get.mockReturnValue({
+    applications.getServiceById.mockReturnValue({
       client_id: req.query.clientid,
       client_secret: 'secret',
       redirect_uris: ['https://test.local'],
@@ -75,8 +77,8 @@ describe('When getting the request password reset view', () => {
   });
 
   it('then if no client is returned a bad request is returned', async () => {
-    hotConfig.get.mockReset();
-    hotConfig.get.mockReturnValue(null);
+    applications.getServiceById.mockReset();
+    applications.getServiceById.mockReturnValue(null);
 
     let error = null;
     try {
@@ -90,10 +92,12 @@ describe('When getting the request password reset view', () => {
   });
 
   it('then if the client has a postRedirectUrl that is used instead of the redirectUri', async () => {
-    hotConfig.get.mockReturnValue({
-      client_id: req.query.clientid,
-      client_secret: 'secret',
-      postResetUrl: 'https://test.local.new',
+    applications.getServiceById.mockReturnValue({
+      relyingParty: {
+        client_id: req.query.clientid,
+        client_secret: 'secret',
+        postResetUrl: 'https://test.local.new',
+      },
     });
 
     await getRequestPasswordReset(req, res);

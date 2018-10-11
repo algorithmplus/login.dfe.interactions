@@ -11,7 +11,7 @@ const rp = require('request-promise').defaults({
 
 const jwtStrategy = require('login.dfe.jwt-strategies');
 
-const getServiceById = async (id) => {
+const getServiceById = async (id, reqId) => {
   if (!id) {
     return undefined;
   }
@@ -22,6 +22,7 @@ const getServiceById = async (id) => {
       uri: `${config.applications.service.url}/services/${id}`,
       headers: {
         authorization: `bearer ${token}`,
+        'x-correlation-id': reqId,
       },
       json: true,
     });

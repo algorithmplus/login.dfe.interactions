@@ -1,5 +1,5 @@
 const InteractionComplete = require('./../InteractionComplete');
-const clients = require('./../../infrastructure/Clients');
+const applicationsApi = require('./../../infrastructure/applications');
 const Users = require('./../../infrastructure/Users');
 const emailValidator = require('email-validator');
 const logger = require('./../../infrastructure/logger');
@@ -44,7 +44,7 @@ const authenticateWithEmail = async (req, client) => {
   if (!user) {
     const saUser = await osaApi.getSaUser(req.body.username, req.id);
     if (saUser) {
-      const serviceHome = client ? (client.service_home || client.redirect_uris[0]) : '#';
+      const serviceHome = client && client.relyingParty ? (client.relyingParty.service_home || client.relyingParty.redirect_uris[0]) : '#';
       await notificationClient.sendUnmigratedSaUser(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
     }
   }
@@ -89,9 +89,9 @@ const handleInvalidCredentials = (req, res, validation, client, legacyUser) => {
     redirectUri: req.query.redirect_uri,
     validationMessages: validation.validationMessages,
     username: req.body.username,
-    header: !client.params || client.params.header,
-    headerMessage: !client.params || client.params.headerMessage,
-    supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
+    header: !client.relyingParty.params || client.relyingParty.params.header,
+    headerMessage: !client.relyingParty.params || client.relyingParty.params.headerMessage,
+    supportsUsernameLogin: !client.relyingParty.params || client.relyingParty.params.supportsUsernameLogin,
   });
 };
 const handleDeactivated = (req, res, validation, client) => {
@@ -115,9 +115,9 @@ const handleDeactivated = (req, res, validation, client) => {
     redirectUri: req.query.redirect_uri,
     validationMessages: validation.validationMessages,
     username: req.body.username,
-    header: !client.params || client.params.header,
-    headerMessage: !client.params || client.params.headerMessage,
-    supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
+    header: !client.relyingParty.params || client.relyingParty.params.header,
+    headerMessage: !client.relyingParty.params || client.relyingParty.params.headerMessage,
+    supportsUsernameLogin: !client.relyingParty.params || client.relyingParty.params.supportsUsernameLogin,
   });
 };
 const handleValidLegacyUser = (req, res, user, client) => {
@@ -126,13 +126,13 @@ const handleValidLegacyUser = (req, res, user, client) => {
     lastName: user.lastName,
     email: user.email,
     organisation: user.organisation,
-    clientName: client.friendlyName,
+    clientName: client.name,
     clientId: req.query.clientid,
     redirectUri: req.query.redirect_uri,
-    serviceId: client.params.serviceId,
+    serviceId: client.id,
     userName: req.body.username,
     osaUserId: user.osaId,
-    service: user.services.find(s => s.id.toLowerCase() === client.params.serviceId.toLowerCase()),
+    service: user.services.find(s => s.id.toLowerCase() === client.id.toLowerCase()),
 
   };
   if (req.session.migrationUser.service) {
@@ -174,7 +174,7 @@ const post = async (req, res) => {
     });
   }
 
-  const client = await clients.get(req.query.clientid, req.id);
+  const client = await applicationsApi.getServiceById(req.query.clientid, req.id);
   if (client === null) {
     return InteractionComplete.process(req.params.uuid, { status: 'failed', reason: 'invalid clientid' }, req, res);
   }
@@ -182,7 +182,7 @@ const post = async (req, res) => {
   let user = null;
   let legacyUser = false;
 
-  const supportsUsernameLogin = client.params && client.params.supportsUsernameLogin;
+  const supportsUsernameLogin = client.relyingParty.params && client.relyingParty.params.supportsUsernameLogin;
   const validation = validateBody(req.body, supportsUsernameLogin);
 
   if (!validation.failedValidation) {

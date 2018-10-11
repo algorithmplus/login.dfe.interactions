@@ -1,16 +1,15 @@
 jest.mock('login.dfe.audit.winston-sequelize-transport');
-jest.mock('./../../src/infrastructure/logger', () => {
-  return {};
-});
-jest.mock('./../../src/infrastructure/Config', () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      hostingEnvironment: {
-        agentKeepAlive: {},
-      },
-    };
-  });
-});
+jest.mock('./../../src/infrastructure/logger', () => ({}));
+jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
+  hostingEnvironment: {
+    agentKeepAlive: {},
+  },
+  applications: {
+    type: 'static',
+  },
+})));
+
+
 jest.mock('./../../src/infrastructure/oidc', () => ({
   getInteractionById: jest.fn(),
 }));
@@ -35,15 +34,17 @@ describe('When user is shown username/password', () => {
     res = utils.mockResponse();
 
     clientsGet = jest.fn().mockReturnValue({
-      client_id: 'test',
-      params: {
-        header: 'Custom header message',
-        headerMessage: 'New message',
-        supportsUsernameLogin: true,
+      relyingParty: {
+        client_id: 'test',
+        params: {
+          header: 'Custom header message',
+          headerMessage: 'New message',
+          supportsUsernameLogin: true,
+        },
       },
     });
-    const clients = require('./../../src/infrastructure/Clients');
-    clients.get = clientsGet;
+    const applications = require('./../../src/infrastructure/applications');
+    applications.getServiceById = clientsGet;
 
     loggerAudit = jest.fn();
     const logger = require('./../../src/infrastructure/logger');

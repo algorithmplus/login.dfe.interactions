@@ -1,4 +1,3 @@
-jest.mock('./../../src/infrastructure/Clients');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('login.dfe.audit.winston-sequelize-transport');
