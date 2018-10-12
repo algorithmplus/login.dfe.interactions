@@ -27,7 +27,7 @@ describe('When posting to confirm the migration email userCode', () => {
       email: expectedEmail,
       emailConfId: expectedUserCodeId,
     };
-    req.session.migrationUser = {};
+    req.migrationUser = {};
 
     userCodesValidateCode = jest.fn().mockReset().mockReturnValue({code: '', userCode: {email: expectedEmail}});
     const userCodes = require('./../../src/infrastructure/UserCodes');

@@ -9,7 +9,7 @@ const validate = async (user) => {
 };
 
 const get = async (req, res) => {
-  const user = req.session.migrationUser;
+  const user = req.migrationUser;
 
   const validationResult = await validate(user);
 
