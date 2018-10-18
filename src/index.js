@@ -15,6 +15,7 @@ const sanitization = require('login.dfe.sanitization');
 const healthCheck = require('login.dfe.healthcheck');
 const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 const KeepAliveAgent = require('agentkeepalive');
+const migratingUserMiddleware = require('./app/utils/migratingUserMiddleware');
 
 // const rateLimiter = require('./app/rateLimit');
 
@@ -86,6 +87,11 @@ if (config.hostingEnvironment.env !== 'dev') {
 
 // app.use(rateLimiter);
 app.use(session(sess));
+app.use(migratingUserMiddleware({
+  signingSecret: config.session.secret,
+  encrypt: true,
+  encryptionSecret: config.session.encryptionSecret,
+}));
 
 // Add middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -150,6 +156,10 @@ app.use(getErrorHandler({
   logger,
   errorPageRenderer,
 }));
+
+app.get('*', (req, res) => {
+  res.status(404).render('errors/views/notFound');
+});
 
 // Setup server
 if (config.hostingEnvironment.env === 'dev') {

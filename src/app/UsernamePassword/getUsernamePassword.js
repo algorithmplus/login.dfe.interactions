@@ -1,12 +1,16 @@
 'use strict';
 
-const clients = require('./../../infrastructure/Clients');
+const applicationsApi = require('./../../infrastructure/applications');
+const oidc = require('./../../infrastructure/oidc');
 
 const get = async (req, res) => {
+  const interactionDetails = await oidc.getInteractionById(req.params.uuid);
+  if (!interactionDetails) {
+    return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
+  }
+
   const clientId = req.query.clientid;
-
-  const client = await clients.get(clientId);
-
+  const client = await applicationsApi.getServiceById(clientId, req.id);
   if (!client) {
     let details = `Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - `;
     if (!client) {
@@ -17,7 +21,7 @@ const get = async (req, res) => {
     throw new Error(details);
   }
 
-  req.session.migrationUser = null;
+  req.migrationUser = null;
   req.session.redirectUri = null;
 
   res.render('UsernamePassword/views/index', {
@@ -29,9 +33,9 @@ const get = async (req, res) => {
     csrfToken: req.csrfToken(),
     redirectUri: req.query.redirect_uri,
     validationMessages: {},
-    header: !client.params || client.params.header,
-    headerMessage: !client.params || client.params.headerMessage,
-    supportsUsernameLogin: !client.params || client.params.supportsUsernameLogin,
+    header: !client.relyingParty.params || client.relyingParty.params.header,
+    headerMessage: !client.relyingParty.params || client.relyingParty.params.headerMessage,
+    supportsUsernameLogin: !client.relyingParty.params || client.relyingParty.params.supportsUsernameLogin,
   });
 };
 

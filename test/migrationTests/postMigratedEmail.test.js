@@ -28,7 +28,7 @@ describe('When posting to confirm the migration email view', () => {
       email: expectedEmail,
     };
 
-    req.session.migrationUser = {
+    req.migrationUser = {
       clientId: expectedClientId,
       redirectUri: expectedRedirectUri,
       clientName: 'TestClient',
@@ -53,7 +53,7 @@ describe('When posting to confirm the migration email view', () => {
 
   it('then if it is selected to use existing email then it is validated', async () => {
     req.body.radioEmailGroup = 'Yes';
-    req.session.migrationUser.email = 'asd';
+    req.migrationUser.email = 'asd';
 
     await getRequestPasswordReset(req, res);
 
@@ -73,7 +73,7 @@ describe('When posting to confirm the migration email view', () => {
     expect(upsertCodeStub.mock.calls[0][3]).toBe('123');
     expect(upsertCodeStub.mock.calls[0][4]).toBe('ConfirmMigratedEmail');
     expect(upsertCodeStub.mock.calls[0][5]).toBe(expectedEmail);
-    expect(upsertCodeStub.mock.calls[0][6]).toMatchObject(req.session.migrationUser);
+    expect(upsertCodeStub.mock.calls[0][6]).toMatchObject(req .migrationUser);
   });
 
   it('then the confirm email view is displayed when the request is valid and the code uid passed to the view', async () => {

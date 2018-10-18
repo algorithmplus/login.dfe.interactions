@@ -14,15 +14,15 @@ module.exports = () => {
       uuid: uuid(),
     });
   });
-  router.post('/dev/:uuid/complete', (req, res) => {
+  router.post('/:uuid/complete', (req, res) => {
     res.render('DevLauncher/views/complete', { data: req.body });
   });
-  router.get('/dev/styleguide', (req, res) => {
+  router.get('/styleguide', (req, res) => {
     res.render('DevLauncher/views/styleguide', {
       title: 'Styleguide',
     });
   });
-  router.get('/dev/complete', (req, res) => {
+  router.get('/complete', (req, res) => {
     res.render('InteractionComplete/views/index', {
       noredirect: 'true',
       destination: '',
@@ -40,6 +40,14 @@ module.exports = () => {
     req.session.uid = '23121d3c-84df-44ac-b458-3d63a9a05497';
     req.session.clientId = 'local';
     res.redirect(`/${req.query.uuid}/resetpassword/complete?clientid=local&redirect_uri=https://localhost:4431`);
+  });
+
+
+  router.get('/:uuid/check', (req, res) => {
+    return res.json({
+      client_id: 'local',
+      redirect_uri: 'https://localhost:4431',
+    });
   });
 
   return router;

@@ -38,6 +38,11 @@ const authenticate = async (username, password, correlationId) => {
         status: 'Deactivated',
       };
     }
+    if (status === 403 && e.error && e.error.reason_code === 'INVALID_CREDENTIALS' && e.error.reason_subcode === 'PASSWORD') {
+      return {
+        status: 'invalid_credentials',
+      };
+    }
     if (status === 403) {
       return null;
     }
