@@ -8,6 +8,27 @@ const InteractionComplete = require('./../InteractionComplete');
 
 const router = express.Router({ mergeParams: true });
 
+const getNaturalIdentifiers = (orgsForUser) => {
+  for (let i = 0; i < orgsForUser.length; i++) {
+    const org = orgsForUser[i];
+    if (org.organisation) {
+      org.naturalIdentifiers = [];
+      const urn = org.organisation.urn;
+      const uidOrg = org.organisation.uid;
+      const ukprn = org.organisation.ukprn;
+      if (urn) {
+        org.naturalIdentifiers.push(`URN: ${urn}`);
+      }
+      if (uidOrg) {
+        org.naturalIdentifiers.push(`UID: ${uidOrg}`);
+      }
+      if (ukprn) {
+        org.naturalIdentifiers.push(`UKPRN: ${ukprn}`);
+      }
+    }
+  }
+};
+
 const getAction = async (req, res) => {
   const uid = req.query.uid;
   if (!uid) {
@@ -23,6 +44,7 @@ const getAction = async (req, res) => {
   if (orgsForUser.length === 1) {
     return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'select-organisation', organisation: JSON.stringify(orgsForUser[0].organisation) }, req, res);
   }
+  getNaturalIdentifiers(orgsForUser);
 
   return res.render('select-organisation/views/index', {
     orgsForUser,
@@ -36,6 +58,7 @@ const postAction = async (req, res) => {
   const uid = req.query.uid;
   if (!req.body['selected-organisation']) {
     const orgsForUser = await organisationApi.associatedWithUser(uid);
+    getNaturalIdentifiers(orgsForUser);
     return res.render('select-organisation/views/index', {
       orgsForUser,
       csrfToken: req.csrfToken(),
