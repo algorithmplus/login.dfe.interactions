@@ -11,7 +11,7 @@ const rp = require('request-promise').defaults({
 const jwtStrategy = require('login.dfe.jwt-strategies');
 
 
-const create = async (userId, serviceId, organisationId, externalIdentifiers = [], correlationId) => {
+const create = async (userId, serviceId, organisationId, externalIdentifiers = [], roles = [], correlationId) => {
   const token = await jwtStrategy(config.access.service).getBearerToken();
 
   try {
@@ -24,6 +24,7 @@ const create = async (userId, serviceId, organisationId, externalIdentifiers = [
       },
       body: {
         identifiers: externalIdentifiers,
+        roles,
       },
       json: true,
     });
@@ -38,6 +39,30 @@ const create = async (userId, serviceId, organisationId, externalIdentifiers = [
   }
 };
 
+const getRolesOfService = async (serviceId, correlationId) => {
+  const token = await jwtStrategy(config.access.service).getBearerToken();
+
+  try {
+    return await rp({
+      method: 'GET',
+      uri: `${config.access.service.url}/services/${serviceId}/roles`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 403) {
+      return false;
+    }
+    throw e;
+  }
+};
+
+
 module.exports = {
   create,
+  getRolesOfService,
 };

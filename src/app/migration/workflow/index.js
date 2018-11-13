@@ -64,7 +64,10 @@ const addUserToService = async (userId, organisation, saOrganisation, currentSer
   externalIdentifiers.push({ key: 'saUserId', value: saUserId });
   externalIdentifiers.push({ key: 'saUserName', value: saUserName });
 
-  const servicesResult = await access.create(userId, currentServiceId, organisation.id, externalIdentifiers, correlationId);
+  const allRolesForService = await access.getRolesOfService(currentServiceId, correlationId);
+  const roles = currentServiceRoles ? currentServiceRoles.map(code => allRolesForService.find(role => role.code.toLowerCase() === code.toLowerCase())).map(x => x.id) : [];
+
+  const servicesResult = await access.create(userId, currentServiceId, organisation.id, externalIdentifiers, roles, correlationId);
   return servicesResult;
 };
 const completeMigration = async (emailConfId, saUserName, correlationId) => {
