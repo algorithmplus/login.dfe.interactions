@@ -1,6 +1,7 @@
 'use strict';
 
 const userCodes = require('./../../infrastructure/UserCodes');
+const Users = require('./../../infrastructure/Users');
 const logger = require('./../../infrastructure/logger');
 const { validate } = require('./../utils/validatePassword');
 const { migrate } = require('./workflow');
@@ -42,6 +43,20 @@ const action = async (req, res) => {
 
   const userCode = validationResult.userCode;
   const userToMigrate = JSON.parse(userCode.userCode.contextData);
+
+  const alreadyMigratedUser = await Users.findByLegacyUsername(userToMigrate.userName, req.id);
+  if (alreadyMigratedUser) {
+    logger.audit(`Attempt login to already migrated account for ${userToMigrate.userName}`, {
+      type: 'sign-in',
+      subType: 'username-password',
+      success: false,
+      userEmail: userToMigrate.userName,
+    });
+    req.migrationUser = {
+      redirectUri: req.query.redirect_uri,
+    };
+    return res.redirect(`/${req.params.uuid}/migration/already-migrated`);
+  }
 
   try {
     await migrate(req.body.emailConfId, userCode.userCode.email, req.body.newPassword, userToMigrate.firstName, userToMigrate.lastName,

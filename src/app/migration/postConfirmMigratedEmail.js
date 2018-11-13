@@ -2,6 +2,7 @@
 
 const userCodes = require('./../../infrastructure/UserCodes');
 const users = require('./../../infrastructure/Users');
+const logger = require('./../../infrastructure/logger');
 
 const validate = (code) => {
   const messages = {
@@ -41,7 +42,6 @@ const action = async (req, res) => {
   }
 
   const userCode = await userCodes.validateCode(uid, code, req.id, 'ConfirmMigratedEmail');
-
   if (!userCode) {
     return res.render('migration/views/confirmEmail', {
       csrfToken: req.csrfToken(),
@@ -54,10 +54,24 @@ const action = async (req, res) => {
     });
   }
 
+  const userToMigrate = JSON.parse(userCode.userCode.contextData);
+  const alreadyMigratedUser = await users.findByLegacyUsername(userToMigrate.userName, req.id);
+  if (alreadyMigratedUser) {
+    logger.audit(`Attempt login to already migrated account for ${userToMigrate.userName}`, {
+      type: 'sign-in',
+      subType: 'username-password',
+      success: false,
+      userEmail: userToMigrate.userName,
+    });
+    req.migrationUser = {
+      redirectUri: req.query.redirect_uri,
+    };
+    return res.redirect(`/${req.params.uuid}/migration/already-migrated`);
+  }
+
   req.session.userCode = code;
 
   const existingUser = await users.find(userCode.userCode.email, req.id);
-
   if (existingUser) {
     req.migrationUser.newEmail = userCode.userCode.email;
     return res.redirect(`/${req.params.uuid}/migration/${req.body.emailConfId}/email-in-use`);
