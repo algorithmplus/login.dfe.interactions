@@ -4,6 +4,12 @@ jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementatio
     agentKeepAlive: {},
   },
 })));
+jest.mock('./../../src/infrastructure/logger', () => ({
+  info: jest.fn(),
+  audit: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+}));
 
 const utils = require('./../utils');
 const postConfirmMigratedEmail = require('./../../src/app/migration/postConfirmMigratedEmail');
@@ -29,7 +35,13 @@ describe('When posting to confirm the migration email userCode', () => {
     };
     req.migrationUser = {};
 
-    userCodesValidateCode = jest.fn().mockReset().mockReturnValue({code: '', userCode: {email: expectedEmail}});
+    userCodesValidateCode = jest.fn().mockReset().mockReturnValue({
+      code: '',
+      userCode: {
+        email: expectedEmail,
+        contextData: '{"service":{}, "firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234","role":{"id":10000}},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}',
+      },
+    });
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.validateCode = userCodesValidateCode;
 
