@@ -3,6 +3,7 @@ jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/Services');
 jest.mock('./../../src/infrastructure/access', () => ({
   create: jest.fn(),
+  getRolesOfService: jest.fn(),
 }));
 jest.mock('./../../src/infrastructure/Organisations');
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
@@ -19,7 +20,7 @@ jest.mock('./../../src/infrastructure/logger', () => ({
 
 const { getCode: userCodesGetCode, deleteCode: userCodesDeleteCode } = require('./../../src/infrastructure/UserCodes');
 const { create: createUser, find: findUser } = require('./../../src/infrastructure/Users');
-const { create: addServiceMapping } = require('./../../src/infrastructure/access');
+const { create: addServiceMapping, getRolesOfService } = require('./../../src/infrastructure/access');
 const { getOrganisationByExternalId, setUsersRoleAtOrg } = require('./../../src/infrastructure/Organisations');
 const utils = require('./../utils');
 const postCreateNewPassword = require('./../../src/app/migration/postCreateNewPassword');
@@ -48,7 +49,7 @@ describe('When posting to create a user from migration', () => {
       userCode: {
         email: expectedEmail,
         code: '',
-        contextData: '{"service":{}, "firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234","role":{"id":10000}},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name"}',
+        contextData: '{"service":{"roles":["group1","group2"]}, "firstName":"Roger","lastName":"Johnson","email":"foo3@example.com","organisation":{"id":"72711ff9-2da1-4135-8a20-3de1fea31073","name":"Some School - MAT","osaId":"95137","urn":null,"localAuthority":null,"type":"010","uid":"MAT1234","role":{"id":10000}},"clientName":"Some very friendly client","clientId":"profiles","redirectUri":"https://localhost:4431","serviceId":"svc1", "userName":"old_user_name","osaUserId":"45632"}',
         redirectUri: 'https://localhost:4431',
       },
     });
@@ -58,6 +59,10 @@ describe('When posting to create a user from migration', () => {
     findUser.mockReset().mockReturnValue({ sub: expectedUserId });
 
     addServiceMapping.mockReset().mockReturnValue(true);
+    getRolesOfService.mockReset().mockReturnValue([
+      { id: 'role1', code: 'group1' },
+      { id: 'role2', code: 'group2' },
+    ]);
 
     getOrganisationByExternalId.mockReset().mockReturnValue({
       id: expectedOrgId,
@@ -134,7 +139,17 @@ describe('When posting to create a user from migration', () => {
     expect(addServiceMapping.mock.calls[0][0]).toBe(expectedUserId);
     expect(addServiceMapping.mock.calls[0][1]).toBe('svc1');
     expect(addServiceMapping.mock.calls[0][2]).toBe(expectedOrgId);
-    expect(addServiceMapping.mock.calls[0][4]).toBe(req.id);
+    expect(addServiceMapping.mock.calls[0][3]).toEqual([
+      { key: 'organisationId', value: '95137' },
+      { key: 'groups', value: 'group1,group2' },
+      { key: 'saUserId', value: '45632' },
+      { key: 'saUserName', value: 'old_user_name' },
+    ]);
+    expect(addServiceMapping.mock.calls[0][4]).toEqual([
+      'role1',
+      'role2',
+    ]);
+    expect(addServiceMapping.mock.calls[0][5]).toBe(req.id);
   });
 
   it('then if the user is successfully created the usercode is deleted', async () => {
@@ -165,7 +180,7 @@ describe('When posting to create a user from migration', () => {
     expect(addServiceMapping.mock.calls[0][0]).toBe(expectedUserId);
     expect(addServiceMapping.mock.calls[0][1]).toBe('svc1');
     expect(addServiceMapping.mock.calls[0][2]).toBe(expectedOrgId);
-    expect(addServiceMapping.mock.calls[0][4]).toBe(req.id);
+    expect(addServiceMapping.mock.calls[0][5]).toBe(req.id);
   });
 
   it('then the user is redirected to the migration complete view when the request is valid', async () => {
