@@ -43,14 +43,14 @@ const createOrUpdateUser = async (email, password, firstName, lastName, emailCon
 
   throw new Error(`Failed to create or find a user for SA user ${saUsername} (email: ${email})`);
 };
-const addUserToOrganisation = async (userId, saOrganisation, correlationId) => {
+const addUserToOrganisation = async (userId, saOrganisation, saUserId, saUserName, correlationId) => {
   const organisation = await org.getOrganisationByExternalId(saOrganisation.osaId, '000');
   if (!organisation) {
     throw new Error(`Failed to find an organisation of type ${saOrganisation.type} with SA id ${saOrganisation.osaId} for user ${userId}`);
   }
 
   logger.info(`Adding user ${userId} to organisation ${organisation.id} with role ${saOrganisation.role.id}`, { correlationId });
-  await org.setUsersRoleAtOrg(userId, organisation.id, saOrganisation.role.id, correlationId);
+  await org.setUsersRoleAtOrg(userId, organisation.id, saOrganisation.role.id, saUserId, saUserName, correlationId);
 
   return organisation;
 };
@@ -79,7 +79,7 @@ const completeMigration = async (emailConfId, saUserName, correlationId) => {
 const migrate = async (emailConfId, email, password, firstName, lastName, saOrganisation, serviceId, serviceRoles, saUserId, saUsername, correlationId) => {
   const user = await createOrUpdateUser(email, password, firstName, lastName, emailConfId, saUsername, correlationId);
 
-  const organisation = await addUserToOrganisation(user.userId, saOrganisation, correlationId);
+  const organisation = await addUserToOrganisation(user.userId, saOrganisation, saUserId, saUsername, correlationId);
 
   const servicesResult = await addUserToService(user.userId, organisation, saOrganisation, serviceId,
     serviceRoles, saUserId, saUsername, correlationId);
