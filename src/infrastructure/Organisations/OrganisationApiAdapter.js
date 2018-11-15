@@ -69,37 +69,37 @@ const callOrganisationsApi = async (endpoint, method, body, correlationId) => {
   const retryFactor = config.organisations.service.retryFactor || 2;
 
   return promiseRetry(async (retry, number) => {
-      try {
-        return await rp({
-          method,
-          uri: `${config.organisations.service.url}/${endpoint}`,
-          headers: {
-            authorization: `bearer ${token}`,
-            'x-correlation-id': correlationId,
-          },
-          body,
-          json: true,
-          strictSSL: config.hostingEnvironment.env.toLowerCase() !== 'dev',
-        });
-      } catch (e) {
-        const status = e.statusCode ? e.statusCode : 500;
-        if (status === 401 || status === 404) {
-          return null;
-        }
-        if (status === 409) {
-          return false;
-        }
-        if ((status === 500 || status === 503) && number < numberOfRetires) {
-          retry();
-        }
-        throw e;
+    try {
+      return await rp({
+        method,
+        uri: `${config.organisations.service.url}/${endpoint}`,
+        headers: {
+          authorization: `bearer ${token}`,
+          'x-correlation-id': correlationId,
+        },
+        body,
+        json: true,
+        strictSSL: config.hostingEnvironment.env.toLowerCase() !== 'dev',
+      });
+    } catch (e) {
+      const status = e.statusCode ? e.statusCode : 500;
+      if (status === 401 || status === 404) {
+        return null;
       }
-    }, { factor: retryFactor },
+      if (status === 409) {
+        return false;
+      }
+      if ((status === 500 || status === 503) && number < numberOfRetires) {
+        retry();
+      }
+      throw e;
+    }
+  }, { factor: retryFactor },
   );
 };
 
-const setUsersRoleAtOrg = async (userId, organisationId, roleId, correlationId) => {
-  const body = { roleId };
+const setUsersRoleAtOrg = async (userId, organisationId, roleId, numericIdentifier, textIdentifier, correlationId) => {
+  const body = { roleId, numericIdentifier, textIdentifier };
   const result = await callOrganisationsApi(`organisations/${organisationId}/users/${userId}`, 'PUT', body, correlationId);
   return result === undefined;
 };
