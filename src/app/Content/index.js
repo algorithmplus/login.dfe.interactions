@@ -7,7 +7,7 @@ const router = express.Router({ mergeParams: true });
 
 module.exports = () => {
   logger.info('Mounting static content routes');
-  router.get('/', (req, res) => {
+  router.get('/welcome', (req, res) => {
     res.render('Content/views/start', {
       title: 'DfE Sign-in',
     });
