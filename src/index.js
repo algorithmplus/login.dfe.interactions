@@ -124,6 +124,9 @@ app.set('layout', 'shared/layout');
 
 // Setup routes
 app.use('/healthcheck', healthCheck({ config }));
+app.get('/', (req, res) => {
+  return res.redirect(config.hostingEnvironment.servicesUrl || '/welcome');
+});
 app.use('/', content(csrf));
 
 app.use('/:uuid/usernamepassword', usernamePassword(csrf));
