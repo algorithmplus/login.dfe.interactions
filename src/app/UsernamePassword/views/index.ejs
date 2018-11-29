@@ -31,7 +31,7 @@
                     <legend class="heading-medium">Sign-in</legend>
                     <div class="form-group <%= (locals.validationMessages.username !== undefined) ? 'form-group-error' : '' %>">
                         <% if(locals.supportsUsernameLogin) {%>
-                            <label class="form-label" for="username">Email address or Secure Access username</label>
+                            <label class="form-label" for="username">Email address <b>or</b> (Secure Access username to create account)</label>
                         <%} else {%>
                             <label class="form-label" for="username">Email address</label>
                         <%}%>
