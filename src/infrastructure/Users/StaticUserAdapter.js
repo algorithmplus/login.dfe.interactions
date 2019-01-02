@@ -51,6 +51,14 @@ const findByLegacyUsername = async (username) => {
   return { id: '23121d3c-84df-44ac-b458-3d63a9a05497' };
 };
 
+const findInvitationByEmail = async (email, correlationId) => {
+  return undefined;
+};
+
+const acceptInvitation = async (invitationId, password, correlationId) => {
+  return Promise.resolve();
+};
+
 module.exports = {
   authenticate,
   find,
@@ -59,4 +67,6 @@ module.exports = {
   create,
   findByLegacyUsername,
   update,
+  findInvitationByEmail,
+  acceptInvitation,
 };

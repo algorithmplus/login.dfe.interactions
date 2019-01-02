@@ -9,6 +9,12 @@ const org = require('./../../../infrastructure/Organisations');
 const osa = require('./../../../infrastructure/osa');
 
 const createOrUpdateUser = async (email, password, firstName, lastName, emailConfId, saUsername, correlationId) => {
+  const invitation = await users.findInvitationByEmail(email, correlationId);
+  if (invitation && !invitation.isCompleted) {
+    await users.acceptInvitation(invitation.id, password, correlationId);
+    logger.info(`Completed invitation ${invitation.id} for ${email} while migrating ${saUsername}`);
+  }
+
   if (password) { // Will not have password when we have checked user exists
     logger.info(`Attempting to create user for ${saUsername} (email = ${email}, firstName = ${firstName}, lastName = ${lastName})`, { correlationId });
     const user = await users.create(email, password, firstName, lastName, saUsername, correlationId);

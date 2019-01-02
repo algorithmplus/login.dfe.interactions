@@ -219,6 +219,57 @@ const update = async (uid, email, firstName, lastName, legacyUsernames, correlat
   }
 };
 
+const findInvitationByEmail = async (email, correlationId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  try {
+    const invitation = await rp({
+      method: 'GET',
+      uri: `${config.directories.service.url}/invitations/by-email/${email}`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+
+    return invitation;
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw new Error(e);
+  }
+};
+
+const acceptInvitation = async (invitationId, password, correlationId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  try {
+    const result = await rp({
+      method: 'POST',
+      uri: `${config.directories.service.url}/invitations/${invitationId}/create_user`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      body: {
+        password,
+      },
+      json: true,
+    });
+
+    return result;
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   authenticate,
   find,
@@ -227,4 +278,6 @@ module.exports = {
   create,
   findByLegacyUsername,
   update,
+  findInvitationByEmail,
+  acceptInvitation,
 };
