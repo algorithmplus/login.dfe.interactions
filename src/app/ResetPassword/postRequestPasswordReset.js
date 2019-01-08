@@ -8,7 +8,6 @@ const logger = require('./../../infrastructure/logger');
 const uuid = require('uuid/v4');
 const NotificationClient = require('login.dfe.notifications.client');
 const config = require('./../../infrastructure/Config')();
-const { getServiceById } = require('./../../infrastructure/applications');
 
 const validate = (email) => {
   const messages = {
@@ -63,9 +62,7 @@ const action = async (req, res) => {
     }
     const saUser = await getSaUser(email, req.id);
     if (saUser) {
-      const service = await getServiceById(req.body.clientId, req.id);
-      const serviceHome = service ? (service.relyingParty.service_home || service.relyingParty.redirect_uris[0]) : '#';
-      await client.sendSAPasswordReset(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
+      await client.sendSAPasswordReset(saUser.email, saUser.firstName, saUser.lastName);
     }
     res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   } catch (e) {
