@@ -44,8 +44,7 @@ const authenticateWithEmail = async (req, client, allowUserName) => {
   if (!user && allowUserName) {
     const saUser = await osaApi.getSaUser(req.body.username, req.id);
     if (saUser) {
-      const serviceHome = client && client.relyingParty ? (client.relyingParty.service_home || client.relyingParty.redirect_uris[0]) : '#';
-      await notificationClient.sendUnmigratedSaUser(saUser.email, saUser.firstName, saUser.lastName, serviceHome);
+      await notificationClient.sendUnmigratedSaUser(saUser.email, saUser.firstName, saUser.lastName);
     }
   }
   return {
