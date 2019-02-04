@@ -9,7 +9,7 @@ switch (directoryType.toLowerCase()) {
   case 'static':
     adapter = StaticUserAdapter;
     break;
-  case 'directoriesapi':
+  case 'api':
     adapter = DirectoriesApiUserAdapter;
     break;
   default:

@@ -16,6 +16,7 @@ const healthCheck = require('login.dfe.healthcheck');
 const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 const KeepAliveAgent = require('agentkeepalive');
 const migratingUserMiddleware = require('./app/utils/migratingUserMiddleware');
+const configSchema = require('./infrastructure/Config/schema');
 
 // const rateLimiter = require('./app/rateLimit');
 
@@ -31,9 +32,7 @@ const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
 
-const { interactionsSchema, validateConfig } = require('login.dfe.config.schema');
-
-validateConfig(interactionsSchema, config, logger, config.hostingEnvironment.env !== 'dev');
+configSchema.validate();
 
 http.GlobalAgent = new KeepAliveAgent({
   maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
