@@ -25,6 +25,7 @@ const migrationUser = require('./app/migration');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const selectOrganisation = require('./app/select-organisation');
+const giasLockout = require('./app/giasLockout');
 const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
@@ -135,6 +136,7 @@ app.use('/:uuid/migration', migrationUser(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
 app.use('/:uuid/select-organisation', selectOrganisation(csrf));
+app.use('/:uuid/gias-lockout', giasLockout(csrf));
 
 if (config.hostingEnvironment.useDevViews) {
   app.use('/dev/', devLauncher(csrf));
@@ -143,6 +145,7 @@ if (config.hostingEnvironment.useDevViews) {
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
   urls: {
+    services: config.hostingEnvironment.servicesUrl,
     help: config.hostingEnvironment.helpUrl,
   },
   app: {
@@ -178,7 +181,7 @@ if (config.hostingEnvironment.env === 'dev') {
   const server = https.createServer(options, app);
 
   server.listen(config.hostingEnvironment.port, () => {
-    logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port} with config:\n${JSON.stringify(config)}`);
+    logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
   });
 } else if (config.hostingEnvironment.env === 'docker') {
   app.listen(config.hostingEnvironment.port, () => {

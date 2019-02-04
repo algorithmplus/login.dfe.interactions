@@ -1,0 +1,37 @@
+<h2 class="heading-large">
+    <%= organisation.name %>
+    <% if(organisation.identifiers.length > 0) { %>
+        (<%= organisation.identifiers.map(i => `${i.type}: ${i.value}`).join(', ') %>)
+    <% } %>
+</h2>
+
+<% announcements.forEach((announcement) => { %>
+    <div class="notification notification-<%= (announcement.level === 2 ? 'error' : 'warning') %>">
+        <h2><%= announcement.title %></h2>
+        <p><%= announcement.message %></p>
+    </div>
+<% }) %>
+
+<div class="row row-spacer">
+    <div class="col-12">
+        <a href="https://get-information-schools.service.gov.uk/Faq">More information about GIAS and service restrictions</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 submit-buttons">
+        <% if(canContinue) { %>
+            <form id="main" method="post" action="<%= postbackDetails.destination %>" style="display: inline-block;">
+                <% Object.keys(postbackDetails.data).forEach((key) => { %>
+                    <input type="hidden" name="<%= key %>" value="<%= postbackDetails.data[key] %>"/>
+                <% }); %>
+                <button class="button" type="submit">Continue</button>
+            </form>
+        <% } else { %>
+            <a href="<%= urls.services %>/my-services" class="button <%= (hasAccessToGias ? 'button-secondary' : '') %>">Go to Services</a>
+        <% } %>
+
+        <% if (hasAccessToGias) { %>
+            <a href="<%= giasServiceHome %>" class="button <%= (canContinue ? 'button-secondary' : '') %>">Go to GIAS</a>
+        <% } %>
+    </div>
+</div>
