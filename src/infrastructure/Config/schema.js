@@ -5,6 +5,7 @@ const logger = require('./../logger');
 
 const hostingEnvironmentSchema = new SimpleSchema({
   rateLimitUrl: patterns.redis,
+  giasApplicationId: patterns.uuid,
 });
 hostingEnvironmentSchema.extend(schemas.hostingEnvironment);
 

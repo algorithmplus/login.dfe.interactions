@@ -13,8 +13,12 @@ const getRolesOfService = async (serviceId, correlationId) => {
     },
   ]);
 };
+const getUsersAccessForServiceInOrganisation = async (userId, serviceId, organisationId, correlationId) => {
+  return undefined;
+};
 
 module.exports = {
   create,
   getRolesOfService,
+  getUsersAccessForServiceInOrganisation,
 };

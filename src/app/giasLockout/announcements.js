@@ -1,5 +1,7 @@
+const config = require('./../../infrastructure/Config')();
 const logger = require('./../../infrastructure/logger');
 const { getOrganisationById } = require('./../../infrastructure/Organisations');
+const { getUsersAccessForServiceInOrganisation } = require('./../../infrastructure/access');
 const InteractionComplete = require('./../InteractionComplete');
 
 const getOrganisationDetails = async (oid, correlationId) => {
@@ -36,7 +38,8 @@ const getOrganisationAnnouncements = async (oid, correlationId) => {
 };
 
 const checkIfUserHasAccessToGias = async (uid, oid, correlationId) => {
-  return false;
+  const giasAccess = await getUsersAccessForServiceInOrganisation(uid, config.hostingEnvironment.giasApplicationId, oid, correlationId);
+  return giasAccess ? true : false;
 };
 
 const get = async (req, res) => {
