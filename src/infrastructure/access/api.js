@@ -83,9 +83,32 @@ const getUsersAccessForServiceInOrganisation = async (userId, serviceId, organis
   }
 };
 
+const getUsersWithAccessToServiceInOrganisation = async (serviceId, organisationId, pageNumber, correlationId) => {
+  const token = await jwtStrategy(config.access.service).getBearerToken();
+
+  try {
+    return await rp({
+      method: 'GET',
+      uri: `${config.access.service.url}/services/${serviceId}/organisations/${organisationId}/users`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return undefined;
+    }
+    throw e;
+  }
+};
+
 
 module.exports = {
   create,
   getRolesOfService,
   getUsersAccessForServiceInOrganisation,
+  getUsersWithAccessToServiceInOrganisation,
 };

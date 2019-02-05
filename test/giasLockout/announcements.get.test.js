@@ -9,6 +9,9 @@ jest.mock('./../../src/infrastructure/Config', () => {
     applications: {
       type: 'static',
     },
+    directories: {
+      type: 'static',
+    },
   });
 });
 jest.mock('./../../src/infrastructure/logger', () => ({
@@ -17,12 +20,14 @@ jest.mock('./../../src/infrastructure/logger', () => ({
 jest.mock('./../../src/infrastructure/Organisations');
 jest.mock('./../../src/infrastructure/access');
 jest.mock('./../../src/infrastructure/applications');
+jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/app/InteractionComplete');
 
 const { mockRequest, mockResponse } = require('./../utils');
 const { getOrganisationById, getPageOfOrganisationAnnouncements } = require('./../../src/infrastructure/Organisations');
-const { getUsersAccessForServiceInOrganisation } = require('./../../src/infrastructure/access');
+const { getUsersWithAccessToServiceInOrganisation } = require('./../../src/infrastructure/access');
 const { getServiceById } = require('./../../src/infrastructure/applications');
+const { find: getUserById } = require('./../../src/infrastructure/Users');
 const InteractionComplete = require('./../../src/app/InteractionComplete');
 const { get } = require('./../../src/app/giasLockout/announcements');
 
@@ -82,19 +87,46 @@ describe('When getting gias lock announcements', () => {
       totalNumberOfRecords: 2,
     });
 
-    getUsersAccessForServiceInOrganisation.mockReset().mockReturnValue({
-      userId: 'user-1',
-      serviceId: 'gias-id',
-      organisationId: 'organisation-1',
-      roles: [],
-      identifiers: [],
-      accessGrantedOn: '2018-08-03T06:51:21Z',
+    getUsersWithAccessToServiceInOrganisation.mockReset().mockReturnValue({
+      services: [
+        {
+          userId: 'user-1',
+          serviceId: 'gias-id',
+          organisationId: 'organisation-1',
+          roles: [],
+          identifiers: [],
+          accessGrantedOn: '2018-08-03T06:51:21Z',
+        },
+      ],
+      page: 1,
+      totalNumberOfPages: 1,
+      totalNumberOfRecords: 1,
     });
 
     getServiceById.mockReset().mockReturnValue({
       relyingParty: {
         service_home: 'https://gias.test',
       },
+    });
+
+    getUserById.mockReset().mockImplementation((userId) => {
+      if (userId === 'user-2') {
+        return {
+          sub: 'user-2',
+          given_name: 'User',
+          family_name: 'Two',
+          email: 'user.two@unit.tests',
+        };
+      }
+      if (userId === 'user-3') {
+        return {
+          sub: 'user-3',
+          given_name: 'User',
+          family_name: 'Three',
+          email: 'user.three@unit.tests',
+        };
+      }
+      return undefined;
     });
 
     InteractionComplete.getPostbackDetails.mockReset().mockReturnValue({
@@ -175,20 +207,25 @@ describe('When getting gias lock announcements', () => {
   it('then it should include user having access to GIAS if they have GIAS for organisation', async () => {
     await get(req, res);
 
-    expect(getUsersAccessForServiceInOrganisation).toHaveBeenCalledTimes(1);
-    expect(getUsersAccessForServiceInOrganisation).toHaveBeenCalledWith('user-1', 'gias-id', 'organisation-1', '123');
+    expect(getUsersWithAccessToServiceInOrganisation).toHaveBeenCalledTimes(1);
+    expect(getUsersWithAccessToServiceInOrganisation).toHaveBeenCalledWith('gias-id', 'organisation-1', 1, '123');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       hasAccessToGias: true,
     });
   });
 
   it('then it should include user not having access to GIAS if they do not have GIAS for organisation', async () => {
-    getUsersAccessForServiceInOrganisation.mockReturnValue(undefined);
+    getUsersWithAccessToServiceInOrganisation.mockReturnValue({
+      services: [],
+      page: 1,
+      totalNumberOfPages: 0,
+      totalNumberOfRecords: 0,
+    });
 
     await get(req, res);
 
-    expect(getUsersAccessForServiceInOrganisation).toHaveBeenCalledTimes(1);
-    expect(getUsersAccessForServiceInOrganisation).toHaveBeenCalledWith('user-1', 'gias-id', 'organisation-1', '123');
+    expect(getUsersWithAccessToServiceInOrganisation).toHaveBeenCalledTimes(1);
+    expect(getUsersWithAccessToServiceInOrganisation).toHaveBeenCalledWith('gias-id', 'organisation-1', 1, '123');
     expect(res.render.mock.calls[0][1]).toMatchObject({
       hasAccessToGias: false,
     });
@@ -229,13 +266,72 @@ describe('When getting gias lock announcements', () => {
   });
 
   it('then it should not include gias service home url for view if user does not have access to gias', async () => {
-    getUsersAccessForServiceInOrganisation.mockReturnValue(undefined);
+    getUsersWithAccessToServiceInOrganisation.mockReturnValue({
+      services: [],
+      page: 1,
+      totalNumberOfPages: 0,
+      totalNumberOfRecords: 0,
+    });
 
     await get(req, res);
 
     expect(getServiceById).toHaveBeenCalledTimes(0);
     expect(res.render.mock.calls[0][1]).toMatchObject({
       giasServiceHome: undefined,
+    });
+  });
+
+  it('then it should include display names and email addresses for users that have access to GIAS if current user does not have GIAS access', async () => {
+    getUsersWithAccessToServiceInOrganisation.mockReturnValue({
+      services: [
+        { userId: 'user-2' },
+        { userId: 'user-3' },
+      ],
+      page: 1,
+      totalNumberOfPages: 1,
+      totalNumberOfRecords: 2,
+    });
+
+    await get(req, res);
+
+    expect(getUserById).toHaveBeenCalledTimes(2);
+    expect(getUserById).toHaveBeenCalledWith('user-2', '123');
+    expect(getUserById).toHaveBeenCalledWith('user-3', '123');
+    expect(res.render.mock.calls[0][1]).toMatchObject({
+      giasUserDetails: [
+        {
+          sub: 'user-2',
+          given_name: 'User',
+          family_name: 'Two',
+          email: 'user.two@unit.tests',
+        },
+        {
+          sub: 'user-3',
+          given_name: 'User',
+          family_name: 'Three',
+          email: 'user.three@unit.tests',
+        },
+      ],
+    });
+  });
+
+  it('then it should not include display names and email addresses for users that have access to GIAS if current user does have GIAS access', async () => {
+    getUsersWithAccessToServiceInOrganisation.mockReturnValue({
+      services: [
+        { userId: 'user-1' },
+        { userId: 'user-2' },
+        { userId: 'user-3' },
+      ],
+      page: 1,
+      totalNumberOfPages: 1,
+      totalNumberOfRecords: 2,
+    });
+
+    await get(req, res);
+
+    expect(getUserById).toHaveBeenCalledTimes(0);
+    expect(res.render.mock.calls[0][1]).toMatchObject({
+      giasUserDetails: [],
     });
   });
 

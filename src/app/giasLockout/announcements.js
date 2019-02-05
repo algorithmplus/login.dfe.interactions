@@ -1,8 +1,9 @@
 const config = require('./../../infrastructure/Config')();
 const logger = require('./../../infrastructure/logger');
 const { getOrganisationById, getPageOfOrganisationAnnouncements } = require('./../../infrastructure/Organisations');
-const { getUsersAccessForServiceInOrganisation } = require('./../../infrastructure/access');
+const { getUsersWithAccessToServiceInOrganisation } = require('./../../infrastructure/access');
 const { getServiceById } = require('./../../infrastructure/applications');
+const { find: getUserById } = require('./../../infrastructure/Users');
 const InteractionComplete = require('./../InteractionComplete');
 
 const getOrganisationDetails = async (oid, correlationId) => {
@@ -44,9 +45,38 @@ const getOrganisationAnnouncements = async (oid, correlationId) => {
   return announcements;
 };
 
-const checkIfUserHasAccessToGias = async (uid, oid, correlationId) => {
-  const giasAccess = await getUsersAccessForServiceInOrganisation(uid, config.hostingEnvironment.giasApplicationId, oid, correlationId);
-  return giasAccess ? true : false;
+const getAllUsersIdsWithAccessToGIASAtOrganisation = async (oid, correlationId) => {
+  const userIds = [];
+  let pageNumber = 1;
+  let numberOfPages;
+  while (numberOfPages === undefined || pageNumber <= numberOfPages) {
+    const page = await getUsersWithAccessToServiceInOrganisation(config.hostingEnvironment.giasApplicationId, oid, pageNumber, correlationId);
+    if (!page) {
+      break;
+    }
+
+    if (page.services) {
+      userIds.push(...page.services.map(s => s.userId));
+    }
+
+    pageNumber += 1;
+    numberOfPages = page.totalNumberOfPages;
+  }
+  return userIds;
+};
+
+const checkIfUserHasAccessToGias = (uid, userIdsWithAccessToGiasAtOrganisation) => {
+  const match = userIdsWithAccessToGiasAtOrganisation.find(x => x.toLowerCase() === uid.toLowerCase());
+  return match ? true : false;
+};
+
+const getGiasUserDetails = async (userIdsWithAccessToGIASAtOrganisation, correlationId) => {
+  const userDetails = [];
+  for (let i = 0; i < userIdsWithAccessToGIASAtOrganisation.length; i += 1) {
+    const user = await getUserById(userIdsWithAccessToGIASAtOrganisation[i], correlationId);
+    userDetails.push(user);
+  }
+  return userDetails;
 };
 
 const getGiasServiceHome = async (correlationId) => {
@@ -87,8 +117,10 @@ const get = async (req, res) => {
 
   const canContinue = announcements.filter(a => a.level === 2).length === 0;
   const postbackDetails = InteractionComplete.getPostbackDetails(req.params.uuid, interactionCompleteData);
-  const hasAccessToGias = await checkIfUserHasAccessToGias(req.interaction.uid, req.interaction.oid, correlationId);
+  const userIdsWithAccessToGIASAtOrganisation = await getAllUsersIdsWithAccessToGIASAtOrganisation(req.interaction.oid, correlationId);
+  const hasAccessToGias = checkIfUserHasAccessToGias(req.interaction.uid, userIdsWithAccessToGIASAtOrganisation);
   const giasServiceHome = hasAccessToGias ? await getGiasServiceHome(correlationId) : undefined;
+  const giasUserDetails = !hasAccessToGias ? await getGiasUserDetails(userIdsWithAccessToGIASAtOrganisation, correlationId) : [];
 
   const model = {
     organisation,
@@ -97,6 +129,7 @@ const get = async (req, res) => {
     canContinue,
     postbackDetails,
     giasServiceHome,
+    giasUserDetails,
   };
   return res.render('giasLockout/views/announcements', model);
 };
