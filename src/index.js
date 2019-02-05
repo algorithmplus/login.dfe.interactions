@@ -180,7 +180,7 @@ if (config.hostingEnvironment.env === 'dev') {
   const server = https.createServer(options, app);
 
   server.listen(config.hostingEnvironment.port, () => {
-    logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
+    logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}/dev`);
   });
 } else if (config.hostingEnvironment.env === 'docker') {
   app.listen(config.hostingEnvironment.port, () => {
@@ -188,6 +188,6 @@ if (config.hostingEnvironment.env === 'dev') {
   });
 } else {
   app.listen(process.env.PORT, () => {
-    logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
+    logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}/dev`);
   });
 }

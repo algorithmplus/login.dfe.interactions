@@ -1,7 +1,8 @@
 const config = require('./../../infrastructure/Config')();
 const logger = require('./../../infrastructure/logger');
-const { getOrganisationById } = require('./../../infrastructure/Organisations');
+const { getOrganisationById, getPageOfOrganisationAnnouncements } = require('./../../infrastructure/Organisations');
 const { getUsersAccessForServiceInOrganisation } = require('./../../infrastructure/access');
+const { getServiceById } = require('./../../infrastructure/applications');
 const InteractionComplete = require('./../InteractionComplete');
 
 const getOrganisationDetails = async (oid, correlationId) => {
@@ -22,24 +23,34 @@ const getOrganisationDetails = async (oid, correlationId) => {
 };
 
 const getOrganisationAnnouncements = async (oid, correlationId) => {
-  // return [];
-  return [
-    {
-      title: 'Announcement 1',
-      message: 'Message one',
-      level: 1,
-    },
-    {
-      title: 'Announcement 2',
-      message: 'Message two',
-      level: 2,
-    },
-  ];
+  const announcements = [];
+  let pageNumber = 1;
+  let numberOfPages;
+  while (numberOfPages === undefined || pageNumber <= numberOfPages) {
+    const page = await getPageOfOrganisationAnnouncements(oid, pageNumber, correlationId);
+
+    if (page.announcements) {
+      announcements.push(...page.announcements.map(a => ({
+        title: a.title,
+        message: a.body,
+        level: a.type === 1 || a.type === 4 ? 1 : 2,
+      })));
+    }
+
+    pageNumber += 1;
+    numberOfPages = page.numberOfPages;
+  }
+  return announcements;
 };
 
 const checkIfUserHasAccessToGias = async (uid, oid, correlationId) => {
   const giasAccess = await getUsersAccessForServiceInOrganisation(uid, config.hostingEnvironment.giasApplicationId, oid, correlationId);
   return giasAccess ? true : false;
+};
+
+const getGiasServiceHome = async (correlationId) => {
+  const application = await getServiceById(config.hostingEnvironment.giasApplicationId, correlationId);
+  return application.relyingParty.service_home;
 };
 
 const get = async (req, res) => {
@@ -76,6 +87,7 @@ const get = async (req, res) => {
   const canContinue = announcements.filter(a => a.level === 2).length === 0;
   const postbackDetails = InteractionComplete.getPostbackDetails(req.params.uuid, interactionCompleteData);
   const hasAccessToGias = await checkIfUserHasAccessToGias(req.interaction.uid, req.interaction.oid, correlationId);
+  const giasServiceHome = hasAccessToGias ? await getGiasServiceHome(correlationId) : undefined;
 
   const model = {
     organisation,
@@ -83,7 +95,7 @@ const get = async (req, res) => {
     hasAccessToGias,
     canContinue,
     postbackDetails,
-    giasServiceHome: '/dev/gias',
+    giasServiceHome,
   };
   return res.render('giasLockout/views/announcements', model);
 };

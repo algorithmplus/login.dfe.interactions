@@ -117,10 +117,15 @@ const getOrganisationById = async (id, correlationId) => {
   return callOrganisationsApi(`organisations/v2/${id}`, 'GET', undefined, correlationId);
 };
 
+const getPageOfOrganisationAnnouncements = async (organisationId, pageNumber, correlationId) => {
+  return callOrganisationsApi(`/organisations/${organisationId}/announcements?page=${pageNumber}`, 'GET', undefined, correlationId);
+};
+
 module.exports = {
   getOrganisationByExternalId,
   associatedWithUser,
   putSingleServiceIdentifierForUser,
   setUsersRoleAtOrg,
   getOrganisationById,
+  getPageOfOrganisationAnnouncements,
 };
