@@ -21,14 +21,10 @@
         <%if(announcement.level === 2 && !hasAccessToGias) {%>
             <p>Your organisation will not have access to these DfE services until GIAS is updated to confirm all details are correct.</p>
         <%}%>
+        <p class="small"><a href="https://get-information-schools.service.gov.uk/Faq">More information about GIAS and service restrictions</a></p>
     </div>
 <% }) %>
 
-<div class="row row-spacer">
-    <div class="col-12">
-        <a href="https://get-information-schools.service.gov.uk/Faq">More information about GIAS and service restrictions</a>
-    </div>
-</div>
 <div class="row">
     <div class="col-12 submit-buttons">
         <% if(canContinue) { %>
