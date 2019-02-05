@@ -63,7 +63,7 @@ describe('When getting gias lock announcements', () => {
           id: 'announcement-2',
           originId: 'unit-test-2',
           organisationId: 'organisation-1',
-          type: 2,
+          type: 5,
           title: 'Announcement Two',
           summary: 'Second announcement',
           body: 'unit test announcement two',
@@ -206,11 +206,13 @@ describe('When getting gias lock announcements', () => {
           title: 'Announcement One',
           message: 'unit test announcement one',
           level: 1,
+          type: 1,
         },
         {
           title: 'Announcement Two',
           message: 'unit test announcement two',
           level: 2,
+          type: 5,
         },
       ],
     });

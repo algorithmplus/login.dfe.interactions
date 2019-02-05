@@ -9,6 +9,18 @@
     <div class="notification notification-<%= (announcement.level === 2 ? 'error' : 'warning') %>">
         <h2><%= announcement.title %></h2>
         <p><%= announcement.message %></p>
+        <%if(announcement.level === 1 && hasAccessToGias) {%>
+            <p>You must confirm the GIAS record to prevent your access to some DfE services being suspended.</p>
+        <%}%>
+        <%if(announcement.level === 1 && !hasAccessToGias) {%>
+            <p>A user at your organisation must confirm the GIAS record to prevent your access to some DfE services being restricted.</p>
+        <%}%>
+        <%if(announcement.level === 2 && hasAccessToGias) {%>
+            <p>You will not have access to these DfE services until GIAS is updated to confirm all details are correct.</p>
+        <%}%>
+        <%if(announcement.level === 2 && !hasAccessToGias) {%>
+            <p>Your organisation will not have access to these DfE services until GIAS is updated to confirm all details are correct.</p>
+        <%}%>
     </div>
 <% }) %>
 

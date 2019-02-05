@@ -34,6 +34,7 @@ const getOrganisationAnnouncements = async (oid, correlationId) => {
         title: a.title,
         message: a.body,
         level: a.type === 1 || a.type === 4 ? 1 : 2,
+        type: a.type,
       })));
     }
 
