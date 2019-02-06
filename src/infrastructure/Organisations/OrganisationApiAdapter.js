@@ -69,32 +69,32 @@ const callOrganisationsApi = async (endpoint, method, body, correlationId) => {
   const retryFactor = config.organisations.service.retryFactor || 2;
 
   return promiseRetry(async (retry, number) => {
-    try {
-      return await rp({
-        method,
-        uri: `${config.organisations.service.url}/${endpoint}`,
-        headers: {
-          authorization: `bearer ${token}`,
-          'x-correlation-id': correlationId,
-        },
-        body,
-        json: true,
-        strictSSL: config.hostingEnvironment.env.toLowerCase() !== 'dev',
-      });
-    } catch (e) {
-      const status = e.statusCode ? e.statusCode : 500;
-      if (status === 401 || status === 404) {
-        return null;
+      try {
+        return await rp({
+          method,
+          uri: `${config.organisations.service.url}/${endpoint}`,
+          headers: {
+            authorization: `bearer ${token}`,
+            'x-correlation-id': correlationId,
+          },
+          body,
+          json: true,
+          strictSSL: config.hostingEnvironment.env.toLowerCase() !== 'dev',
+        });
+      } catch (e) {
+        const status = e.statusCode ? e.statusCode : 500;
+        if (status === 401 || status === 404) {
+          return null;
+        }
+        if (status === 409) {
+          return false;
+        }
+        if ((status === 500 || status === 503) && number < numberOfRetires) {
+          retry();
+        }
+        throw e;
       }
-      if (status === 409) {
-        return false;
-      }
-      if ((status === 500 || status === 503) && number < numberOfRetires) {
-        retry();
-      }
-      throw e;
-    }
-  }, { factor: retryFactor },
+    }, { factor: retryFactor },
   );
 };
 
@@ -113,9 +113,19 @@ const putSingleServiceIdentifierForUser = async (userId, serviceId, orgId, value
   return result === undefined;
 };
 
+const getOrganisationById = async (id, correlationId) => {
+  return callOrganisationsApi(`organisations/v2/${id}`, 'GET', undefined, correlationId);
+};
+
+const getPageOfOrganisationAnnouncements = async (organisationId, pageNumber, correlationId) => {
+  return callOrganisationsApi(`/organisations/${organisationId}/announcements?page=${pageNumber}`, 'GET', undefined, correlationId);
+};
+
 module.exports = {
   getOrganisationByExternalId,
   associatedWithUser,
   putSingleServiceIdentifierForUser,
   setUsersRoleAtOrg,
+  getOrganisationById,
+  getPageOfOrganisationAnnouncements,
 };

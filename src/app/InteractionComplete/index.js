@@ -27,12 +27,29 @@ const buildPostbackData = (uuid, data) => {
 
 
 class InteractionComplete {
+  static getPostbackDetails(uuid, data) {
+    const postbackData = { uuid };
+
+    if (data !== null) {
+      Object.keys(data).forEach((key) => {
+        postbackData[key] = data[key];
+      });
+    }
+
+    postbackData.sig = signData(postbackData);
+
+    return {
+      destination: `${Config.oidcService.url}/${uuid}/complete`,
+      data: postbackData,
+    };
+  };
+
   static process(uuid, data, req, res) {
-    const postbackData = buildPostbackData(uuid, data);
+    const postbackDetails = InteractionComplete.getPostbackDetails(uuid, data);
 
     sendResult(req, res, 'InteractionComplete/views/index', {
-      destination: `${Config.oidcService.url}/${uuid}/complete`,
-      postbackData,
+      destination: postbackDetails.destination,
+      postbackData: postbackDetails.data,
       noredirect: (Config.hostingEnvironment.env === 'dev').toString(),
     });
   }

@@ -50,7 +50,7 @@ describe('When getting the request password reset view', () => {
     expect(res.render.mock.calls[0][1].validationFailed).toBe(false);
   });
 
-  it('then the client is retrieved from hotconfig api', async () => {
+  it('then the client is retrieved from applications api', async () => {
     await getRequestPasswordReset(req, res);
 
     expect(applications.getServiceById.mock.calls).toHaveLength(1);

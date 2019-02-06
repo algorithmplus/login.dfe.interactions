@@ -28,7 +28,7 @@ const callApi = async (opts) => {
 
   try {
     const uri = `${config.oidcService.url}${route}`;
-    await rp({
+    return await rp({
       method: method || 'GET',
       uri,
       headers: {
@@ -37,8 +37,6 @@ const callApi = async (opts) => {
       body,
       json: true,
     });
-
-    return true;
   } catch (e) {
     if (e.statusCode === 404) {
       return undefined;

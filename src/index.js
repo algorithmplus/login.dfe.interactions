@@ -16,6 +16,7 @@ const healthCheck = require('login.dfe.healthcheck');
 const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 const KeepAliveAgent = require('agentkeepalive');
 const migratingUserMiddleware = require('./app/utils/migratingUserMiddleware');
+const configSchema = require('./infrastructure/Config/schema');
 
 // const rateLimiter = require('./app/rateLimit');
 
@@ -25,14 +26,13 @@ const migrationUser = require('./app/migration');
 const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const selectOrganisation = require('./app/select-organisation');
+const giasLockout = require('./app/giasLockout');
 const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
 
-const { interactionsSchema, validateConfig } = require('login.dfe.config.schema');
-
-validateConfig(interactionsSchema, config, logger, config.hostingEnvironment.env !== 'dev');
+configSchema.validate();
 
 http.GlobalAgent = new KeepAliveAgent({
   maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
@@ -135,6 +135,7 @@ app.use('/:uuid/migration', migrationUser(csrf));
 app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
 app.use('/:uuid/select-organisation', selectOrganisation(csrf));
+app.use('/:uuid/gias-lockout', giasLockout(csrf));
 
 if (config.hostingEnvironment.useDevViews) {
   app.use('/dev/', devLauncher(csrf));
@@ -143,6 +144,7 @@ if (config.hostingEnvironment.useDevViews) {
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
   urls: {
+    services: config.hostingEnvironment.servicesUrl,
     help: config.hostingEnvironment.helpUrl,
   },
   app: {
@@ -178,7 +180,7 @@ if (config.hostingEnvironment.env === 'dev') {
   const server = https.createServer(options, app);
 
   server.listen(config.hostingEnvironment.port, () => {
-    logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port} with config:\n${JSON.stringify(config)}`);
+    logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}/dev`);
   });
 } else if (config.hostingEnvironment.env === 'docker') {
   app.listen(config.hostingEnvironment.port, () => {
@@ -186,6 +188,6 @@ if (config.hostingEnvironment.env === 'dev') {
   });
 } else {
   app.listen(process.env.PORT, () => {
-    logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
+    logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}/dev`);
   });
 }
