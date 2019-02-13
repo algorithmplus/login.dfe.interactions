@@ -19,6 +19,7 @@ describe('When user is shown username/password', () => {
   let req;
   let res;
   let clientsGet;
+  let bannerGet;
   let getInteractionById;
   let loggerAudit;
 
@@ -43,8 +44,18 @@ describe('When user is shown username/password', () => {
         },
       },
     });
+
+    bannerGet = jest.fn().mockReturnValue([{
+      id: 'bannerId',
+      serviceId: 'serviceId',
+      name: 'banner name',
+      title: 'Custom header message',
+      message: 'New message',
+      isActive: true,
+    }]);
     const applications = require('./../../src/infrastructure/applications');
     applications.getServiceById = clientsGet;
+    applications.listAllBannersForService = bannerGet;
 
     loggerAudit = jest.fn();
     const logger = require('./../../src/infrastructure/logger');
@@ -75,7 +86,7 @@ describe('When user is shown username/password', () => {
       expect(clientsGet.mock.calls).toHaveLength(1);
       expect(res.render.mock.calls[0][1]).toMatchObject({
         header: 'Custom header message',
-        headerMessage: 'New message',
+        headerMessage: '<p>New message</p>',
         supportsUsernameLogin: true,
       });
     });

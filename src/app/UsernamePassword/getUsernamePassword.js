@@ -2,6 +2,12 @@
 
 const applicationsApi = require('./../../infrastructure/applications');
 const oidc = require('./../../infrastructure/oidc');
+const moment = require('moment');
+const { markdown } = require('markdown');
+
+const convertMarkdownToHtml = (content) => {
+  return markdown.toHTML(content);
+};
 
 const get = async (req, res) => {
   const interactionDetails = await oidc.getInteractionById(req.params.uuid);
@@ -21,6 +27,21 @@ const get = async (req, res) => {
     throw new Error(details);
   }
 
+  const allBannersForService = await applicationsApi.listAllBannersForService(client.id, req.id);
+  let header;
+  let headerMessage;
+  if (allBannersForService) {
+    const now = moment();
+    const timeLimitedBanner = allBannersForService.find(x => moment(now).isBetween(x.validFrom, x.validTo) === true);
+    const alwaysOnBanner = allBannersForService.find(x => x.isActive === true);
+    if (timeLimitedBanner) {
+      header = timeLimitedBanner.title;
+      headerMessage = convertMarkdownToHtml(timeLimitedBanner.message);
+    } else if (alwaysOnBanner) {
+      header = alwaysOnBanner.title;
+      headerMessage = convertMarkdownToHtml(alwaysOnBanner.message);
+    }
+  }
   req.migrationUser = null;
   req.session.redirectUri = null;
 
@@ -33,8 +54,8 @@ const get = async (req, res) => {
     csrfToken: req.csrfToken(),
     redirectUri: req.query.redirect_uri,
     validationMessages: {},
-    header: !client.relyingParty.params || client.relyingParty.params.header,
-    headerMessage: !client.relyingParty.params || client.relyingParty.params.headerMessage,
+    header,
+    headerMessage,
     supportsUsernameLogin: !client.relyingParty.params || client.relyingParty.params.supportsUsernameLogin,
   });
 };
