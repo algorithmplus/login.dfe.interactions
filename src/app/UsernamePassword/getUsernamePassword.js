@@ -3,6 +3,11 @@
 const applicationsApi = require('./../../infrastructure/applications');
 const oidc = require('./../../infrastructure/oidc');
 const moment = require('moment');
+const { markdown } = require('markdown');
+
+const convertMarkdownToHtml = (content) => {
+  return markdown.toHTML(content);
+};
 
 const get = async (req, res) => {
   const interactionDetails = await oidc.getInteractionById(req.params.uuid);
@@ -31,10 +36,10 @@ const get = async (req, res) => {
     const alwaysOnBanner = allBannersForService.find(x => x.isActive === true);
     if (timeLimitedBanner) {
       header = timeLimitedBanner.title;
-      headerMessage = timeLimitedBanner.message;
+      headerMessage = convertMarkdownToHtml(timeLimitedBanner.message);
     } else if (alwaysOnBanner) {
       header = alwaysOnBanner.title;
-      headerMessage = alwaysOnBanner.message;
+      headerMessage = convertMarkdownToHtml(alwaysOnBanner.message);
     }
   }
   req.migrationUser = null;

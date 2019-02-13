@@ -86,7 +86,7 @@ describe('When user is shown username/password', () => {
       expect(clientsGet.mock.calls).toHaveLength(1);
       expect(res.render.mock.calls[0][1]).toMatchObject({
         header: 'Custom header message',
-        headerMessage: 'New message',
+        headerMessage: '<p>New message</p>',
         supportsUsernameLogin: true,
       });
     });
