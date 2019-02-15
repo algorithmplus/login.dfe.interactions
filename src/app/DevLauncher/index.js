@@ -47,8 +47,9 @@ module.exports = () => {
     return res.json({
       client_id: 'local',
       redirect_uri: 'https://localhost:4431',
-      uid: '23121d3c-84df-44ac-b458-3d63a9a05497',
+      uid: 'A92D1615-F520-4D0D-A106-9A9554A8D1EF',
       oid: 'fa460f7c-8ab9-4cee-aaff-82d6d341d702',
+      scopes: ['openid', 'profile', 'email', 'organisation'],
     });
   });
 
