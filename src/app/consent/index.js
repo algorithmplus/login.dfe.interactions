@@ -15,6 +15,7 @@ const registerRoutes = (csrf) => {
   router.use(appendInteractionDetails);
 
   router.get('/', csrf, asyncWrapper(grantAccess.get));
+  router.post('/', csrf, asyncWrapper(grantAccess.post));
 
   return router;
 };
