@@ -22,6 +22,9 @@ const getPageOfOrganisationAnnouncements = async (organisationId, pageNumber, co
     totalNumberOfRecords: 0,
   });
 };
+const associatedWithUser = async (userId, correlationId) => {
+  return Promise.resolve([]);
+}
 
 module.exports = {
   getOrganisationByExternalId,
@@ -29,4 +32,5 @@ module.exports = {
   putSingleServiceIdentifierForUser,
   getOrganisationById,
   getPageOfOrganisationAnnouncements,
+  associatedWithUser,
 };

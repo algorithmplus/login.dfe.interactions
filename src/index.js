@@ -27,6 +27,7 @@ const resetPassword = require('./app/ResetPassword');
 const digipass = require('./app/Digipass');
 const selectOrganisation = require('./app/select-organisation');
 const giasLockout = require('./app/giasLockout');
+const consent = require('./app/consent');
 const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
@@ -136,6 +137,7 @@ app.use('/:uuid/resetpassword', resetPassword(csrf));
 app.use('/:uuid/digipass', digipass(csrf));
 app.use('/:uuid/select-organisation', selectOrganisation(csrf));
 app.use('/:uuid/gias-lockout', giasLockout(csrf));
+app.use('/:uuid/consent', consent(csrf));
 
 if (config.hostingEnvironment.useDevViews) {
   app.use('/dev/', devLauncher(csrf));
