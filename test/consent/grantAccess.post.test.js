@@ -56,7 +56,7 @@ describe('when handling user granting application access', () => {
       uid: 'user-1',
       status: 'success',
       type: 'consent',
-      organisations: 'org-1|org-2',
+      organisations: '["org-1","org-2"]',
     }, req, res);
   });
 
@@ -71,7 +71,7 @@ describe('when handling user granting application access', () => {
       uid: 'user-1',
       status: 'success',
       type: 'consent',
-      organisations: 'org-1',
+      organisations: '["org-1"]',
     }, req, res);
   });
 
@@ -86,7 +86,7 @@ describe('when handling user granting application access', () => {
       uid: 'user-1',
       status: 'success',
       type: 'consent',
-      organisations: 'org-1',
+      organisations: '["org-1"]',
     }, req, res);
   });
 

@@ -44,7 +44,7 @@ const post = async (req, res) => {
     uid: req.interaction.uid,
     status: 'success',
     type: 'consent',
-    organisations: organisations.join('|'),
+    organisations: JSON.stringify(organisations),
   };
   InteractionComplete.process(req.params.uuid, data, req, res);
 };
