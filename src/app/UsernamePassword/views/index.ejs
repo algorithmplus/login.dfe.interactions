@@ -51,6 +51,9 @@
                         <p class="form-help font-xsmall"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">I've forgotten my password</a></p>
                     </div>
                 </fieldset>
+                <div class="panel panel-border-wide">
+                    <p>By continuing you accept the <a href="/terms">terms and conditions</a>.</p>
+                </div>
                 <div class="form-submit submit-buttons">
                     <button type="submit" class="button">
                         Sign in
@@ -61,25 +64,12 @@
                         </span>
                     </button>
                 </div>
-                <div class="panel panel-border-wide">
-                    <p>By continuing you accept the <a href="/terms">terms and conditions</a>.</p>
-                </div>
             </form>
         </div>
     </div>
     <div class="row">
         <div class="col-8">
-            <% if(locals.supportsUsernameLogin) {%>
-            <details class="helpdesk">
-                <summary><span class="summary">Having problems?</span></summary>
-                <div class="panel panel-border-narrow">
-                    <p>If you are using DfE Sign-in for the first time you can use your Secure Access login details to create a DfE Sign-in account. Once you have created your account you will no longer use your Secure Access details to login.
-                        If you are still having problems, read our <a href="<%=locals.urls.help%>/contact">FAQs</a>.</p>
-                </div>
-            </details>
-            <%} else {%>
             <%- include('../../includes/helpdesk'); %>
-            <%}%>
         </div>
     </div>
 
