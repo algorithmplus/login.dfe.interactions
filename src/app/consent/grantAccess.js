@@ -39,7 +39,7 @@ const post = async (req, res) => {
   }
   const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
   const organisations = [];
-  const organisationIds = req.body.organisation instanceof Array ? req.body.organisation : [req.body.organisation];
+  const organisationIds = req.body.organisation ? (req.body.organisation instanceof Array ? req.body.organisation : [req.body.organisation]) : [];
   for (let i = 0; i < organisationIds.length; i += 1) {
     organisations.push(userOrganisations.find(o => o.organisation.id.toUpperCase() === organisationIds[i].toUpperCase()).organisation);
   }
