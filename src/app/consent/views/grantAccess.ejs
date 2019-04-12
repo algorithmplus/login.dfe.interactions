@@ -1,32 +1,22 @@
 <div class="row">
     <div class="col-12">
         <h1 class="heading-xlarge">
-            Allow <%= application.name %> to access your details?
+            Do you want to use <%= application.name %> to send us your data?
         </h1>
-        <p class="lede"><strong><%= application.name %></strong> has requested to access the following information about
-            your <strong><%= user.email %></strong> DfE Sign-in account.</p>
+        <p class="lede">Send Data to DfE is a secure new way to send your data.</p>
+        <p>The service is currently being tested. Please note that all schools must complete their January census returns as normal using COLLECT.</p>
+        <p>On completion of the trial we will contact you to confirm your data has been deleted.</p>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <ul class="list list-bullet">
-            <% if (scopes.find(x => x === 'profile')) { %>
-                <li>Name</li>
-            <% } %>
-            <% if (scopes.find(x => x === 'email')) { %>
-                <li>Email address</li>
-            <% } %>
-        </ul>
-    </div>
-</div>
+
 
 <form id="main" method="post" style="display: inline-block;">
     <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
     <% if (user.organisations.length > 0) { %>
         <div class="row">
             <div class="col-12">
-                <h4 class="heading-small">Organisations</h4>
+                <h4 class="heading-small">Allow <%= application.name %> to send data for the following Organisations.</h4>
                 <% user.organisations.forEach((organisation) => { %>
                 <div class="multiple-choice">
                     <input type="checkbox" name="organisation" id="org<%=organisation.id%>" value="<%=organisation.id%>">
@@ -40,8 +30,8 @@
 
     <div class="row">
         <div class="col-12 submit-buttons">
-            <button class="button" type="submit">Allow</button>
-            <a href="<%=redirectUri%>?error=consent_denied" class="button button-secondary">Deny</a>
+            <button class="button" type="submit">Yes, i want to use <%= application.name %></button>
+            <a href="<%=redirectUri%>?error=consent_denied" class="button button-secondary">Not now</a>
         </div>
     </div>
 </form>
