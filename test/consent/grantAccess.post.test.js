@@ -19,8 +19,23 @@ jest.mock('./../../src/app/InteractionComplete');
 const { mockRequest, mockResponse } = require('./../utils');
 const InteractionComplete = require('./../../src/app/InteractionComplete');
 const { post } = require('./../../src/app/consent/grantAccess');
+const { associatedWithUser: getUserOrganisations } = require('./../../src/infrastructure/Organisations');
 
 const res = mockResponse();
+const orgData= [
+  {
+    organisation: {
+      id: 'org-1',
+      name: 'Organisation One',
+    },
+  },
+  {
+    organisation: {
+      id: 'org-2',
+      name: 'Organisation Two',
+    },
+  },
+];
 
 describe('when handling user granting application access', () => {
   let req;
@@ -44,51 +59,12 @@ describe('when handling user granting application access', () => {
       },
     });
 
+    getUserOrganisations.mockReset().mockReturnValue(orgData)
+
     res.mockResetAll();
   });
 
-  it('then it should complete interaction with selected organisations', async () => {
-    await post(req, res);
 
-    expect(InteractionComplete.process).toHaveBeenCalledTimes(1);
-    expect(InteractionComplete.process).toHaveBeenCalledWith('interaction-1', {
-      uuid: 'interaction-1',
-      uid: 'user-1',
-      status: 'success',
-      type: 'consent',
-      organisations: '["org-1","org-2"]',
-    }, req, res);
-  });
-
-  it('then it should complete interaction with selected organisation when organisation array', async () => {
-    req.body.organisation = ['org-1'];
-
-    await post(req, res);
-
-    expect(InteractionComplete.process).toHaveBeenCalledTimes(1);
-    expect(InteractionComplete.process).toHaveBeenCalledWith('interaction-1', {
-      uuid: 'interaction-1',
-      uid: 'user-1',
-      status: 'success',
-      type: 'consent',
-      organisations: '["org-1"]',
-    }, req, res);
-  });
-
-  it('then it should complete interaction with selected organisation when organisation string', async () => {
-    req.body.organisation = 'org-1';
-
-    await post(req, res);
-
-    expect(InteractionComplete.process).toHaveBeenCalledTimes(1);
-    expect(InteractionComplete.process).toHaveBeenCalledWith('interaction-1', {
-      uuid: 'interaction-1',
-      uid: 'user-1',
-      status: 'success',
-      type: 'consent',
-      organisations: '["org-1"]',
-    }, req, res);
-  });
 
   it('then it should redirect back to relying party if interaction has expired', async () => {
     req.interaction = undefined;
