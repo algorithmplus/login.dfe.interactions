@@ -37,8 +37,12 @@ const post = async (req, res) => {
     logger.warn(`Request to GIAS lockout with expired session (uuid: ${req.params.uuid})`, { correlationId });
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
   }
-
-  const organisations = req.body.organisation instanceof Array ? req.body.organisation : [req.body.organisation];
+  const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
+  const organisations = [];
+  const organisationIds = req.body.organisation instanceof Array ? req.body.organisation : [req.body.organisation];
+  for (let i = 0; i < organisationIds.length; i += 1) {
+    organisations.push(userOrganisations.find(o => o.organisation.id.toUpperCase() === organisationIds[i].toUpperCase()).organisation);
+  }
   const data = {
     uuid: req.params.uuid,
     uid: req.interaction.uid,
