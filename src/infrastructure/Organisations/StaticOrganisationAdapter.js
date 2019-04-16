@@ -26,6 +26,10 @@ const associatedWithUser = async (userId, correlationId) => {
   return Promise.resolve([]);
 }
 
+const associatedWithUserV2 = async (userId, correlationId) => {
+  return Promise.resolve([]);
+}
+
 module.exports = {
   getOrganisationByExternalId,
   setUsersRoleAtOrg,
@@ -33,4 +37,5 @@ module.exports = {
   getOrganisationById,
   getPageOfOrganisationAnnouncements,
   associatedWithUser,
+  associatedWithUserV2,
 };
