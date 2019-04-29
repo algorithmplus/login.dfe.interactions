@@ -121,6 +121,10 @@ const getPageOfOrganisationAnnouncements = async (organisationId, pageNumber, co
   return callOrganisationsApi(`/organisations/${organisationId}/announcements?page=${pageNumber}`, 'GET', undefined, correlationId);
 };
 
+const associatedWithUserV2 = async (userId, correlationId) => {
+  return callOrganisationsApi(`organisations/v2/associated-with-user/${userId}`, 'GET', undefined, correlationId);
+};
+
 module.exports = {
   getOrganisationByExternalId,
   associatedWithUser,
@@ -128,4 +132,5 @@ module.exports = {
   setUsersRoleAtOrg,
   getOrganisationById,
   getPageOfOrganisationAnnouncements,
+  associatedWithUserV2,
 };

@@ -35,7 +35,7 @@ const getAction = async (req, res) => {
     return InteractionComplete.process(req.params.uuid, { status: 'failed', uid: req.query.uid, type: 'select-organisation', reason: "Missing uid"}, req, res);
   }
 
-  const orgsForUser = await organisationApi.associatedWithUser(uid);
+  const orgsForUser = await organisationApi.associatedWithUserV2(uid);
 
   if (!orgsForUser || orgsForUser.length === 0) {
     return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'select-organisation', organisation: JSON.stringify({}) }, req, res);
