@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-6">
-            <p>DfE Sign-in is the new way to sign-in to access some specific education sector services.</p>
+            <p>DfE Sign-in is the new way to access some specific education sector services. To use DfE Sign-in you will need to <a href="<%=locals.urls.help%>/contact/create-account">create an account</a>.</p>
             <form method="post" id="form-signin" class="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <input type="hidden" name="clientId" value="<%=locals.clientId%>"/>
@@ -48,7 +48,7 @@
                         <div class="show-password full-width">
                             <input class="form-control" id="password" name="password" type="password" <% if (locals.validationMessages.password !== undefined) { %> aria-invalid="true" aria-describedby="validation-password" <% } %>>
                         </div>
-                        <p class="form-help font-xsmall"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">I've forgotten my password</a></p>
+                        <p class="form-help"><a href="/<%=locals.uuid%>/resetpassword/request?clientid=<%=locals.clientId%>&redirect_uri=<%=locals.redirectUri%>">Forgotten your password?</a></p>
                     </div>
                 </fieldset>
                 <div class="panel panel-border-wide">
