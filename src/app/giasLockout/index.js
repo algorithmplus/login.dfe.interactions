@@ -12,7 +12,7 @@ const router = express.Router({ mergeParams: true });
 const registerRoutes = (csrf) => {
   logger.info('Mounting smsCode routes');
 
-  router.use(appendInteractionDetails);
+  router.use(asyncWrapper(appendInteractionDetails));
 
   router.get('/', csrf, asyncWrapper(announcements.get));
 

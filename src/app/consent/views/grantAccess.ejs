@@ -13,21 +13,6 @@
 
 <form id="main" method="post" style="display: inline-block;">
     <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
-    <% if (user.organisations.length > 0) { %>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="heading-small">Allow <%= application.name %> to send data for the following Organisations.</h4>
-                <% user.organisations.forEach((organisation) => { %>
-                <div class="multiple-choice">
-                    <input type="checkbox" name="organisation" id="org<%=organisation.id%>" value="<%=organisation.id%>">
-                    <label for="org<%=organisation.id%>"><%=organisation.name%></label>
-                </div>
-                <% }) %>
-            </div>
-        </div>
-        <div class="row row-spacer"></div>
-    <% } %>
-
     <div class="row">
         <div class="col-12 submit-buttons">
             <button class="button" type="submit">Yes, i want to use <%= application.name %></button>

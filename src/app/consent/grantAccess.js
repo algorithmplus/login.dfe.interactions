@@ -7,7 +7,7 @@ const InteractionComplete = require('./../InteractionComplete');
 const get = async (req, res) => {
   const correlationId = req.id;
   if (!req.interaction) {
-    logger.warn(`Request to GIAS lockout with expired session (uuid: ${req.params.uuid})`, { correlationId });
+    logger.warn(`Request to explicit with expired session (uuid: ${req.params.uuid})`, { correlationId });
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
   }
 
@@ -34,23 +34,22 @@ const get = async (req, res) => {
 const post = async (req, res) => {
   const correlationId = req.id;
   if (!req.interaction) {
-    logger.warn(`Request to GIAS lockout with expired session (uuid: ${req.params.uuid})`, { correlationId });
+    logger.warn(`Request to explicit consent with expired session (uuid: ${req.params.uuid})`, { correlationId });
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
   }
   const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
-  const organisations = [];
-  const organisationIds = req.body.organisation ? (req.body.organisation instanceof Array ? req.body.organisation : [req.body.organisation]) : [];
-  for (let i = 0; i < organisationIds.length; i += 1) {
-    organisations.push(userOrganisations.find(o => o.organisation.id.toUpperCase() === organisationIds[i].toUpperCase()).organisation);
-  }
+
+  const organisationIds = req.query.oid;
+  const organisation = userOrganisations.find(o => o.organisation.id.toUpperCase() === organisationIds.toUpperCase()).organisation;
+
   const data = {
     uuid: req.params.uuid,
     uid: req.interaction.uid,
     status: 'success',
     type: 'consent',
-    organisations: JSON.stringify(organisations),
+    organisation: JSON.stringify(organisation),
   };
-  InteractionComplete.process(req.params.uuid, data, req, res);
+  return InteractionComplete.process(req.params.uuid, data, req, res);
 };
 
 module.exports = {
