@@ -1,12 +1,8 @@
 'use strict';
 
-const express = require('express');
 const logger = require('./../../infrastructure/logger');
-const { asyncWrapper } = require('login.dfe.express-error-handling');
 const organisationApi = require('./../../infrastructure/Organisations');
 const InteractionComplete = require('./../InteractionComplete');
-
-const router = express.Router({ mergeParams: true });
 
 const getNaturalIdentifiers = (orgsForUser) => {
   for (let i = 0; i < orgsForUser.length; i++) {
@@ -30,6 +26,7 @@ const getNaturalIdentifiers = (orgsForUser) => {
 };
 
 const getOrganisation = async (req, res) => {
+  const correlationId = req.id;
   if (!req.interaction) {
     logger.warn(`Request to consent lockout with expired session (uuid: ${req.params.uuid})`, { correlationId });
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
@@ -40,7 +37,7 @@ const getOrganisation = async (req, res) => {
   }
 
   if (!req.interaction.scopes.includes('organisation')) {
-    res.redirect(`/${req.params.uuid}/consent`);
+    res.redirect(`/${req.params.uuid}/consent?role_scope=${req.query.role_scope}`);
   }
 
   const orgsForUser = await organisationApi.associatedWithUserV2(uid);
@@ -50,7 +47,7 @@ const getOrganisation = async (req, res) => {
   }
 
   if (orgsForUser.length === 1) {
-    res.redirect(`/${req.params.uuid}/consent?oid=${orgsForUser[0].organisation.id}`);
+    res.redirect(`/${req.params.uuid}/consent?oid=${orgsForUser[0].organisation.id}&role_scope=${req.query.role_scope}`);
   }
   getNaturalIdentifiers(orgsForUser);
 
@@ -63,6 +60,7 @@ const getOrganisation = async (req, res) => {
 };
 
 const postOrganisation = async (req, res) => {
+  const correlationId = req.id;
   if (!req.interaction) {
     logger.warn(`Request to consent lockout with expired session (uuid: ${req.params.uuid})`, { correlationId });
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
@@ -82,7 +80,7 @@ const postOrganisation = async (req, res) => {
   }
   const organisation = req.body['selected-organisation'];
 
-  return res.redirect(`/${req.params.uuid}/consent?oid=${organisation}`);
+  return res.redirect(`/${req.params.uuid}/consent?oid=${organisation}&role_scope=${req.query.role_scope}`);
 
   // return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'select-organisation', organisation }, req, res);
 };
