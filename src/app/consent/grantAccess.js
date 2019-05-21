@@ -13,6 +13,7 @@ const get = async (req, res) => {
 
   const application = await getServiceById(req.interaction.client_id, req.id);
   const user = await getUserById(req.interaction.uid, req.id);
+  const roleScope = req.query.role_scope;
 
   if (req.interaction.scopes.find(x => x === 'organisation')) {
     const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
@@ -26,6 +27,7 @@ const get = async (req, res) => {
     hideUserNav: true,
     application,
     user,
+    roleScope,
     scopes: req.interaction.scopes,
     redirectUri: req.interaction.redirect_uri,
   });
@@ -37,17 +39,22 @@ const post = async (req, res) => {
     logger.warn(`Request to explicit consent with expired session (uuid: ${req.params.uuid})`, { correlationId });
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
   }
+  if (req.body['consent-choice'] !== 'yes') {
+    return res.redirect(`${req.params.redirectUri}?error=consent_denied`);
+  }
+
   const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
 
   const organisationIds = req.query.oid;
   const organisation = userOrganisations.find(o => o.organisation.id.toUpperCase() === organisationIds.toUpperCase()).organisation;
-
+  const roleScope = req.query.role_scope;
   const data = {
     uuid: req.params.uuid,
     uid: req.interaction.uid,
     status: 'success',
     type: 'consent',
     organisation: JSON.stringify(organisation),
+    roleScope,
   };
   return InteractionComplete.process(req.params.uuid, data, req, res);
 };
