@@ -24,7 +24,7 @@ const validateBody = (body, allowUserName) => {
       validationMessages.username = 'Please enter your email address';
     }
     failedValidation = true;
-  } else if (!emailValidator.validate(body.username) && !allowUserName) {
+  } else if (!emailValidator.validate(body.username.trim()) && !allowUserName) {
     validationMessages.username = 'Please enter a valid email address';
     failedValidation = true;
   }
@@ -187,7 +187,7 @@ const post = async (req, res) => {
   if (!validation.failedValidation) {
     let result;
 
-    if (emailValidator.validate(req.body.username)) {
+    if (emailValidator.validate(req.body.username.trim())) {
       result = await authenticateWithEmail(req, client, supportsUsernameLogin);
     } else {
       result = await authenticateWithUsername(req);
