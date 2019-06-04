@@ -37,10 +37,10 @@ const post = async (req, res) => {
   const correlationId = req.id;
   if (!req.interaction) {
     logger.warn(`Request to explicit consent with expired session (uuid: ${req.params.uuid})`, { correlationId });
-    return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
+    return res.redirect(`${req.interaction.redirect_uri}?error=sessionexpired`);
   }
   if (req.body['consent-choice'] !== 'yes') {
-    return res.redirect(`${req.params.redirectUri}?error=consent_denied`);
+    return res.redirect(`${req.interaction.redirect_uri}?error=consent_denied`);
   }
 
   const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
