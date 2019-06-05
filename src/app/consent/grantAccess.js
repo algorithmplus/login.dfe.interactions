@@ -40,7 +40,7 @@ const post = async (req, res) => {
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
   }
   if (req.body['consent-choice'] !== 'yes') {
-    return res.redirect(`${req.params.redirectUri}?error=consent_denied`);
+    return res.redirect(`${req.interaction.redirect_uri}?error=consent_denied`);
   }
 
   const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
