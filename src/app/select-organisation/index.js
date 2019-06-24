@@ -51,8 +51,10 @@ const getAction = async (req, res) => {
     const serviceRoles = await getRolesOfService(application.id, req.id);
     if (serviceRoles && serviceRoles.length > 0) {
       const allUserServices = await listUserServices(req.query.uid, req.id);
-      const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-      orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+      if (allUserServices && allUserServices.length > 0) {
+        const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
+        orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+      }
     }
   }
 
