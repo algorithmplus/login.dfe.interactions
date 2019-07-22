@@ -1,12 +1,21 @@
 <div class="row">
     <div class="col-12">
         <h1 class="heading-xlarge">
+            <% if (locals.consentTitle) { %>
+                <%= locals.consentTitle %>
+            <% } else { %>
             Do you want to use <%= application.name -%> to send us your <%= roleScope -%> data?
+            <% } %>
         </h1>
         <p class="lede">Send Data to DfE is a secure new way to send your data.</p>
+
+        <% if (locals.consentBody) { %>
+            <%- locals.consentBody %>
+        <% } else { %>
         <p>The service is currently being tested. Please note that all schools must complete their census
             returns as normal using COLLECT.</p>
         <p>On completion of the trial we will contact you to confirm your data has been deleted.</p>
+        <% } %>
     </div>
 </div>
 
