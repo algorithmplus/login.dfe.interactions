@@ -14,6 +14,17 @@ const get = async (req, res) => {
   const application = await getServiceById(req.interaction.client_id, req.id);
   const user = await getUserById(req.interaction.uid, req.id);
   const roleScope = req.query.role_scope;
+  let consentTitle = false;
+  let consentBody = false;
+
+  if (application.relyingParty && application.relyingParty.params) {
+    if (application.relyingParty.params.consentTitle) {
+      consentTitle = application.relyingParty.params.consentTitle.replace('{{ApplicationName}}', application.name || '').replace('{{RoleScope}}', roleScope || '');
+    }
+    if (application.relyingParty.params.consentBody) {
+      consentBody = application.relyingParty.params.consentBody.replace('{{ApplicationName}}', application.name || '').replace('{{RoleScope}}', roleScope || '');
+    }
+  }
 
   if (req.interaction.scopes.find(x => x === 'organisation')) {
     const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
@@ -30,6 +41,8 @@ const get = async (req, res) => {
     roleScope,
     scopes: req.interaction.scopes,
     redirectUri: req.interaction.redirect_uri,
+    consentTitle,
+    consentBody,
   });
 };
 
