@@ -13,11 +13,11 @@ const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
 const sanitization = require('login.dfe.sanitization');
 const healthCheck = require('login.dfe.healthcheck');
-const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
+const {getErrorHandler, ejsErrorPages} = require('login.dfe.express-error-handling');
 const KeepAliveAgent = require('agentkeepalive');
 const migratingUserMiddleware = require('./app/utils/migratingUserMiddleware');
 const configSchema = require('./infrastructure/Config/schema');
-
+const { sendRedirect } = require('./infrastructure/utils');
 // const rateLimiter = require('./app/rateLimit');
 
 const usernamePassword = require('./app/UsernamePassword');
@@ -95,7 +95,7 @@ app.use(migratingUserMiddleware({
 }));
 
 // Add middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(sanitization({
   sanitizer: (key, value) => {
@@ -124,7 +124,7 @@ app.use(expressLayouts);
 app.set('layout', 'shared/layout');
 
 // Setup routes
-app.use('/healthcheck', healthCheck({ config }));
+app.use('/healthcheck', healthCheck({config}));
 app.get('/', (req, res) => {
   return res.redirect(config.hostingEnvironment.servicesUrl || '/welcome');
 });
@@ -156,7 +156,15 @@ Object.assign(app.locals, {
   gaTrackingId: config.hostingEnvironment.gaTrackingId,
 });
 
-// error handling
+app.use((err, req, res, next) => {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err)
+
+  return sendRedirect(req, res, {
+    redirect: true,
+    uri: req.originalUrl,
+  });
+});
+
 const errorPageRenderer = ejsErrorPages.getErrorPageRenderer({
   help: config.hostingEnvironment.helpUrl,
 }, config.hostingEnvironment.env === 'dev');
