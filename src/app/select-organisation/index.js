@@ -72,6 +72,7 @@ const getAction = async (req, res) => {
     csrfToken: req.csrfToken(),
     code: '',
     validationMessages: {},
+    backLink: true,
   });
 };
 
@@ -87,6 +88,7 @@ const postAction = async (req, res) => {
       validationMessages: {
         organisation: 'Please select an organisation',
       },
+      backLink: true,
     });
   }
   const organisation = req.body['selected-organisation'];
