@@ -26,13 +26,15 @@ jest.mock('./../../src/infrastructure/Config', () => {
     };
   });
 });
-describe('when handling the posting of a password reset request', () => {
+
+describe('when handling a password reset request for an activated user', () => {
 
   let req;
   let res;
   let userCodesUpsertCode;
   let usersFind;
   let saUsersFind;
+  let invitationsFind;
 
   let postRequestPasswordReset;
 
@@ -40,15 +42,15 @@ describe('when handling the posting of a password reset request', () => {
     req = utils.mockRequest();
     res = utils.mockResponse();
 
-
-
     userCodesUpsertCode = jest.fn();
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.upsertCode = userCodesUpsertCode;
 
     usersFind = jest.fn().mockReturnValue({ sub: '12345' });
+    invitationsFind = jest.fn().mockReturnValue(null);
     const users = require('./../../src/infrastructure/Users');
     users.find = usersFind;
+    users.findInvitationByEmail = invitationsFind;
 
     saUsersFind = jest.fn().mockReturnValue(null);
     const saUsers = require('./../../src/infrastructure/osa');
@@ -162,4 +164,58 @@ describe('when handling the posting of a password reset request', () => {
     });
   });
 
+});
+
+describe('when handling a password reset request for a non-activated user', () => {
+  let req;
+  let res;
+  let userCodesUpsertCode;
+  let usersFind;
+  let invitationsFind;
+
+  let postRequestPasswordReset;
+
+  beforeEach(() => {
+    req = utils.mockRequest();
+    res = utils.mockResponse();
+
+    usersFind = jest.fn().mockReturnValue(null);
+    invitationsFind = jest.fn().mockReturnValue({ isCompleted: false });
+
+    const users = require('./../../src/infrastructure/Users');
+    users.find = usersFind();
+    users.findInvitationByEmail = invitationsFind();
+
+    postRequestPasswordReset = require('./../../src/app/ResetPassword/postRequestPasswordReset');
+  });
+
+  describe('and the details are valid', () => {
+    beforeEach(() => {
+      req.body = {
+        email: 'user.one@unit.test',
+        clientId: 'client1',
+        redirectUri: 'https://local.test',
+      };
+    });
+
+    it('then the invite is retrieved from the directories api', async () => {
+      await postRequestPasswordReset(req,res);
+
+      expect(usersFind.mock.calls.length).toBe(0);
+      expect(invitationsFind.mock.calls.length).toBe(1)
+    });
+
+    it('then a an invite is resent for that user', async ()=> {
+      await postRequestPasswordReset(req,res);
+      
+      // TODO: Add resend invite method
+    });
+
+    it('then it should render the check email instructions', async () => {
+      await postRequestPasswordReset(req,res);
+
+      expect(res.redirect.mock.calls).toHaveLength(1);
+      expect(res.redirect.mock.calls[0][0]).toBe('/123-abc/resetpassword/12345/checkEmail?clientid=client1&redirect_uri=https://local.test');
+    });
+  });
 });
