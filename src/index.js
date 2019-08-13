@@ -143,12 +143,15 @@ if (config.hostingEnvironment.useDevViews) {
   app.use('/dev/', devLauncher(csrf));
 }
 
+let assetsUrl = config.hostingEnvironment.assetsUrl || 'https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/';
+assetsUrl = assetsUrl.endsWith('/') ? assetsUrl.substr(0, assetsUrl.length - 1) : assetsUrl;
 // Setup global locals for layouts and views
 Object.assign(app.locals, {
   urls: {
     services: config.hostingEnvironment.servicesUrl,
     help: config.hostingEnvironment.helpUrl,
     profile: config.hostingEnvironment.profileUrl,
+    assets: assetsUrl,
   },
   app: {
     title: 'DfE Sign-in',
