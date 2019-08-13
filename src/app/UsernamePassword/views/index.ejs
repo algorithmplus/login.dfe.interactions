@@ -22,7 +22,11 @@
     </div>
     <div class="row">
         <div class="col-6">
+            <% if (locals.useSelfRegister) { %>
+                <p>To access some specific education sector services you will need to <a href="<%= locals.urls.profile %>/register">create a DfE Sign-in account</a>.</p>
+            <% } else { %>
             <p>DfE Sign-in is the new way to access some specific education sector services. To use DfE Sign-in you will need to <a href="<%=locals.urls.help%>/contact/create-account">create an account</a>.</p>
+            <% } %>
             <form method="post" id="form-signin" class="form-signin">
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                 <input type="hidden" name="clientId" value="<%=locals.clientId%>"/>

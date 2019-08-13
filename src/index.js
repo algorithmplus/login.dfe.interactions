@@ -148,12 +148,14 @@ Object.assign(app.locals, {
   urls: {
     services: config.hostingEnvironment.servicesUrl,
     help: config.hostingEnvironment.helpUrl,
+    profile: config.hostingEnvironment.profileUrl,
   },
   app: {
     title: 'DfE Sign-in',
     environmentBannerMessage: config.hostingEnvironment.environmentBannerMessage,
   },
   gaTrackingId: config.hostingEnvironment.gaTrackingId,
+  useSelfRegister: config.toggles ? config.toggles.useSelfRegister : false,
 });
 
 app.use((err, req, res, next) => {
