@@ -121,6 +121,10 @@ const notificationsSchema = new SimpleSchema({
   connectionString: patterns.redis,
 });
 
+const togglesSchema = new SimpleSchema({
+  useSelfRegister: Boolean,
+});
+
 const schema = new SimpleSchema({
   loggerSettings: schemas.loggerSettings,
   hostingEnvironment: hostingEnvironmentSchema,
@@ -136,6 +140,7 @@ const schema = new SimpleSchema({
   crypto: cryptoSchema,
   cache: cacheSchema,
   notifications: notificationsSchema,
+  toggles: togglesSchema,
 });
 
 module.exports.validate = () => {
