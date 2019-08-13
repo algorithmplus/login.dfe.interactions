@@ -155,7 +155,7 @@ Object.assign(app.locals, {
     environmentBannerMessage: config.hostingEnvironment.environmentBannerMessage,
   },
   gaTrackingId: config.hostingEnvironment.gaTrackingId,
-  useSelfRegister: config.toggles.useSelfRegister,
+  useSelfRegister: config.toggles ? config.toggles.useSelfRegister : false,
 });
 
 app.use((err, req, res, next) => {

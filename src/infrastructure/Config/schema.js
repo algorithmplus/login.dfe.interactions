@@ -122,7 +122,11 @@ const notificationsSchema = new SimpleSchema({
 });
 
 const togglesSchema = new SimpleSchema({
-  useSelfRegister: Boolean,
+  useSelfRegister: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false,
+  },
 });
 
 const schema = new SimpleSchema({
