@@ -19,6 +19,7 @@ jest.mock('./../../src/infrastructure/Config', () => {
     return {
       hostingEnvironment: {
         agentKeepAlive: {},
+        profileUrl: "profile.test.url"
       },
       notifications: {
         connectionString: {},
@@ -28,7 +29,6 @@ jest.mock('./../../src/infrastructure/Config', () => {
 });
 
 describe('when handling a password reset request for an activated user', () => {
-
   let req;
   let res;
   let userCodesUpsertCode;
@@ -40,19 +40,19 @@ describe('when handling a password reset request for an activated user', () => {
 
   beforeEach(() => {
     req = utils.mockRequest();
-    res = utils.mockResponse();
+    res = utils.mockResponse().mockResetAll();
 
-    userCodesUpsertCode = jest.fn();
+    userCodesUpsertCode = jest.fn().mockReset();
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.upsertCode = userCodesUpsertCode;
 
-    usersFind = jest.fn().mockReturnValue({ sub: '12345' });
-    invitationsFind = jest.fn().mockReturnValue(null);
+    usersFind = jest.fn().mockReset().mockReturnValue({ sub: '12345' });
+    invitationsFind = jest.fn().mockReset().mockReturnValue(null);
     const users = require('./../../src/infrastructure/Users');
     users.find = usersFind;
     users.findInvitationByEmail = invitationsFind;
 
-    saUsersFind = jest.fn().mockReturnValue(null);
+    saUsersFind = jest.fn().mockReset().mockReturnValue(null);
     const saUsers = require('./../../src/infrastructure/osa');
     saUsers.getSaUser = saUsersFind;
 
@@ -72,6 +72,7 @@ describe('when handling a password reset request for an activated user', () => {
       await postRequestPasswordReset(req,res);
 
       expect(usersFind.mock.calls.length).toBe(1);
+      expect(invitationsFind.mock.calls.length).toBe(0);
       expect(usersFind.mock.calls[0][0]).toBe('user.one@unit.test');
     });
 
@@ -166,10 +167,9 @@ describe('when handling a password reset request for an activated user', () => {
 
 });
 
-describe('when handling a password reset request for a non-activated user', () => {
+describe('when handling a password reset request for a invited user', () => {
   let req;
   let res;
-  let userCodesUpsertCode;
   let usersFind;
   let invitationsFind;
 
@@ -177,14 +177,16 @@ describe('when handling a password reset request for a non-activated user', () =
 
   beforeEach(() => {
     req = utils.mockRequest();
-    res = utils.mockResponse();
+    res = utils.mockResponse().mockResetAll();
 
-    usersFind = jest.fn().mockReturnValue(null);
-    invitationsFind = jest.fn().mockReturnValue({ isCompleted: false });
+    usersFind = jest.fn().mockReset().mockReturnValue(null);
+    invitationsFind = jest.fn().mockReset().mockReturnValue({ id: '12345', isCompleted: false, deactivated: false });
+    invitationsResend = jest.fn();
 
     const users = require('./../../src/infrastructure/Users');
-    users.find = usersFind();
-    users.findInvitationByEmail = invitationsFind();
+    users.find = usersFind;
+    users.findInvitationByEmail = invitationsFind;
+    users.resendInvitation = invitationsResend;
 
     postRequestPasswordReset = require('./../../src/app/ResetPassword/postRequestPasswordReset');
   });
@@ -200,22 +202,25 @@ describe('when handling a password reset request for a non-activated user', () =
 
     it('then the invite is retrieved from the directories api', async () => {
       await postRequestPasswordReset(req,res);
-
-      expect(usersFind.mock.calls.length).toBe(0);
-      expect(invitationsFind.mock.calls.length).toBe(1)
+      
+      expect(usersFind.mock.calls.length).toBe(1);
+      expect(invitationsFind.mock.calls.length).toBe(1);
+      expect(usersFind.mock.calls[0][0]).toBe('user.one@unit.test');
+      expect(invitationsFind.mock.calls[0][0]).toBe('user.one@unit.test');
     });
 
     it('then a an invite is resent for that user', async ()=> {
       await postRequestPasswordReset(req,res);
       
-      // TODO: Add resend invite method
+      expect(invitationsResend.mock.calls).toHaveLength(1);
+      expect(invitationsResend.mock.calls[0][0]).toBe('12345');
     });
 
-    it('then it should render the check email instructions', async () => {
+    it('then it should render the invitation confirmation view', async () => {
       await postRequestPasswordReset(req,res);
 
       expect(res.redirect.mock.calls).toHaveLength(1);
-      expect(res.redirect.mock.calls[0][0]).toBe('/123-abc/resetpassword/12345/checkEmail?clientid=client1&redirect_uri=https://local.test');
+      expect(res.redirect.mock.calls[0][0]).toBe(`profile.test.url/register/12345?clientid=client1&redirect_uri=https://local.test`);
     });
   });
 });

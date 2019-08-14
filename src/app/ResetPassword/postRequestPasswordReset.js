@@ -63,6 +63,7 @@ const action = async (req, res) => {
         logger.info(`Found an invitation for ${email}. Resending invitation...`);
         await users.resendInvitation(invitation.id, req.id);
         res.redirect(`${config.hostingEnvironment.profileUrl}/register/${invitation.id}?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+        return;
       }     
     }
     res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
