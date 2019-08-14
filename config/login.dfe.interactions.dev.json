@@ -11,6 +11,7 @@
   },
   "hostingEnvironment": {
     "portalUrl": "https://login-dfe-portal.herokuapp.com",
+    "profileUrl": "https://profile.dfe.signin.docker:8015",
     "env": "dev",
     "host": "localhost",
     "port": 4431,
