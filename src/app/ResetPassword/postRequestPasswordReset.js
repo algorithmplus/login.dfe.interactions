@@ -1,5 +1,6 @@
 'use strict';
 
+const config = require('./../../infrastructure/Config')();
 const emailValidator = require('email-validator');
 const users = require('./../../infrastructure/Users');
 const userCodes = require('./../../infrastructure/UserCodes');
@@ -57,11 +58,11 @@ const action = async (req, res) => {
     }
     else {
       logger.warn(`Could not find an active user for ${email}. Checking invitations...`);
-      const invitation = await users.findInvitationByEmail(email, correlationId);
+      const invitation = await users.findInvitationByEmail(email, req.id);
       if (invitation && !invitation.isCompleted && !invitation.deactivated) {
         logger.info(`Found an invitation for ${email}. Resending invitation...`);
-        await users.resendInvitation(invitation.id, correlationId);
-        res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/checkEmail?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+        await users.resendInvitation(invitation.id, req.id);
+        res.redirect(`${config.hostingEnvironment.profileUrl}/register/${invitation.id}?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
       }     
     }
     res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
