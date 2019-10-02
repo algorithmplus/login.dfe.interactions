@@ -79,7 +79,19 @@ const getAction = async (req, res) => {
 const postAction = async (req, res) => {
   const uid = req.query.uid;
   if (!req.body['selected-organisation']) {
-    const orgsForUser = await organisationApi.associatedWithUser(uid);
+    let orgsForUser = await organisationApi.associatedWithUserV2(uid);
+
+    const application = await getServiceById(req.interaction.client_id, req.id);
+    if (application) {
+      const serviceRoles = await getRolesOfService(application.id, req.id);
+      if (serviceRoles && serviceRoles.length > 0) {
+        const allUserServices = await listUserServices(req.query.uid, req.id);
+        if (allUserServices && allUserServices.length > 0) {
+          const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
+          orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+        }
+      }
+    }
     getNaturalIdentifiers(orgsForUser);
     return res.render('select-organisation/views/index', {
       orgsForUser,
