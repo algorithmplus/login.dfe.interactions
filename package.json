@@ -2,12 +2,10 @@
   "name": "login.dfe.interactions",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "engines": {
     "node": "8.x.x"
   },
   "scripts": {
-    "start": "node src/index.js",
     "test": "./node_modules/.bin/jest",
     "dev": "settings='./config/login.dfe.interactions.dev.json' node src/index.js"
   },
