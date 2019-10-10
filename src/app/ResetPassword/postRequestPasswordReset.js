@@ -1,7 +1,8 @@
 'use strict';
 
+const config = require('./../../infrastructure/Config')();
 const emailValidator = require('email-validator');
-const directoriesApi = require('./../../infrastructure/Users');
+const users = require('./../../infrastructure/Users');
 const userCodes = require('./../../infrastructure/UserCodes');
 const logger = require('./../../infrastructure/logger');
 const uuid = require('uuid/v4');
@@ -49,11 +50,21 @@ const action = async (req, res) => {
   }
 
   try {
-    const user = await directoriesApi.find(email, req.id);
+    const user = await users.find(email, req.id);
     if (user) {
       await userCodes.upsertCode(user.sub, req.body.clientId, req.body.redirectUri, req.id);
       res.redirect(`/${req.params.uuid}/resetpassword/${user.sub}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
       return;
+    }
+    else {
+      logger.warn(`Could not find an active user for ${email}. Checking invitations...`);
+      const invitation = await users.findInvitationByEmail(email, req.id);
+      if (invitation && !invitation.isCompleted && !invitation.deactivated) {
+        logger.info(`Found an invitation for ${email}. Resending invitation...`);
+        await users.resendInvitation(invitation.id, req.id);
+        res.redirect(`${config.hostingEnvironment.profileUrl}/register/${invitation.id}?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
+        return;
+      }     
     }
     res.redirect(`/${req.params.uuid}/resetpassword/${uuid()}/confirm?clientid=${req.body.clientId}&redirect_uri=${req.body.redirectUri}`);
   } catch (e) {
