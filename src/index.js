@@ -151,6 +151,7 @@ Object.assign(app.locals, {
     services: config.hostingEnvironment.servicesUrl,
     help: config.hostingEnvironment.helpUrl,
     profile: config.hostingEnvironment.profileUrl,
+    survey: config.hostingEnvironment.surveyUrl,
     assets: assetsUrl,
   },
   app: {
