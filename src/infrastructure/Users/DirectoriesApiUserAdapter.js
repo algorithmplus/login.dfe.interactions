@@ -270,6 +270,30 @@ const acceptInvitation = async (invitationId, password, correlationId) => {
   }
 };
 
+const resendInvitation = async (invitationId, correlationId) => {
+  const token = await jwtStrategy(config.directories.service).getBearerToken();
+
+  try {
+    const result = await rp({
+      method: 'POST',
+      uri: `${config.directories.service.url}/invitations/${invitationId}/resend`,
+      headers: {
+        authorization: `bearer ${token}`,
+        'x-correlation-id': correlationId,
+      },
+      json: true,
+    });
+
+    return result;
+  } catch (e) {
+    const status = e.statusCode ? e.statusCode : 500;
+    if (status === 404) {
+      return null;
+    }
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   authenticate,
   find,
@@ -280,4 +304,5 @@ module.exports = {
   update,
   findInvitationByEmail,
   acceptInvitation,
+  resendInvitation,
 };
