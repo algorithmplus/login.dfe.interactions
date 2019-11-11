@@ -53,7 +53,9 @@ const getAction = async (req, res) => {
       const allUserServices = await listUserServices(req.query.uid, req.id);
       if (allUserServices && allUserServices.length > 0) {
         const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-        orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+        if (userAccessToService && userAccessToService.length > 0) {
+          orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+        }
       }
     }
   }
@@ -88,7 +90,9 @@ const postAction = async (req, res) => {
         const allUserServices = await listUserServices(req.query.uid, req.id);
         if (allUserServices && allUserServices.length > 0) {
           const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-          orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+          if (userAccessToService && userAccessToService.length > 0) {
+            orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+          }
         }
       }
     }
