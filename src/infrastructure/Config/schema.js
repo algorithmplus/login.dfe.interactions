@@ -7,7 +7,6 @@ const hostingEnvironmentSchema = new SimpleSchema({
   rateLimitUrl: patterns.redis,
   giasApplicationId: patterns.uuid,
 });
-hostingEnvironmentSchema.extend(schemas.hostingEnvironment);
 
 const oidcServiceSchema = new SimpleSchema({
   url: patterns.url,
@@ -131,7 +130,7 @@ const togglesSchema = new SimpleSchema({
 
 const schema = new SimpleSchema({
   loggerSettings: schemas.loggerSettings,
-  hostingEnvironment: hostingEnvironmentSchema,
+  hostingEnvironment: schemas.hostingEnvironment.extend(hostingEnvironmentSchema),
   directories: schemas.apiClient,
   oidcService: oidcServiceSchema,
   devices: schemas.apiClient,
