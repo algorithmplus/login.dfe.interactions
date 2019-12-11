@@ -37,17 +37,17 @@ const getOrganisation = async (req, res) => {
   }
 
   if (!req.interaction.scopes.includes('organisation')) {
-    res.redirect(`/${req.params.uuid}/consent?role_scope=${req.query.role_scope}`);
+    return res.redirect(`/${req.params.uuid}/consent?role_scope=${req.query.role_scope}`);
   }
 
   const orgsForUser = await organisationApi.associatedWithUserV2(uid);
 
   if (!orgsForUser || orgsForUser.length === 0) {
-    res.redirect(`/${req.params.uuid}/consent`);
+    return res.redirect(`/${req.params.uuid}/consent`);
   }
 
   if (orgsForUser.length === 1) {
-    res.redirect(`/${req.params.uuid}/consent?oid=${orgsForUser[0].organisation.id}&role_scope=${req.query.role_scope}`);
+    return res.redirect(`/${req.params.uuid}/consent?oid=${orgsForUser[0].organisation.id}&role_scope=${req.query.role_scope}`);
   }
   getNaturalIdentifiers(orgsForUser);
 
