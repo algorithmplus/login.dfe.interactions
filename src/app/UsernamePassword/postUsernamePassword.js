@@ -34,7 +34,7 @@ const validateBody = (body, allowUserName) => {
 };
 
 const authenticateWithEmail = async (req) => {
-  const user = await Users.authenticate(req.body.username, req.body.password, req.id);
+  const user = await Users.authenticate(req.body.username.trim(), req.body.password, req.id);
   return {
     user,
     legacyUser: false,
