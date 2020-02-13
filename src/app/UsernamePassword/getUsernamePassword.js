@@ -15,7 +15,10 @@ const get = async (req, res) => {
     return res.redirect(`${req.query.redirect_uri}?error=sessionexpired`);
   }
 
-  const clientId = req.query.clientid;
+  let clientId = req.query.clientid;
+  if(!clientId){
+    clientId = interactionDetails.client_id;
+  }
   const client = await applicationsApi.getServiceById(clientId, req.id);
   if (!client) {
     let details = `Invalid redirect_uri (clientid: ${req.query.clientid}, redirect_uri: ${req.query.redirect_uri}) - `;
