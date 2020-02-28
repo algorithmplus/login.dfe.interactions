@@ -36,7 +36,7 @@ const getOrganisation = async (req, res) => {
     return InteractionComplete.process(req.params.uuid, { status: 'failed', uid: req.query.uid, type: 'consent', reason: 'Missing uid'}, req, res);
   }
 
-  if (!req.interaction.scopes.includes('organisation') && !req.interaction.scopes.includes('organisationid') ) {
+  if (!req.interaction.scopes.includes('organisation') ) {
     return res.redirect(`/${req.params.uuid}/consent?role_scope=${req.query.role_scope}`);
   }
 
