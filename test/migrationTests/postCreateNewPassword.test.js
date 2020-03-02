@@ -8,7 +8,6 @@ jest.mock('./../../src/infrastructure/access', () => ({
 jest.mock('./../../src/infrastructure/Organisations');
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
-    agentKeepAlive: {},
   },
 })));
 jest.mock('./../../src/infrastructure/logger', () => ({

@@ -2,7 +2,6 @@ jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/infrastructure/logger', () => ({}));
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
-    agentKeepAlive: {},
   },
   osaApi: {
     type: 'static',
@@ -18,7 +17,6 @@ jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
     return {
       hostingEnvironment: {
-        agentKeepAlive: {},
       },
       notifications: {
         connectionString: {},

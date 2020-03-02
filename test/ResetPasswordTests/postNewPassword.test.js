@@ -8,7 +8,6 @@ jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
     return {
       hostingEnvironment: {
-        agentKeepAlive: {},
       },
     };
   });
@@ -49,7 +48,7 @@ describe('when posting new password', () => {
     userAdapter.changePassword = userAdapterChangePassword;
 
     userCodesDeleteCode = jest.fn().mockReturnValue(true);
-    userCodesGetCode = jest.fn().mockReturnValue({userCode:{ uid: '123', code: 'abc123', redirectUri: expectedRedirectUri }});
+    userCodesGetCode = jest.fn().mockReturnValue({ userCode: { uid: '123', code: 'abc123', redirectUri: expectedRedirectUri } });
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.deleteCode = userCodesDeleteCode;
     userCodes.getCode = userCodesGetCode;
