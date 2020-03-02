@@ -29,10 +29,7 @@ const get = async (req, res) => {
   if (req.interaction.scopes.find(x => x === 'organisation')) {
     const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
     user.organisations = userOrganisations.map(x => x.organisation);
-  }else if (req.interaction.scopes.find(x => x === 'organisationid')) {
-    const userOrganisations = await getUserOrganisations(req.interaction.uid, req.id);
-    user.organisations = userOrganisations.map(x => x.organisation.id);
-  }  else {
+  }else {
     user.organisations = [];
   }
 
