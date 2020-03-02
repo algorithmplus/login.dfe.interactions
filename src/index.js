@@ -31,7 +31,7 @@ const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
-https.globalAgent.maxSockets = http.globalAgent.maxSockets = process.env.NODE_MAX_SOCKETS || 50;
+https.globalAgent.maxSockets = http.globalAgent.maxSockets = config.hostingEnvironment.agentKeepAlive.maxSockets || 50;
 
 
 configSchema.validate();
