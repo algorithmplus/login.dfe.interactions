@@ -20,6 +20,10 @@ const validateDigipassToken = async (serialNumber, code, correlationId) => {
       json: true,
     });
 
+    if (!result) {
+      throw new Error('No result');
+    }
+
     return result.valid;
   } catch (e) {
     const status = e.statusCode ? e.statusCode : 500;

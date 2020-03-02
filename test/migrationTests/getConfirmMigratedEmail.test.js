@@ -1,7 +1,6 @@
 jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
-    agentKeepAlive: {},
   },
 })));
 const utils = require('./../utils');

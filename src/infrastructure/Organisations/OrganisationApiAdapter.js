@@ -17,6 +17,10 @@ const getOrganisationByExternalId = async (organisationId, orgType, correlationI
       json: true,
     });
 
+    if (!org) {
+      throw new Error('No org found');
+    }
+
     return {
       id: org.id,
     };
