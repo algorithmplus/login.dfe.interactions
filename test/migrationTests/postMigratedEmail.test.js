@@ -2,7 +2,6 @@ jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('./../../src/infrastructure/Users');
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
-    agentKeepAlive: {},
   },
 })));
 
@@ -73,7 +72,7 @@ describe('When posting to confirm the migration email view', () => {
     expect(upsertCodeStub.mock.calls[0][3]).toBe('123');
     expect(upsertCodeStub.mock.calls[0][4]).toBe('ConfirmMigratedEmail');
     expect(upsertCodeStub.mock.calls[0][5]).toBe(expectedEmail);
-    expect(upsertCodeStub.mock.calls[0][6]).toMatchObject(req .migrationUser);
+    expect(upsertCodeStub.mock.calls[0][6]).toMatchObject(req.migrationUser);
   });
 
   it('then the confirm email view is displayed when the request is valid and the code uid passed to the view', async () => {

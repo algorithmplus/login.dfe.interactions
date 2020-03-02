@@ -1,13 +1,5 @@
 const config = require('./../Config')();
-const KeepAliveAgent = require('agentkeepalive').HttpsAgent;
-const rp = require('login.dfe.request-promise-retry').defaults({
-  agent: new KeepAliveAgent({
-    maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
-    maxFreeSockets: config.hostingEnvironment.agentKeepAlive.maxFreeSockets,
-    timeout: config.hostingEnvironment.agentKeepAlive.timeout,
-    keepAliveTimeout: config.hostingEnvironment.agentKeepAlive.keepAliveTimeout,
-  }),
-});
+const rp = require('login.dfe.request-promise-retry');
 const jwtStrategy = require('login.dfe.jwt-strategies');
 
 const authenticate = async (username, password, correlationId) => {
@@ -76,6 +68,7 @@ const find = async (username, correlationId) => {
     if (status === 404) {
       return null;
     }
+    console.log(e);
     throw new Error(e);
   }
 };
