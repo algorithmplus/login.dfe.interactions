@@ -1,9 +1,6 @@
 jest.mock('login.dfe.request-promise-retry');
 jest.mock('login.dfe.jwt-strategies');
 jest.mock('../../src/infrastructure/Config');
-jest.mock('agentkeepalive', () => ({
-  HttpsAgent: jest.fn(),
-}));
 const rp = jest.fn();
 const requestPromise = require('login.dfe.request-promise-retry');
 requestPromise.defaults.mockReturnValue(rp);
@@ -31,10 +28,7 @@ describe('When finding a user with the api', () => {
         service: {
           url: 'https://directories.login.dfe.test',
         },
-      },
-      hostingEnvironment: {
-        agentKeepAlive: {},
-      },
+      }
     }));
 
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
