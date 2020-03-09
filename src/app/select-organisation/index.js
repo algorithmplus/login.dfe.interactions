@@ -45,21 +45,22 @@ const getAction = async (req, res) => {
   }
 
   let orgsForUser = await organisationApi.associatedWithUserV2(uid);
-
-  const application = await getServiceById(req.interaction.client_id, req.id);
-  if (application) {
-    const serviceRoles = await getRolesOfService(application.id, req.id);
-    if (serviceRoles && serviceRoles.length > 0) {
-      const allUserServices = await listUserServices(req.query.uid, req.id);
-      if (allUserServices && allUserServices.length > 0) {
-        const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-        if (userAccessToService && userAccessToService.length > 0) {
-          orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+  logger.info( 'redirecr uri =' + req.query.redirect_uri);
+  if(req.query.redirect_uri !== 'https://dfeuat-sso.achieveservice.com/service/coronavirus') {
+    const application = await getServiceById(req.interaction.client_id, req.id);
+    if (application) {
+      const serviceRoles = await getRolesOfService(application.id, req.id);
+      if (serviceRoles && serviceRoles.length > 0) {
+        const allUserServices = await listUserServices(req.query.uid, req.id);
+        if (allUserServices && allUserServices.length > 0) {
+          const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
+          if (userAccessToService && userAccessToService.length > 0) {
+            orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+          }
         }
       }
     }
   }
-
   if (!orgsForUser || orgsForUser.length === 0) {
     return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'select-organisation', organisation: JSON.stringify({}) }, req, res);
   }
@@ -82,16 +83,18 @@ const postAction = async (req, res) => {
   const uid = req.query.uid;
   if (!req.body['selected-organisation']) {
     let orgsForUser = await organisationApi.associatedWithUserV2(uid);
-
-    const application = await getServiceById(req.interaction.client_id, req.id);
-    if (application) {
-      const serviceRoles = await getRolesOfService(application.id, req.id);
-      if (serviceRoles && serviceRoles.length > 0) {
-        const allUserServices = await listUserServices(req.query.uid, req.id);
-        if (allUserServices && allUserServices.length > 0) {
-          const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-          if (userAccessToService && userAccessToService.length > 0) {
-            orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+    logger.info( 'redirecr uri =' + req.query.redirect_uri);
+    if(req.query.redirect_uri !== 'https://dfeuat-sso.achieveservice.com/service/coronavirus') {
+      const application = await getServiceById(req.interaction.client_id, req.id);
+      if (application) {
+        const serviceRoles = await getRolesOfService(application.id, req.id);
+        if (serviceRoles && serviceRoles.length > 0) {
+          const allUserServices = await listUserServices(req.query.uid, req.id);
+          if (allUserServices && allUserServices.length > 0) {
+            const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
+            if (userAccessToService && userAccessToService.length > 0) {
+              orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+            }
           }
         }
       }
