@@ -46,7 +46,7 @@ const getAction = async (req, res) => {
 
   let orgsForUser = await organisationApi.associatedWithUserV2(uid);
   logger.info( 'redirecr uri =' + req.query.redirect_uri);
-  if(req.query.redirect_uri !== 'https://dfeuat-sso.achieveservice.com/service/coronavirus') {
+  if(req.query.redirect_uri !== 'https://signin-pp-aforms-as.azurewebsites.net/oidc/cb') {
     const application = await getServiceById(req.interaction.client_id, req.id);
     if (application) {
       const serviceRoles = await getRolesOfService(application.id, req.id);
@@ -84,7 +84,7 @@ const postAction = async (req, res) => {
   if (!req.body['selected-organisation']) {
     let orgsForUser = await organisationApi.associatedWithUserV2(uid);
     logger.info( 'redirecr uri =' + req.query.redirect_uri);
-    if(req.query.redirect_uri !== 'https://dfeuat-sso.achieveservice.com/service/coronavirus') {
+    if(req.query.redirect_uri !== 'https://signin-pp-aforms-as.azurewebsites.net/oidc/cb') {
       const application = await getServiceById(req.interaction.client_id, req.id);
       if (application) {
         const serviceRoles = await getRolesOfService(application.id, req.id);
