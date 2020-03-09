@@ -11,7 +11,6 @@ jest.mock('./../../src/infrastructure/cache', () => ({
 }));
 jest.mock('./../../src/infrastructure/Config', () => jest.fn().mockImplementation(() => ({
   hostingEnvironment: {
-    agentKeepAlive: {},
   },
   applications: {
     type: 'static',

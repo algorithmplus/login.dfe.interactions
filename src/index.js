@@ -13,8 +13,7 @@ const config = require('./infrastructure/Config')();
 const helmet = require('helmet');
 const sanitization = require('login.dfe.sanitization');
 const healthCheck = require('login.dfe.healthcheck');
-const {getErrorHandler, ejsErrorPages} = require('login.dfe.express-error-handling');
-const KeepAliveAgent = require('agentkeepalive');
+const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 const migratingUserMiddleware = require('./app/utils/migratingUserMiddleware');
 const configSchema = require('./infrastructure/Config/schema');
 const { sendRedirect } = require('./infrastructure/utils');
@@ -32,21 +31,10 @@ const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
 
+https.globalAgent.maxSockets = http.globalAgent.maxSockets = config.hostingEnvironment.agentKeepAlive.maxSockets || 50;
+
 
 configSchema.validate();
-
-http.GlobalAgent = new KeepAliveAgent({
-  maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
-  maxFreeSockets: config.hostingEnvironment.agentKeepAlive.maxFreeSockets,
-  timeout: config.hostingEnvironment.agentKeepAlive.timeout,
-  keepAliveTimeout: config.hostingEnvironment.agentKeepAlive.keepAliveTimeout,
-});
-https.GlobalAgent = new KeepAliveAgent({
-  maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
-  maxFreeSockets: config.hostingEnvironment.agentKeepAlive.maxFreeSockets,
-  timeout: config.hostingEnvironment.agentKeepAlive.timeout,
-  keepAliveTimeout: config.hostingEnvironment.agentKeepAlive.keepAliveTimeout,
-});
 
 let expiryInMinutes = 30;
 const sessionExpiry = parseInt(config.hostingEnvironment.sessionCookieExpiryInMinutes);
@@ -95,7 +83,7 @@ app.use(migratingUserMiddleware({
 }));
 
 // Add middleware
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(sanitization({
   sanitizer: (key, value) => {
@@ -124,7 +112,7 @@ app.use(expressLayouts);
 app.set('layout', 'shared/layout');
 
 // Setup routes
-app.use('/healthcheck', healthCheck({config}));
+app.use('/healthcheck', healthCheck({ config }));
 app.get('/', (req, res) => {
   return res.redirect(config.hostingEnvironment.servicesUrl || '/welcome');
 });

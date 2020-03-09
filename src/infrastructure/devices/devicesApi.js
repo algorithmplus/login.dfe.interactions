@@ -1,13 +1,5 @@
 const config = require('./../Config')();
-const KeepAliveAgent = require('agentkeepalive').HttpsAgent;
-const rp = require('login.dfe.request-promise-retry').defaults({
-  agent: new KeepAliveAgent({
-    maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
-    maxFreeSockets: config.hostingEnvironment.agentKeepAlive.maxFreeSockets,
-    timeout: config.hostingEnvironment.agentKeepAlive.timeout,
-    keepAliveTimeout: config.hostingEnvironment.agentKeepAlive.keepAliveTimeout,
-  }),
-});
+const rp = require('login.dfe.request-promise-retry');
 const jwtStrategy = require('login.dfe.jwt-strategies');
 const logger = require('./../logger');
 
@@ -27,6 +19,10 @@ const validateDigipassToken = async (serialNumber, code, correlationId) => {
       },
       json: true,
     });
+
+    if (!result) {
+      throw new Error('No result');
+    }
 
     return result.valid;
   } catch (e) {

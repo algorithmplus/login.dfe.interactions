@@ -4,18 +4,14 @@ jest.mock('./../../src/infrastructure/UserCodes');
 jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('./../../src/infrastructure/logger', () => {
   return {
-    info :jest.fn(),
+    info: jest.fn(),
     audit: jest.fn(),
   }
 });
-jest.mock('agentkeepalive', () => ({
-  HttpsAgent: jest.fn(),
-}));
 jest.mock('./../../src/infrastructure/Config', () => {
   return jest.fn().mockImplementation(() => {
     return {
       hostingEnvironment: {
-        agentKeepAlive: {},
       },
     };
   });
@@ -28,13 +24,13 @@ describe('When posting the confirm password reset view', () => {
   let loggerAudit;
 
   let postConfirmPasswordReset;
-  const userId ='12345EDC';
+  const userId = '12345EDC';
 
   beforeEach(() => {
     req = utils.mockRequest();
     res = utils.mockResponse();
 
-    userCodesValidateCode = jest.fn().mockReturnValue({code: ''});
+    userCodesValidateCode = jest.fn().mockReturnValue({ code: '' });
     const userCodes = require('./../../src/infrastructure/UserCodes');
     userCodes.validateCode = userCodesValidateCode;
 
