@@ -8,7 +8,7 @@ const InteractionComplete = require('./../InteractionComplete');
 const appendInteractionDetails = require('./../utils/appendInteractionDetails');
 const { getServiceById } = require('./../../infrastructure/applications');
 const { getRolesOfService, listUserServices } = require('./../../infrastructure/access');
-const config = require('./../../infrastructure/Config')();
+// const config = require('./../../infrastructure/Config')();
 const router = express.Router({ mergeParams: true });
 
 const getNaturalIdentifiers = (orgsForUser) => {
@@ -45,8 +45,8 @@ const getAction = async (req, res) => {
   }
 
   let orgsForUser = await organisationApi.associatedWithUserV2(uid);
-  const coronaVirusFormRedirectUri = config.coronavirusform? config.coronavirusform.redirect : null;
-  logger.info( 'corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::'+coronaVirusFormRedirectUri);
+  //const coronaVirusFormRedirectUri = config.coronavirusform? config.coronavirusform.redirect : null;
+  logger.info( 'corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::');
   if(req.query.redirect_uri !== 'https://signin-pp-aforms-as.azurewebsites.net/oidc/cb') {
     const application = await getServiceById(req.interaction.client_id, req.id);
     if (application) {
@@ -84,8 +84,8 @@ const postAction = async (req, res) => {
   const uid = req.query.uid;
   if (!req.body['selected-organisation']) {
     let orgsForUser = await organisationApi.associatedWithUserV2(uid);
-    const coronaVirusFormRedirectUri = config.coronavirusform? config.coronavirusform.redirect : null;
-    logger.info( 'corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::'+coronaVirusFormRedirectUri);
+   // const coronaVirusFormRedirectUri = config.coronavirusform? config.coronavirusform.redirect : null;
+    logger.info( 'corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::');
     if(req.query.redirect_uri !== 'https://signin-pp-aforms-as.azurewebsites.net/oidc/cb') {
       const application = await getServiceById(req.interaction.client_id, req.id);
       if (application) {
