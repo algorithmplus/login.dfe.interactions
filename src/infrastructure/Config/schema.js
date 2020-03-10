@@ -128,6 +128,10 @@ const togglesSchema = new SimpleSchema({
   },
 });
 
+const coronavirusformSchema = new SimpleSchema({
+  redirect: String,
+});
+
 const schema = new SimpleSchema({
   loggerSettings: schemas.loggerSettings,
   hostingEnvironment: schemas.hostingEnvironment.extend(hostingEnvironmentSchema),
@@ -144,6 +148,7 @@ const schema = new SimpleSchema({
   cache: cacheSchema,
   notifications: notificationsSchema,
   toggles: togglesSchema,
+  coronavirusform: coronavirusformSchema,
 });
 
 module.exports.validate = () => {
