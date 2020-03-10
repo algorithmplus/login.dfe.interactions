@@ -150,7 +150,7 @@ const schema = new SimpleSchema({
   cache: cacheSchema,
   notifications: notificationsSchema,
   toggles: togglesSchema,
-  coronavirusform: coronavirusformSchema,
+  // coronavirusform: coronavirusformSchema,
 });
 
 module.exports.validate = () => {
