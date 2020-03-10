@@ -128,9 +128,11 @@ const togglesSchema = new SimpleSchema({
   },
 });
 
+/*
 const coronavirusformSchema = new SimpleSchema({
   redirect: String,
 });
+*/
 
 const schema = new SimpleSchema({
   loggerSettings: schemas.loggerSettings,
