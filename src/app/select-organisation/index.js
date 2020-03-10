@@ -46,7 +46,8 @@ const getAction = async (req, res) => {
 
   let orgsForUser = await organisationApi.associatedWithUserV2(uid);
   logger.info( 'corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::'+config.coronavirusform.redirect);
-  if(req.query.redirect_uri !== config.coronavirusform.redirect) {
+  const coronaVirusFormRedirectUri = config.coronavirusform? config.coronavirusform.redirect : null;
+  if(req.query.redirect_uri !== coronaVirusFormRedirectUri) {
     const application = await getServiceById(req.interaction.client_id, req.id);
     if (application) {
       const serviceRoles = await getRolesOfService(application.id, req.id);
@@ -84,7 +85,8 @@ const postAction = async (req, res) => {
   if (!req.body['selected-organisation']) {
     let orgsForUser = await organisationApi.associatedWithUserV2(uid);
     logger.info( 'corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::'+config.coronavirusform.redirect);
-    if(req.query.redirect_uri !== config.coronavirusform.redirect) {
+    const coronaVirusFormRedirectUri = config.coronavirusform? config.coronavirusform.redirect : null;
+    if(req.query.redirect_uri !== coronaVirusFormRedirectUri) {
       const application = await getServiceById(req.interaction.client_id, req.id);
       if (application) {
         const serviceRoles = await getRolesOfService(application.id, req.id);
