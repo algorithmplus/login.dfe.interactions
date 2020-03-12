@@ -128,9 +128,9 @@ const togglesSchema = new SimpleSchema({
   },
 });
 
-/*const coronavirusformSchema = new SimpleSchema({
+const coronaVirusFormSchema = new SimpleSchema({
   redirect: String,
-});*/
+});
 
 
 const schema = new SimpleSchema({
@@ -149,7 +149,7 @@ const schema = new SimpleSchema({
   cache: cacheSchema,
   notifications: notificationsSchema,
   toggles: togglesSchema,
-  // coronavirusform: coronavirusformSchema,
+  coronaVirusForm: coronaVirusFormSchema,
 });
 
 module.exports.validate = () => {
