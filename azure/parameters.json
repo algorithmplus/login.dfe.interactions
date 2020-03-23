@@ -22,6 +22,12 @@
         },
         "certificateName": {
             "value": ""
+        },           
+        "keyVaultName": {
+            "value": ""
+        },
+        "keyVaultResourceGroup": {
+            "value": ""
         },
         "keyVaultName": {
             "value": ""
