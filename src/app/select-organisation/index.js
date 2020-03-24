@@ -8,8 +8,8 @@ const InteractionComplete = require('./../InteractionComplete');
 const appendInteractionDetails = require('./../utils/appendInteractionDetails');
 const { getServiceById } = require('./../../infrastructure/applications');
 const { getRolesOfService, listUserServices } = require('./../../infrastructure/access');
-
 const router = express.Router({ mergeParams: true });
+const config = require('./../../infrastructure/Config')();
 
 const getNaturalIdentifiers = (orgsForUser) => {
   for (let i = 0; i < orgsForUser.length; i++) {
@@ -46,20 +46,23 @@ const getAction = async (req, res) => {
 
   let orgsForUser = await organisationApi.associatedWithUserV2(uid);
 
-  const application = await getServiceById(req.interaction.client_id, req.id);
-  if (application) {
-    const serviceRoles = await getRolesOfService(application.id, req.id);
-    if (serviceRoles && serviceRoles.length > 0) {
-      const allUserServices = await listUserServices(req.query.uid, req.id);
-      if (allUserServices && allUserServices.length > 0) {
-        const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-        if (userAccessToService && userAccessToService.length > 0) {
-          orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+  const coronaVirusFormRedirectUri = config.coronaVirusForm ? config.coronaVirusForm.redirect : null;
+  logger.info('corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronavirusform.redirect::' + coronaVirusFormRedirectUri);
+  if(req.query.redirect_uri !== coronaVirusFormRedirectUri) {
+    const application = await getServiceById(req.interaction.client_id, req.id);
+    if (application) {
+      const serviceRoles = await getRolesOfService(application.id, req.id);
+      if (serviceRoles && serviceRoles.length > 0) {
+        const allUserServices = await listUserServices(req.query.uid, req.id);
+        if (allUserServices && allUserServices.length > 0) {
+          const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
+          if (userAccessToService && userAccessToService.length > 0) {
+            orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+          }
         }
       }
     }
   }
-
   if (!orgsForUser || orgsForUser.length === 0) {
     return InteractionComplete.process(req.params.uuid, { status: 'success', uid: req.query.uid, type: 'select-organisation', organisation: JSON.stringify({}) }, req, res);
   }
@@ -83,15 +86,19 @@ const postAction = async (req, res) => {
   if (!req.body['selected-organisation']) {
     let orgsForUser = await organisationApi.associatedWithUserV2(uid);
 
-    const application = await getServiceById(req.interaction.client_id, req.id);
-    if (application) {
-      const serviceRoles = await getRolesOfService(application.id, req.id);
-      if (serviceRoles && serviceRoles.length > 0) {
-        const allUserServices = await listUserServices(req.query.uid, req.id);
-        if (allUserServices && allUserServices.length > 0) {
-          const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
-          if (userAccessToService && userAccessToService.length > 0) {
-            orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+    const coronaVirusFormRedirectUri = config.coronaVirusForm? config.coronaVirusForm.redirect : null;
+    logger.info('corona virus form redirect_uri =' + req.query.redirect_uri +' config.coronaVirusForm.redirect::' + coronaVirusFormRedirectUri);
+    if(req.query.redirect_uri !== coronaVirusFormRedirectUri) {
+      const application = await getServiceById(req.interaction.client_id, req.id);
+      if (application) {
+        const serviceRoles = await getRolesOfService(application.id, req.id);
+        if (serviceRoles && serviceRoles.length > 0) {
+          const allUserServices = await listUserServices(req.query.uid, req.id);
+          if (allUserServices && allUserServices.length > 0) {
+            const userAccessToService = allUserServices.filter(x => x.serviceId === application.id);
+            if (userAccessToService && userAccessToService.length > 0) {
+              orgsForUser = orgsForUser.filter(x => userAccessToService.find(y => y.organisationId === x.organisation.id));
+            }
           }
         }
       }
