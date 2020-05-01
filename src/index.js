@@ -30,6 +30,7 @@ const consent = require('./app/consent');
 const devLauncher = require('./app/DevLauncher');
 const content = require('./app/Content');
 const setCorrelationId = require('express-mw-correlation-id');
+const b2cApp = require('./app/b2c');
 
 https.globalAgent.maxSockets = http.globalAgent.maxSockets = config.hostingEnvironment.agentKeepAlive.maxSockets || 50;
 
@@ -100,6 +101,8 @@ app.use(sanitization({
   },
 }));
 
+process.env.NODE_ENV = config.NODE_ENV || 'development';
+
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -126,6 +129,7 @@ app.use('/:uuid/digipass', digipass(csrf));
 app.use('/:uuid/select-organisation', selectOrganisation(csrf));
 app.use('/:uuid/gias-lockout', giasLockout(csrf));
 app.use('/:uuid/consent', consent(csrf));
+app.use('/b2c/', b2cApp(csrf))
 
 if (config.hostingEnvironment.useDevViews) {
   app.use('/dev/', devLauncher(csrf));
