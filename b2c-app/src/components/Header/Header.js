@@ -1,5 +1,7 @@
 import React from 'react'
 
+import './Header.scss';
+
 function Header() {
     return (
         <header class="govuk-header " role="banner" data-module="govuk-header">
