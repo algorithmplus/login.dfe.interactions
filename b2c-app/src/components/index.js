@@ -4,6 +4,7 @@ import B2C from './B2C';
 import PageTitle from './PageTitle/PageTitle';
 import PageNavigation from './PageNavigation/PageNavigation';
 import NavigationLink from './NavigationLink/NavigationLink';
+import Breadcrumbs from './Breadcrumbs/Breadcrumbs';
 
 export default {
     Header: Header,
@@ -11,5 +12,6 @@ export default {
     B2C: B2C,
     PageTitle: PageTitle,
     PageNavigation: PageNavigation,
-    NavigationLink: NavigationLink
+    NavigationLink: NavigationLink,
+    Breadcrumbs: Breadcrumbs
 }
