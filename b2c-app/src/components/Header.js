@@ -4,7 +4,7 @@ function Header() {
     return (
         <div>
             
-            <button class="govuk-button" data-module="govuk-button">
+            <button className="govuk-button" data-module="govuk-button">
                 Save and continue
             </button>
 
