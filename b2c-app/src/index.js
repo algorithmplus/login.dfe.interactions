@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../node_modules/govuk-frontend/govuk/all.scss';
+
+//styles
 import './index.scss';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';

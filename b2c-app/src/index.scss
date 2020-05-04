@@ -1,3 +1,9 @@
+
+$govuk-images-path: "/b2c/assets/static/media/";
+$govuk-fonts-path: "/b2c/assets/static/media/";
+
+@import '../node_modules/govuk-frontend/govuk/all';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
