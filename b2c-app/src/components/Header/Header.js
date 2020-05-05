@@ -1,6 +1,7 @@
 import React from 'react'
 
-import './Header.scss'
+//not needed if we are following GDS styles
+//import './Header.scss'
 
 import components from '../../components';
 

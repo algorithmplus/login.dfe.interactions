@@ -1,9 +1,9 @@
 import React from 'react';
 import components from '../components';
 
-export default function Login() {
+export default function Signup() {
     return (
-        <div id="login">
+        <div id="signup">
             <components.Header />
             <components.MainContainer />
             <components.Footer />

@@ -3,23 +3,23 @@
     "navigationItems" : [
         {
             "title": "Job profiles",
-            "link": "./login"
+            "link": "./signup"
         },
         {
             "title": "Skills health check",
-            "link": "./login"
+            "link": "./signup"
         },
         {
             "title": "Find a course",
-            "link": "./login"
+            "link": "./signup"
         },
         {
             "title": "Contact an adviser",
-            "link": "./login"
+            "link": "./signup"
         },
         {
             "title": "About us",
-            "link": "./login"
+            "link": "./signup"
         }
     ]
 }

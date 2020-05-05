@@ -1,6 +1,6 @@
 import React from 'react';
 //import './App.scss';
-import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 import {
   Switch,
@@ -28,8 +28,8 @@ function App() {
                 </a>
             </header>
           </Route>
-          <Route path="/login">
-            <Login />
+          <Route path="/signup">
+            <Signup />
           </Route>
         </Switch>
       </div>

@@ -1,0 +1,87 @@
+$govuk-images-path: "/b2c/images/";
+$govuk-fonts-path: "/b2c/assets/static/media/";
+@import '../../../node_modules/govuk-frontend/govuk/all';
+
+//we might need to import them separately, otherwise the above import overwrites all the 
+//changes that have been overwritten
+// @import '../../../node_modules/govuk-frontend/govuk/components/label/_label';
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.helpLink {
+    display: none;
+}
+
+//hide for now
+.error {
+    display: none;
+}
+
+.intro {
+    display: none;    
+}
+
+label {
+    @extend .govuk-label;
+}
+
+.attrEntry {
+    @extend .govuk-form-group;
+}
+
+.textInput {
+    @extend .govuk-input;
+
+    //one third of the width for large screens
+    @media (min-width: 40.0625em) {
+        width: 33.33% !important;
+    }
+}
+
+// .CheckboxMultiSelect.attrEntry {
+//     @extend .govuk-checkboxes--small;
+// }
+
+.CheckboxMultiSelect .attrEntry{
+    //@extend .govuk-checkboxes--small, .govuk-checkboxes__item;
+
+    display: inline-block;
+    float: none;
+    clear: left;
+    position: relative;
+    background: #dee0e2;
+    border: 1px solid #dee0e2;
+    padding: 18px 30px 15px 54px;
+    margin-bottom: 10px;
+    cursor: pointer;
+
+    label {
+        cursor: pointer;
+    }
+
+    &:hover {
+        border-color: #0b0c0c;
+    }
+
+    input {
+        //@extend .govuk-checkboxes__item;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        cursor: pointer;
+        margin: 0;
+        width: 29px;
+        height: 29px;
+    }
+}
+
+#continue {
+    @extend .govuk-button;
+}
+
+#cancel {
+    display: none;
+}
