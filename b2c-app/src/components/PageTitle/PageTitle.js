@@ -2,9 +2,7 @@ import React from 'react'
 
 function PageTitle(props) {
     return (
-        <a href="./login" className="govuk-header__link govuk-header__link--service-name">
-            {props.title}
-        </a>
+        <h1 className="govuk-heading-xl govuk-!-margin-top-6 govuk-!-margin-bottom-9">Create an account</h1>
     )
 }
 

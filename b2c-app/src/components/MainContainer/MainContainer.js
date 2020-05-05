@@ -6,6 +6,7 @@ function MainContainer () {
     return (
         <div class="govuk-width-container">
             <components.Breadcrumbs />
+            <components.PageTitle />
             <components.B2C />
         </div>
     );

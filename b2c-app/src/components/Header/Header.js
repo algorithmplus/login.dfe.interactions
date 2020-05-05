@@ -11,7 +11,7 @@ function Header() {
         <header className="govuk-header " role="banner" data-module="govuk-header">
             <div className="govuk-header__container govuk-width-container">
                 <div className="govuk-header__content">
-                    <components.PageTitle title={headerData.title} />
+                    <components.HeaderTitle title={headerData.title} />
                     <components.PageNavigation navigationItems={headerData.navigationItems} />
                 </div>
             </div>
