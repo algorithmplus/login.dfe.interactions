@@ -9,8 +9,8 @@ import {
 
 function App() {
   return (
-    <div className="App">
-      <div>
+    <div className="App" id="app">
+      <div id="routes">
         <Switch>
           <Route exact path="/">
             <header className="App-header">
