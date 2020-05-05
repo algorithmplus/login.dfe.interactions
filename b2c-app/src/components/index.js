@@ -5,6 +5,7 @@ import PageTitle from './PageTitle/PageTitle';
 import PageNavigation from './PageNavigation/PageNavigation';
 import NavigationLink from './NavigationLink/NavigationLink';
 import Breadcrumbs from './Breadcrumbs/Breadcrumbs';
+import MainContainer from './MainContainer/MainContainer';
 
 export default {
     Header: Header,
@@ -13,5 +14,6 @@ export default {
     PageTitle: PageTitle,
     PageNavigation: PageNavigation,
     NavigationLink: NavigationLink,
-    Breadcrumbs: Breadcrumbs
+    Breadcrumbs: Breadcrumbs,
+    MainContainer: MainContainer
 }

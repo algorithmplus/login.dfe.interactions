@@ -5,8 +5,7 @@ export default function Login() {
     return (
         <div id="login">
             <components.Header />
-            <components.Breadcrumbs />
-            <components.B2C />
+            <components.MainContainer />
             <components.Footer />
         </div>
     )
