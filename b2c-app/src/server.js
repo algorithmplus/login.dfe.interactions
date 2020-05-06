@@ -18,9 +18,11 @@ function getComponent(route) {
         let html;
         let context = {};
         try {
-            html = ReactDOMServer.renderToString(<StaticRouter location={route} context={context}>
-                <App />
-            </StaticRouter>);
+            html = ReactDOMServer.renderToString(
+                <StaticRouter location={route} context={context}>
+                    <App />
+                </StaticRouter>
+            );
             resolve(html);
         } catch (e) {
             reject(e)
