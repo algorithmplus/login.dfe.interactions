@@ -10,23 +10,23 @@ export default function footer() {
                     <h2 className="govuk-visually-hidden">Support links</h2>
                     <ul className="govuk-footer__inline-list">
                         <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="#">
+                            <a className="govuk-footer__link" href="./login">
                             Contact us
                             </a>
                         </li>
                         <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="#">
+                            <a className="govuk-footer__link" href="./login">
                             Privacy and cookies
                             </a>
                         </li>
                         <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="#">
+                            <a className="govuk-footer__link" href="./login">
                             Terms and conditions
                             </a>
                         </li>
                     </ul>
                     <div className="govuk-footer__meta-custom">
-                        Built by the <a href="#" className="govuk-footer__link">Skills Funding Agency</a>
+                        Built by the <a href="./login" className="govuk-footer__link">Skills Funding Agency</a>
                     </div>
 
                     <svg aria-hidden="true" focusable="false" className="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7" height="17" width="41">
