@@ -1,5 +1,9 @@
 import React from 'react'
 
+import components from '../../components';
+
+import footerData from '../../data/footerData.json';
+
 export default function footer() {
     return (
         <footer className="govuk-footer " role="contentinfo">
@@ -8,23 +12,9 @@ export default function footer() {
                     <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
 
                     <h2 className="govuk-visually-hidden">Support links</h2>
-                    <ul className="govuk-footer__inline-list">
-                        <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="https://nationalcareers.service.gov.uk/contact-us">
-                            Contact us
-                            </a>
-                        </li>
-                        <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="https://nationalcareers.service.gov.uk/help/privacy-and-cookies">
-                            Privacy and cookies
-                            </a>
-                        </li>
-                        <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="https://nationalcareers.service.gov.uk/help/terms-and-conditions">
-                            Terms and conditions
-                            </a>
-                        </li>
-                    </ul>
+                    
+                    <components.FooterNavigation items={footerData.items} />
+                    
                     <div className="govuk-footer__meta-custom">
                         Built by the <a href="https://www.gov.uk/government/organisations/skills-funding-agency" className="govuk-footer__link">Skills Funding Agency</a>
                     </div>
