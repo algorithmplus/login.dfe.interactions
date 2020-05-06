@@ -6,7 +6,9 @@ function PageNavigation(props) {
 
     //build array of components with actual config
     const navItemComponents = props.navigationItems.map( 
-        navItem => <components.NavigationLink title={navItem.title} link={navItem.link} key={navItem.title+navItem.link}/> 
+        navItem => {
+            return <components.NavigationLink title={navItem.title} link={navItem.link} key={navItem.title+navItem.link}/> 
+        }
     );
     
     return (
