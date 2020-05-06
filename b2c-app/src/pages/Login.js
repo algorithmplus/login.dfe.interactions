@@ -14,7 +14,7 @@ export default function Login() {
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Sign in'/>
-                                {/* <components.B2C /> */}
+                                <components.B2C />
                             </div>
                             <div class="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Create an account'/>

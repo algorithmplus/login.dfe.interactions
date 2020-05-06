@@ -6,30 +6,31 @@ $govuk-fonts-path: "/b2c/assets/static/media/";
 //changes that have been overwritten
 // @import '../../../node_modules/govuk-frontend/govuk/components/label/_label';
 
+
+//LISTS
+
 ul {
     list-style-type: none;
     padding: 0;
 }
 
-.helpLink {
-    display: none;
-}
-
-//hide for now
-.error {
-    @extend .govuk-error-message;
-}
-
-.intro {
-    display: none;    
-}
+//FORMS
 
 label {
     @extend .govuk-label;
 }
 
-.attrEntry {
+.attrEntry, .entry-item {
     @extend .govuk-form-group;
+}
+
+.entry-item input {
+    @extend .govuk-input;
+
+    //one third of the width for large screens
+    @media (min-width: 40.0625em) {
+        width: 50% !important;
+    }
 }
 
 .textInput {
@@ -40,6 +41,9 @@ label {
         width: 33.33% !important;
     }
 }
+
+
+//CHECKBOXES
 
 // .CheckboxMultiSelect.attrEntry {
 //     @extend .govuk-checkboxes--small;
@@ -78,10 +82,38 @@ label {
     }
 }
 
-#continue {
+//LINKS
+
+a {
+    @extend .govuk-link;
+}
+
+//BUTTONS
+
+button {
     @extend .govuk-button;
+}
+
+#continue {
+    @extend button;
 }
 
 #cancel {
     display: none;
+}
+
+
+//OTHER STUFF
+
+.helpLink {
+    display: none;
+}
+
+//hide for now
+.error {
+    @extend .govuk-error-message;
+}
+
+.intro {
+    display: none;    
 }
