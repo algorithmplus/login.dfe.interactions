@@ -17,7 +17,7 @@ ul {
 
 //hide for now
 .error {
-    display: none;
+    @extend .govuk-error-message;
 }
 
 .intro {
