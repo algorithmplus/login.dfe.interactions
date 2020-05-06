@@ -10,23 +10,23 @@ export default function footer() {
                     <h2 className="govuk-visually-hidden">Support links</h2>
                     <ul className="govuk-footer__inline-list">
                         <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="./login">
+                            <a className="govuk-footer__link" href="https://nationalcareers.service.gov.uk/contact-us">
                             Contact us
                             </a>
                         </li>
                         <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="./login">
+                            <a className="govuk-footer__link" href="https://nationalcareers.service.gov.uk/help/privacy-and-cookies">
                             Privacy and cookies
                             </a>
                         </li>
                         <li className="govuk-footer__inline-list-item">
-                            <a className="govuk-footer__link" href="./login">
+                            <a className="govuk-footer__link" href="https://nationalcareers.service.gov.uk/help/terms-and-conditions">
                             Terms and conditions
                             </a>
                         </li>
                     </ul>
                     <div className="govuk-footer__meta-custom">
-                        Built by the <a href="./login" className="govuk-footer__link">Skills Funding Agency</a>
+                        Built by the <a href="https://www.gov.uk/government/organisations/skills-funding-agency" className="govuk-footer__link">Skills Funding Agency</a>
                     </div>
 
                     <svg aria-hidden="true" focusable="false" className="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7" height="17" width="41">
