@@ -4,7 +4,7 @@ import components from '../../components'
 
 function MainContainer () {
     return (
-        <div class="govuk-width-container">
+        <div className="govuk-width-container">
             <components.Breadcrumbs />
             <components.PageTitle />
             <components.B2C />
