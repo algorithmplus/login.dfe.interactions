@@ -5,7 +5,11 @@ export default function Signup() {
     return (
         <div id="signup">
             <components.Header />
-            <components.MainContainer />
+            <div class="govuk-width-container">
+                <components.Breadcrumbs />
+                <components.PageTitle size='xl' title='Create an account'/>
+                <components.B2C />
+            </div>
             <components.Footer />
         </div>
     )

@@ -1,6 +1,8 @@
 import React from 'react';
 //import './App.scss';
 import Signup from './pages/Signup';
+import Login from './pages/Login';
+import LockedAccount from './pages/LockedAccount';
 
 import {
   Switch,
@@ -30,6 +32,12 @@ function App() {
           </Route>
           <Route path="/signup">
             <Signup />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/locked">
+            <LockedAccount />
           </Route>
         </Switch>
       </div>
