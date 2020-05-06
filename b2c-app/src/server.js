@@ -59,5 +59,7 @@ module.exports = (csrf) => {
             });
     });
 
+    console.log('ready');
+
     return router;
 }
