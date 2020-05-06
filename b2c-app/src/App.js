@@ -1,6 +1,8 @@
 import React from 'react';
-import './App.css';
+//import './App.scss';
+import Signup from './pages/Signup';
 import Login from './pages/Login';
+import LockedAccount from './pages/LockedAccount';
 
 import {
   Switch,
@@ -9,8 +11,8 @@ import {
 
 function App() {
   return (
-    <div className="App">
-      <div>
+    <div className="App" id="app">
+      <div id="routes">
         <Switch>
           <Route exact path="/">
             <header className="App-header">
@@ -28,8 +30,14 @@ function App() {
                 </a>
             </header>
           </Route>
+          <Route path="/signup">
+            <Signup />
+          </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/locked">
+            <LockedAccount />
           </Route>
         </Switch>
       </div>

@@ -1,0 +1,25 @@
+{
+    "title": "National Careers Service",
+    "navigationItems" : [
+        {
+            "title": "Job profiles",
+            "link": "./signup"
+        },
+        {
+            "title": "Skills health check",
+            "link": "./signup"
+        },
+        {
+            "title": "Find a course",
+            "link": "./signup"
+        },
+        {
+            "title": "Contact an adviser",
+            "link": "./signup"
+        },
+        {
+            "title": "About us",
+            "link": "./signup"
+        }
+    ]
+}

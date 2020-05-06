@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
+//styles
+import './index.scss';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.hydrate(
-  <div>
+//fix for error in console "Warning: Expected server HTML to contain a matching <div> in <div>."
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
+renderMethod(
+  <div id="index">
     <BrowserRouter basename="/b2c">
       <App />
     </BrowserRouter>
