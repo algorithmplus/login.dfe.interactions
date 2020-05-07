@@ -1,7 +1,6 @@
 import React from 'react'
 
-//not needed if we are following GDS styles
-//import './Header.scss'
+import './Header.scss'
 
 import components from '../../components';
 
@@ -10,7 +9,7 @@ import headerData from '../../data/headerData.json';
 function Header() {
     return (
         <header className="govuk-header " role="banner" data-module="govuk-header">
-            <div className="govuk-header__container govuk-width-container">
+            <div className="govuk-header__container govuk-width-container ncs-custom">
                 <div className="govuk-header__content">
                     <components.HeaderTitle title={headerData.title} />
                     <components.PageNavigation navigationItems={headerData.navigationItems} />

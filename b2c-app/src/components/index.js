@@ -7,6 +7,8 @@ import NavigationLink from './NavigationLink/NavigationLink';
 import Breadcrumbs from './Breadcrumbs/Breadcrumbs';
 import MainContainer from './MainContainer/MainContainer';
 import PageTitle from './PageTitle/PageTitle';
+import FooterNavigation from './FooterNavigation/FooterNavigation';
+import FooterLink from './FooterLink/FooterLink';
 
 export default {
     Header: Header,
@@ -17,5 +19,7 @@ export default {
     NavigationLink: NavigationLink,
     Breadcrumbs: Breadcrumbs,
     MainContainer: MainContainer,
-    PageTitle: PageTitle
+    PageTitle: PageTitle,
+    FooterNavigation: FooterNavigation,
+    FooterLink: FooterLink
 }

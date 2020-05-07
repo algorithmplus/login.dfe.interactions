@@ -6,23 +6,23 @@ export default function Login() {
         
         <div id="login">
             <components.Header />
-            <div class="govuk-width-container">
+            <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
-                <div class="govuk-width-container ">
-                    <main class="govuk-main-wrapper " id="main-content" role="main">
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                <div className="govuk-width-container ">
+                    <main className="govuk-main-wrapper " id="main-content" role="main">
+                        <div className="govuk-grid-row">
+                            <div className="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Sign in'/>
                                 <components.B2C />
                             </div>
-                            <div class="govuk-grid-column-one-half">
+                            <div className="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Create an account'/>
-                                <p class="govuk-body">
-                                    <a href="./signup" class="govuk-link">Creating an account</a>
+                                <p className="govuk-body">
+                                    <a href="./signup" className="govuk-link">Creating an account</a>
                                     &nbsp;allows you to access your adviser created action plans and save your:
                                 </p>
-                                <ul class="govuk-list govuk-list--bullet">
+                                <ul className="govuk-list govuk-list--bullet">
                                     <li>course searches</li>
                                     <li>Skills health check reports</li>
                                 </ul>

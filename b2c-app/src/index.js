@@ -11,11 +11,10 @@ import { BrowserRouter } from 'react-router-dom';
 //fix for error in console "Warning: Expected server HTML to contain a matching <div> in <div>."
 const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
 renderMethod(
-  <div id="index">
-    <BrowserRouter basename="/b2c">
-      <App />
-    </BrowserRouter>
-  </div>,
+  //NOTE: if this is edited, then server.js needs to be updated too --> html = ReactDOMServer.renderToString(...)
+  <BrowserRouter basename="/b2c">
+    <App />
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
