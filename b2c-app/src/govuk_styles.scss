@@ -11,46 +11,46 @@ $govuk-fonts-path: "/b2c/assets/static/media/";
 ul {
     list-style-type: none;
     padding: 0;
-  }
+}
   
-  //FORMS
-  
-  label {
+//FORMS
+
+label {
     @extend .govuk-label;
-  }
-  
-  .attrEntry, .entry-item {
+}
+
+.attrEntry, .entry-item {
     @extend .govuk-form-group;
-  }
-  
-  .entry-item input {
+}
+
+.entry-item input {
     @extend .govuk-input;
-  
+
     //one third of the width for large screens
     @media (min-width: 40.0625em) {
         width: 50% !important;
     }
-  }
-  
-  .textInput {
+}
+
+.textInput {
     @extend .govuk-input;
-  
+
     //one third of the width for large screens
     @media (min-width: 40.0625em) {
         width: 33.33% !important;
     }
-  }
-  
-  
-  //CHECKBOXES
-  
-  // .CheckboxMultiSelect.attrEntry {
-  //     @extend .govuk-checkboxes--small;
-  // }
-  
-  .CheckboxMultiSelect .attrEntry{
+}
+
+
+//CHECKBOXES
+
+// .CheckboxMultiSelect.attrEntry {
+//     @extend .govuk-checkboxes--small;
+// }
+
+.CheckboxMultiSelect .attrEntry{
     //@extend .govuk-checkboxes--small, .govuk-checkboxes__item;
-  
+
     display: inline-block;
     float: none;
     clear: left;
@@ -60,15 +60,15 @@ ul {
     padding: 18px 30px 15px 54px;
     margin-bottom: 10px;
     cursor: pointer;
-  
+
     label {
         cursor: pointer;
     }
-  
+
     &:hover {
         border-color: #0b0c0c;
     }
-  
+
     input {
         //@extend .govuk-checkboxes__item;
         position: absolute;
@@ -79,81 +79,96 @@ ul {
         width: 29px;
         height: 29px;
     }
-  }
-  
-  //LINKS
-  
-  a {
+}
+
+//LINKS
+
+a {
     @extend .govuk-link;
-  }
-  
-  //BUTTONS
-  
-  button {
+}
+
+//BUTTONS
+
+button {
     @extend .govuk-button;
-  }
-  
-  #continue {
+}
+
+#continue {
     @extend button;
-  }
-  
-  #cancel {
+}
+
+#cancel {
     display: none;
-  }
-  
-  
-  //OTHER STUFF
-  
-  .helpLink {
-    display: none;
-  }
-  
-  //hide for now
-  .error {
+}
+
+
+//ERRORS
+
+.error.itemLevel {
     @extend .govuk-error-message;
-  }
-  
-  .intro {
+}
+
+.error.pageLevel {
+    @extend .govuk-error-summary;
+
+    &::before {
+        @extend .govuk-error-summary__title;
+        content: "There is a problem";
+    }
+
+    p {
+        @extend .govuk-error-message;
+    }
+}
+
+
+//OTHER STUFF
+
+.helpLink {
+    display: none;
+}
+
+.intro {
     display: none;    
-  }
-  
-  
-  //Hide placeholders
-  ::-webkit-input-placeholder {
-    /* WebKit browsers */
-     opacity: 0;
-  }
-  :-moz-placeholder {
-    /* Mozilla Firefox 4 to 18 */
-     opacity: 0;
-  }
-  ::-moz-placeholder {
-    /* Mozilla Firefox 19+ */
-     opacity: 0;
-  }
-  :-ms-input-placeholder {
-    /* Internet Explorer 10+ */
-     opacity: 0;
-  }
-  input::placeholder {
-     opacity: 0;
-  }
-  textarea::-webkit-input-placeholder {
-    /* WebKit browsers */
-     opacity: 0;
-  }
-  textarea:-moz-placeholder {
-    /* Mozilla Firefox 4 to 18 */
-     opacity: 0;
-  }
-  textarea::-moz-placeholder {
-    /* Mozilla Firefox 19+ */
-     opacity: 0;
-  }
-  textarea:-ms-input-placeholder {
-    /* Internet Explorer 10+ */
-     opacity: 0;
-  }
-  textarea::placeholder {
-     opacity: 0;
-  }
+}
+
+
+//Hide placeholders
+::-webkit-input-placeholder {
+/* WebKit browsers */
+    opacity: 0;
+}
+:-moz-placeholder {
+/* Mozilla Firefox 4 to 18 */
+    opacity: 0;
+}
+::-moz-placeholder {
+/* Mozilla Firefox 19+ */
+    opacity: 0;
+}
+:-ms-input-placeholder {
+/* Internet Explorer 10+ */
+    opacity: 0;
+}
+input::placeholder {
+    opacity: 0;
+}
+textarea::-webkit-input-placeholder {
+/* WebKit browsers */
+    opacity: 0;
+}
+textarea:-moz-placeholder {
+/* Mozilla Firefox 4 to 18 */
+    opacity: 0;
+}
+textarea::-moz-placeholder {
+/* Mozilla Firefox 19+ */
+    opacity: 0;
+}
+textarea:-ms-input-placeholder {
+/* Internet Explorer 10+ */
+    opacity: 0;
+}
+textarea::placeholder {
+    opacity: 0;
+}
