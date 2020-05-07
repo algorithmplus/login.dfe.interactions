@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import EmailSent from './pages/EmailSent';
 import LockedAccount from './pages/LockedAccount';
+import AccountActivated from './pages/AccountActivated';
 
 import {
   Switch,
@@ -42,6 +43,9 @@ function App() {
           </Route>
           <Route path="/locked">
             <LockedAccount />
+          </Route>
+          <Route path="/activated">
+            <AccountActivated />
           </Route>
         </Switch>
       </div>
