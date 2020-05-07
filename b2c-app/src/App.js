@@ -2,6 +2,7 @@ import React from 'react';
 //import './App.scss';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import EmailSent from './pages/EmailSent';
 import LockedAccount from './pages/LockedAccount';
 
 import {
@@ -35,6 +36,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/emailsent">
+            <EmailSent />
           </Route>
           <Route path="/locked">
             <LockedAccount />
