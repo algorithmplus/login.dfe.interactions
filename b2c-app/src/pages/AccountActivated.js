@@ -3,8 +3,7 @@ import components from '../components';
 
 export default function AccountActivated() {
     return (
-        <div id="login">
-            <components.Header />
+        <div id="accountActivated">
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -22,7 +21,6 @@ export default function AccountActivated() {
                 </main>
 
             </div>
-            <components.Footer />
         </div>
     )
 }

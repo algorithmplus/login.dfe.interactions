@@ -3,8 +3,7 @@ import components from '../components';
 
 export default function EmailSent() {
     return (
-        <div id="login">
-            <components.Header />
+        <div id="emailSent">
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -21,7 +20,6 @@ export default function EmailSent() {
                 </main>
 
             </div>
-            <components.Footer />
         </div>
     )
 }
