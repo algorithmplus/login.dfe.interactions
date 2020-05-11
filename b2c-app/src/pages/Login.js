@@ -5,7 +5,6 @@ export default function Login() {
     return (
         
         <div id="login">
-            <components.Header />
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -32,7 +31,6 @@ export default function Login() {
                 </div>
                 
             </div>
-            <components.Footer />
         </div>
     )
 }

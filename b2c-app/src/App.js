@@ -6,6 +6,8 @@ import EmailSent from './pages/EmailSent';
 import LockedAccount from './pages/LockedAccount';
 import AccountActivated from './pages/AccountActivated';
 
+import components from './components';
+
 import {
   Switch,
   Route
@@ -14,6 +16,11 @@ import {
 function App() {
   return (
     <div className="App" id="app">
+
+      {/* header */}
+      <components.Header />
+
+      {/* routing */}
       <div id="routes">
         <Switch>
           <Route exact path="/">
@@ -49,6 +56,10 @@ function App() {
           </Route>
         </Switch>
       </div>
+
+      {/* footer */}
+      <components.Footer />
+
     </div>
   );
 }
