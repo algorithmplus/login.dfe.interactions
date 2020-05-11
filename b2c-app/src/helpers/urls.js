@@ -8,6 +8,9 @@ export function getB2CLink (action) {
         case 'signup':
             actionURL = 'B2C_1A_account_signup';
             break;
+        case 'login':
+            actionURL = 'B2C_1A_signin_invitation';
+            break;
         default:
             //point to login page by default
             actionURL = 'B2C_1A_signin_invitation';

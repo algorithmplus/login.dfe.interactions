@@ -1,6 +1,5 @@
 import React from 'react';
 import components from '../components';
-
 import { getB2CLink } from '../helpers/urls';
 
 export default function Login() {
