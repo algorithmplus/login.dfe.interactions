@@ -95,6 +95,11 @@ a {
     @extend .govuk-link;
 }
 
+.forgot-password {
+    @extend .govuk-body;
+    margin-top: govuk-spacing(6);
+}
+
 //BUTTONS
 
 button {
