@@ -9,7 +9,7 @@
     "test": "./node_modules/.bin/jest --coverage",
     "test-watcher": "./node_modules/.bin/jest --watch --coverage",
     "dev": "settings='./config/login.dfe.interactions.dev.json' node src/index.js",
-    "postinstall": "cd b2c-app && npm i && PUBLIC_URL=https://s141d01-signin-int.azurewebsites.net/b2c/assets/ react-scripts build"
+    "postinstall": "cd b2c-app && npm i && npm run build"
   },
   "repository": {
     "type": "git",
