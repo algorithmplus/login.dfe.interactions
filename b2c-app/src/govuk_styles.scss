@@ -108,18 +108,13 @@ button {
     @extend .govuk-error-message;
 }
 
-.error.pageLevel {
-    @extend .govuk-error-summary;
-
-    &::before {
-        @extend .govuk-error-summary__title;
-        content: "There is a problem";
-    }
-
-    p {
+.error.pageLevel, .govuk-error-summary__body {
+    p{
         @extend .govuk-error-message;
     }
 }
+
+
 
 
 //OTHER STUFF

@@ -8,6 +8,8 @@ export default function Login() {
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
+                <div id="pageLevelErrorContainer"></div>
+
                 <div className="govuk-width-container ">
                     <main className="govuk-main-wrapper " id="main-content" role="main">
                         <div className="govuk-grid-row">
