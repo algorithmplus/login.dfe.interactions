@@ -81,6 +81,14 @@ label {
     }
 }
 
+
+//TEXT
+
+.textInParagraph {
+    @extend .govuk-body;
+}
+
+
 //LINKS
 
 a {

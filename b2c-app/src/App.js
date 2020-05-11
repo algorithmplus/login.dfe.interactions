@@ -37,24 +37,31 @@ export default class App extends React.Component {
       </div>
       `;
 
+    //get all page level error elements
+    this._pageErrors = document.getElementsByClassName('error pageLevel');
+
+    //find out how many of these errors are visible
+    let numVisibleItems = Array.from(this._pageErrors).filter(function(item){
+      return item.offsetParent !== null;
+    }).length;
+
+    //only add the error summary if there is at least one error visible
+    if(numVisibleItems > 0){
+
       this._pageLevelErrorContainer = document.getElementById('pageLevelErrorContainer');
 
-    if(this._pageLevelErrorContainer){
-      this._pageLevelErrorContainer.appendChild(this._govUkPageErrorElement);
-
-      //get all page level error elements
-      this._pageErrors = document.getElementsByClassName('error pageLevel');
-      if(this._pageErrors.length){
+      if(this._pageLevelErrorContainer){
+        this._pageLevelErrorContainer.appendChild(this._govUkPageErrorElement);
         //get the error summary items container
         this._pageLevelErrorItemsContainer = document.getElementById("errorSummaryItems");
-        Array.from(this._pageErrors).forEach( (errorItem) => {
+        Array.from(this._pageErrors).forEach( (errorItem) => {   
           //and add each page level error as list items
           let listItem = document.createElement("LI");
           let paragraph = document.createElement("P");
           paragraph.appendChild(errorItem);
           listItem.appendChild(paragraph);
           this._pageLevelErrorItemsContainer.appendChild(listItem);
-        })
+        });
       }
     }
   }
