@@ -1,10 +1,7 @@
 jest.mock('login.dfe.request-promise-retry');
 jest.mock('login.dfe.jwt-strategies');
 jest.mock('../../src/infrastructure/Config');
-const rp = jest.fn();
-const requestPromise = require('login.dfe.request-promise-retry');
-requestPromise.defaults.mockReturnValue(rp);
-
+const rp = require('login.dfe.request-promise-retry');
 
 describe('When deleting a reset code through the api', () => {
   let jwtGetBearerToken;
@@ -42,13 +39,13 @@ describe('When deleting a reset code through the api', () => {
     expect(true).toBe(true);
   });
 
-  // it('then the user codes api endpoint is called', async () => {
-  //   const userId = 'user1@test.com';
+   it('then the user codes api endpoint is called', async () => {
+     const userId = 'user1@test.com';
 
-  //   await userCodesApiAdapter.deleteCode(userId);
+     await userCodesApiAdapter.deleteCode(userId);
 
-  //   expect(rp.mock.calls.length).toBe(1);
-  //   expect(rp.mock.calls[0][0].method).toBe('DELETE');
-  //   expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/${userId}`);
-  // });
+     expect(rp.mock.calls.length).toBe(1);
+     expect(rp.mock.calls[0][0].method).toBe('DELETE');
+     expect(rp.mock.calls[0][0].uri).toBe(`https://directories.login.dfe.test/userCodes/${userId}`);
+   });
 });
