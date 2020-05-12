@@ -67,6 +67,7 @@ export default class App extends React.Component {
 
     // manipulate the DOM so that we can include the password help item
     this._passWordHelp = document.createElement('div');
+    /*eslint-disable */
     this._passWordHelp.innerHTML = `
         <details class="govuk-details govuk-!-margin-top-3" data-module="govuk-details">
           <summary class="govuk-details__summary">
@@ -85,6 +86,7 @@ export default class App extends React.Component {
           </div>
         </details>
       `;
+      /*eslint-enable */
 
     //Add password help
     this._passwordElement = document.getElementById('newPassword');
