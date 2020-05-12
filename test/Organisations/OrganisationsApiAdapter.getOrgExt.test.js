@@ -36,9 +36,7 @@ describe('When getting an organisation by external id with the api', () => {
     organisationsApiAdapter = require('./../../src/infrastructure/Organisations/OrganisationApiAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('then the data retrieved from the organisations api', async () => {
      await organisationsApiAdapter.getOrganisationByExternalId(organisationId, orgType, expectedCorrelationId);

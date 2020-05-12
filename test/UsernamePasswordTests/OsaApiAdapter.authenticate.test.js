@@ -36,9 +36,6 @@ describe('When authenticating a user with the OSA api', () => {
     osaApiUserAdapter = require('./../../src/infrastructure/osa/OsaApiAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
 
    it('it should post to the osa api', async () => {
      await osaApiUserAdapter.authenticate(username, password);

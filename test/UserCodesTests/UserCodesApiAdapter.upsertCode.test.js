@@ -35,9 +35,7 @@ describe('When upserting a reset code through the api', () => {
     userCodesApiAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('then the user codes api endpoint is called', async () => {
      const userId = '1234EDCFR';

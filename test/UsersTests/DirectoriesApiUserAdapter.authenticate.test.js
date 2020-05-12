@@ -35,9 +35,7 @@ describe('When authenticating a user with the api', () => {
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('it should post to the clients directory', async () => {
       await directoriesApiUserAdapter.authenticate(username, password);

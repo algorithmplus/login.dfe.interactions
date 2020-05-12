@@ -39,9 +39,7 @@ describe('When creating a user with the api', () => {
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('it should post to the directories api', async () => {
      await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);

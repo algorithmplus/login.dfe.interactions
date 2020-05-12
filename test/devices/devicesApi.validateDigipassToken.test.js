@@ -45,9 +45,7 @@ describe('When validating a digipass code with the api', () => {
     });
   });
 
-  it('SHOULD PASS', () => {
-    expect(true).toBe(true);
-  })
+
 
    it('then it should post to the api', async () => {
      await validateDigipassToken(serialNumber, code);

@@ -37,9 +37,7 @@ describe('when getting users devices', () => {
     ]);
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('then it should get devices from user url', async () => {
      await getDevices(uid);

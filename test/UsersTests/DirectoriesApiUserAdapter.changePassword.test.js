@@ -35,9 +35,7 @@ describe('When changing password for a user with the api', () => {
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('then it should set users password in directories api', async () => {
      await directoriesApiUserAdapter.changePassword(uid, password);

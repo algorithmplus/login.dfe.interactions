@@ -32,9 +32,7 @@ describe('When getting a reset code through the api', () => {
     userCodesApiAdapter = require('./../../src/infrastructure/UserCodes/UserCodesApiAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('then the user codes api endpoint is called with the default code type', async () => {
      const userId = 'user1@test.com';

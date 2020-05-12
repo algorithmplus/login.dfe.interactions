@@ -32,9 +32,6 @@ describe('When finding a user with the api', () => {
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
 
    it('it calls the clients directory at the user endpoint with the user identifier', async () => {
      await directoriesApiUserAdapter.find(username);

@@ -34,9 +34,7 @@ describe('When finding a user with the api', () => {
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('it calls the directories api passing the legacy username', async () => {
      await directoriesApiUserAdapter.findByLegacyUsername(username);

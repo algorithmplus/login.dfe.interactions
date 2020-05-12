@@ -39,9 +39,7 @@ describe('When creating a user with the api', () => {
     servicesApiUserAdapter = require('./../../src/infrastructure/Services/ServicesApiAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
+
 
    it('then the data is posted to the organisations api', async () => {
      await servicesApiUserAdapter.create(userId, serviceId, organisationId, orgType, expectedCorrelationId);
