@@ -30,6 +30,10 @@ label {
     @media (min-width: 40.0625em) {
         width: 50% !important;
     }
+
+    &.highlightError {
+        @extend .govuk-input--error;
+    }
 }
 
 .textInput {
@@ -38,6 +42,10 @@ label {
     //one third of the width for large screens
     @media (min-width: 40.0625em) {
         width: 33.33% !important;
+    }
+
+    &.highlightError {
+        @extend .govuk-input--error;
     }
 }
 
@@ -100,6 +108,7 @@ a {
     margin-top: govuk-spacing(6);
 }
 
+
 //BUTTONS
 
 button {
@@ -126,8 +135,6 @@ button {
         @extend .govuk-error-message;
     }
 }
-
-
 
 
 //OTHER STUFF
