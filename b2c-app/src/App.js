@@ -21,8 +21,6 @@ export default class App extends React.Component {
 
   componentDidMount(){
 
-    /*
-
     // manipulate the DOM so that we can find all page level errors and put them in the same place, potentially
     // outside the B2C container
     this._govUkPageErrorElement = document.createElement('div');
@@ -48,7 +46,7 @@ export default class App extends React.Component {
     }).length;
 
     //only add the error summary if there is at least one error visible
-    if(numVisibleItems > 0){
+    // if(numVisibleItems > 0){
 
       this._pageLevelErrorContainer = document.getElementById('pageLevelErrorContainer');
 
@@ -65,10 +63,7 @@ export default class App extends React.Component {
           this._pageLevelErrorItemsContainer.appendChild(listItem);
         });
       }
-    }
-
-    */
-
+    // }
 
     // manipulate the DOM so that we can include the password help item
     this._passWordHelp = document.createElement('div');
