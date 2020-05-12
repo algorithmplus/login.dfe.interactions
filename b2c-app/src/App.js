@@ -86,10 +86,9 @@ export default class App extends React.Component {
         </details>
       `;
 
-    //Add password help <components.PasswordHelp />
+    //Add password help
     this._passwordElement = document.getElementById('newPassword');
     if(this._passwordElement){
-      // this._passwordElement.appendChild(this._passWordHelp);
       this._passwordElement.parentNode.insertBefore(this._passWordHelp, this._passwordElement.nextSibling);
     }
 
