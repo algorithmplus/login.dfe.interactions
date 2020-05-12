@@ -15,7 +15,7 @@ const router = express.Router({ mergeParams: true });
 module.exports = (csrf) => {
     router.use(expressLayouts);
 
-    router.get('/v2/login', (req, res) => {
+    router.get('/v2/login', cors, (req, res) => {
         res.render('b2c/views/login', {
             layout: 'b2c/views/layout'
         });
