@@ -15,11 +15,20 @@ import {
 
 export default class App extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.handleLoad = () =>  {
+      console.log('loaded'); 
+      console.log(document.getElementsByClassName('error pageLevel'));
+    }
+  }
+
   shouldComponentUpdate() {
     return false;
   };
 
   componentDidMount(){
+    window.addEventListener('load', this.handleLoad);
 
     // manipulate the DOM so that we can find all page level errors and put them in the same place, potentially
     // outside the B2C container
@@ -94,6 +103,10 @@ export default class App extends React.Component {
       this._passwordElement.parentNode.insertBefore(this._passWordHelp, this._passwordElement.nextSibling);
     }
 
+  }
+
+  componentWillUnmount() { 
+    window.removeEventListener('load', this.handleLoad)  
   }
 
   render() {
