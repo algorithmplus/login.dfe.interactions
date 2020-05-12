@@ -112,7 +112,7 @@ app.set('logger', logger);
 
 // Setup express layouts
 app.use(expressLayouts);
-app.set('layout', 'shared/layout');
+app.set('layout', 'shared/layout', 'b2c/views/layout');
 
 // Setup routes
 app.use('/healthcheck', healthCheck({ config }));
