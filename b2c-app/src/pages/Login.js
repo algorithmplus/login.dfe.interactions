@@ -1,5 +1,6 @@
 import React from 'react';
 import components from '../components';
+import { getB2CLink } from '../helpers/urls';
 
 export default function Login() {
     return (
@@ -20,7 +21,7 @@ export default function Login() {
                             <div className="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Create an account'/>
                                 <p className="govuk-body">
-                                    <a href="./signup" className="govuk-link">Creating an account</a>
+                                    <a href={getB2CLink('signup')} className="govuk-link">Creating an account</a>
                                     &nbsp;allows you to access your adviser created action plans and save your:
                                 </p>
                                 <ul className="govuk-list govuk-list--bullet">

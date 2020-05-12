@@ -1,5 +1,6 @@
 import React from 'react';
 import components from '../components';
+import { getB2CLink } from '../helpers/urls';
 
 export default function AccountActivated() {
     return (
@@ -15,7 +16,7 @@ export default function AccountActivated() {
                             <components.PageTitle size='xl' title="We've activated your account"/>
                             <components.B2C />
                             <p className="govuk-body">You can start using your account to access your information.</p>
-                            <a href="./login" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+                            <a href={getB2CLink('login')} role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
                                 Sign in to your account
                             </a>
                         </div>
