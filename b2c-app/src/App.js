@@ -41,12 +41,12 @@ export default class App extends React.Component {
     this._pageErrors = document.getElementsByClassName('error pageLevel');
 
     //find out how many of these errors are visible
-    let numVisibleItems = Array.from(this._pageErrors).filter(function(item){
-      return item.offsetParent !== null;
-    }).length;
+    // let numVisibleItems = Array.from(this._pageErrors).filter(function(item){
+    //   return item.offsetParent !== null;
+    // }).length;
 
     //only add the error summary if there is at least one error visible
-    if(numVisibleItems > 0){
+    // if(numVisibleItems > 0){
 
       this._pageLevelErrorContainer = document.getElementById('pageLevelErrorContainer');
 
@@ -63,7 +63,37 @@ export default class App extends React.Component {
           this._pageLevelErrorItemsContainer.appendChild(listItem);
         });
       }
+    // }
+
+    // manipulate the DOM so that we can include the password help item
+    this._passWordHelp = document.createElement('div');
+    /*eslint-disable */
+    this._passWordHelp.innerHTML = `
+        <details class="govuk-details govuk-!-margin-top-3" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+              Help choosing a valid password
+              </span>
+          </summary>
+          <div class="govuk-details__text">
+              <p>Your password must be between 8 and 16 characters and contain 3 out of 4 of the following:</p>
+              <ul class="govuk-list govuk-list--bullet">
+                  <li>lowercase characters</li>
+                  <li>uppercase characters</li>
+                  <li>digits (0-9)</li>
+                  <li>one or more of the following symbols: @ # $ % ^ & * - _ + = [ ] { } | \ : ' , ? / \` ~ " ( ) ; . </li>
+              </ul>
+          </div>
+        </details>
+      `;
+      /*eslint-enable */
+
+    //Add password help
+    this._passwordElement = document.getElementById('newPassword');
+    if(this._passwordElement){
+      this._passwordElement.parentNode.insertBefore(this._passWordHelp, this._passwordElement.nextSibling);
     }
+
   }
 
   render() {
