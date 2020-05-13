@@ -11,15 +11,28 @@ const cors = require('cors');
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const router = express.Router({ mergeParams: true });
+const { exec } = require('child_process');
+
+exec('./node_modules/.bin/sass src/app/b2c/assets/main.scss src/app/b2c/assets/main.css', (err, stdout, stderr) => {
+    if (err) {
+        // node couldn't execute the command
+        return;
+    }
+});
 
 module.exports = (csrf) => {
     router.use(expressLayouts);
+    router.use(cors());
 
-    router.get('/v2/login', cors, (req, res) => {
-        res.render('b2c/views/login', {
+    router.get('/assets/:resource', (req, res) => {
+
+    });
+
+    router.get('*', (req, res) => {
+        res.render(`b2c/views/${req.url}`, {
             layout: 'b2c/views/layout'
         });
-    })
+    });
 
     return router;
 }
