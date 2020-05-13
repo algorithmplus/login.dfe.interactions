@@ -92,14 +92,17 @@ function onDOMContentLoaded() {
     }
 }
 
-function onLoad() {
-    console.log('onLoad');
-    console.log(document.getElementById('api'));
-    console.log(document.getElementsByClassName('error pageLevel'));
+//modify the UI if DOM ready, otherwise listen for event to do it then
+if (document.readyState === "complete" 
+     || document.readyState === "loaded" 
+     || document.readyState === "interactive") {
+     
+     // document has at least been parsed, go and tweak the template received by B2C
+     onDOMContentLoaded();
 }
-
-window.addEventListener("DOMContentLoaded", onDOMContentLoaded);
-window.addEventListener("load", onLoad);
+else{
+    document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+}
 
 //Observe changes into the API node coming from B2C
 var targetNode = document.getElementById('api');
