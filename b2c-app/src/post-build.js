@@ -12,15 +12,9 @@ fs.readFile(indexFile, 'utf8', (err, data) => {
     }
 
     let newFile = data.replace(/(\r\n)*<script.*?\/script>(\r\n)*/g, '');
+    newFile = newFile.replace(/client-script/g, 'script');
 
-    //replace for local environment
-    // newFile = newFile.replace(/<client-script>/, '<script src="/b2c/assets/js-static/domManipulation.js">');
-
-    //replace for production build
-    newFile = newFile.replace(/<client-script>/, '<script src="/__b2cPath__/b2c/assets/js-static/domManipulation.js">');
-
-    //replace ending "client-script" tag
-    newFile = newFile.replace(/<\/client-script>/, '</script>');
-
-    fs.writeFile(filename, newFile, () => { });
+    fs.writeFile(filename, newFile, (err) => {
+        console.log(err);
+    });
 });
