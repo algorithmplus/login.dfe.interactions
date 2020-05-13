@@ -55,13 +55,13 @@ function onLoad() {
     var redirectURI = queryParams.get("redirect_uri");
     
     if(redirectURI){
-        var els = document.querySelectorAll("a[href^='authorize?']");
-        els.forEach(function(item){
+        var links = document.querySelectorAll("a[href^='authorize?']");
+        links.forEach(function(item){
             item.href = item.href.replace(/__redirectURI__/g, redirectURI);
         });
     }    
 
-    
+
     // manipulate the DOM so that we can include the password help item
     this._passWordHelp = document.createElement('div');
     /* eslint-disable */
