@@ -44,8 +44,8 @@ function onErrorsUpdate() {
     }
 }
 
-function onLoad() {
-    console.log('DOM loaded');
+function onDOMContentLoaded() {
+    console.log('DOM content loaded');
     console.log(document.getElementById('api'));
     console.log(document.getElementsByClassName('error pageLevel'));
 
@@ -92,7 +92,14 @@ function onLoad() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", onLoad, false);
+function onLoad() {
+    console.log('onLoad');
+    console.log(document.getElementById('api'));
+    console.log(document.getElementsByClassName('error pageLevel'));
+}
+
+window.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+window.addEventListener("load", onLoad);
 
 //Observe changes into the API node coming from B2C
 var targetNode = document.getElementById('api');
