@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "PUBLIC_URL=/b2c/assets/ react-scripts start",
-    "build": "react-scripts build && node ./src/post-build.js build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-local": "PUBLIC_URL=/b2c/assets/ react-scripts build",
