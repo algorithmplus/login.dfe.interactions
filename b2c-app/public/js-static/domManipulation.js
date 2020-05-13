@@ -44,13 +44,23 @@ function onErrorsUpdate() {
     }
 }
 
-function onLoad() {
-    console.log('DOM loaded');
+function onDOMContentLoaded() {
+    console.log('DOM content loaded');
     console.log(document.getElementById('api'));
     console.log(document.getElementsByClassName('error pageLevel'));
 
 
-    //Actual DOM Manipulation for B2C below
+    //Replace placeholder for redirect URI in all the links
+    var queryParams = (new URL(document.location)).searchParams;
+    var redirectURI = queryParams.get("redirect_uri");
+    
+    if(redirectURI){
+        var links = document.querySelectorAll("a[href^='authorize?']");
+        links.forEach(function(item){
+            item.href = item.href.replace(/__redirectURI__/g, redirectURI);
+        });
+    }    
+
 
     // manipulate the DOM so that we can include the password help item
     this._passWordHelp = document.createElement('div');
@@ -82,7 +92,14 @@ function onLoad() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", onLoad, false);
+function onLoad() {
+    console.log('onLoad');
+    console.log(document.getElementById('api'));
+    console.log(document.getElementsByClassName('error pageLevel'));
+}
+
+window.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+window.addEventListener("load", onLoad);
 
 //Observe changes into the API node coming from B2C
 var targetNode = document.getElementById('api');
