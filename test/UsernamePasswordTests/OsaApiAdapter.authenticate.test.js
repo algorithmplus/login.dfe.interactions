@@ -2,11 +2,7 @@ jest.mock('login.dfe.request-promise-retry');
 jest.mock('login.dfe.jwt-strategies');
 jest.mock('../../src/infrastructure/Config');
 
-const rp = jest.fn();
-const requestPromise = require('login.dfe.request-promise-retry');
-
-requestPromise.defaults.mockReturnValue(rp);
-
+const rp = require('login.dfe.request-promise-retry');
 
 describe('When authenticating a user with the OSA api', () => {
   const username = 'user.one@unit.tests';
@@ -40,45 +36,42 @@ describe('When authenticating a user with the OSA api', () => {
     osaApiUserAdapter = require('./../../src/infrastructure/osa/OsaApiAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
 
-  // it('it should post to the osa api', async () => {
-  //   await osaApiUserAdapter.authenticate(username, password);
+   it('it should post to the osa api', async () => {
+     await osaApiUserAdapter.authenticate(username, password);
 
-  //   expect(rp.mock.calls[0][0].method).toBe('POST');
-  //   expect(rp.mock.calls[0][0].uri).toBe('https://osa.login.dfe.test/authenticate');
-  // });
+     expect(rp.mock.calls[0][0].method).toBe('POST');
+     expect(rp.mock.calls[0][0].uri).toBe('https://osa.login.dfe.test/authenticate');
+   });
 
-  // it('it should send entered username and password', async () => {
-  //   await osaApiUserAdapter.authenticate(username, password);
+   it('it should send entered username and password', async () => {
+     await osaApiUserAdapter.authenticate(username, password);
 
-  //   expect(rp.mock.calls[0][0].body.username).toBe(username);
-  //   expect(rp.mock.calls[0][0].body.password).toBe(password);
-  // });
+     expect(rp.mock.calls[0][0].body.username).toBe(username);
+     expect(rp.mock.calls[0][0].body.password).toBe(password);
+   });
 
-  // it('it should user the jwt token for authorization', async () => {
-  //   await osaApiUserAdapter.authenticate(username, password);
+   it('it should user the jwt token for authorization', async () => {
+     await osaApiUserAdapter.authenticate(username, password);
 
-  //   expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
-  // });
+     expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
+   });
 
-  // it('then it should throw an error if the api call failed', async () => {
-  //   rp.mockImplementation(() => {
-  //     const error = new Error();
-  //     error.statusCode = 500;
-  //     throw error;
-  //   });
+   it('then it should throw an error if the api call failed', async () => {
+     rp.mockImplementation(() => {
+       const error = new Error();
+       error.statusCode = 500;
+       throw error;
+     });
 
-  //   try {
-  //     await osaApiUserAdapter.authenticate(username, password);
-  //     throw new Error('No error thrown!');
-  //   } catch (e) {
-  //     if (e.message === 'No error thrown!') {
-  //       throw e;
-  //     }
-  //   }
-  // });
+     try {
+       await osaApiUserAdapter.authenticate(username, password);
+       throw new Error('No error thrown!');
+     } catch (e) {
+       if (e.message === 'No error thrown!') {
+         throw e;
+       }
+     }
+   });
 
 });
