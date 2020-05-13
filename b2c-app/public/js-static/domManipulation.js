@@ -50,8 +50,18 @@ function onLoad() {
     console.log(document.getElementsByClassName('error pageLevel'));
 
 
-    //Actual DOM Manipulation for B2C below
+    //Replace placeholder for redirect URI in all the links
+    var queryParams = (new URL(document.location)).searchParams;
+    var redirectURI = queryParams.get("redirect_uri");
+    
+    if(redirectURI){
+        var els = document.querySelectorAll("a[href^='authorize?']");
+        els.forEach(function(item){
+            item.href = item.href.replace(/__redirectURI__/g, redirectURI);
+        });
+    }    
 
+    
     // manipulate the DOM so that we can include the password help item
     this._passWordHelp = document.createElement('div');
     /* eslint-disable */

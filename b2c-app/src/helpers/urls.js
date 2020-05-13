@@ -18,7 +18,7 @@ export function getB2CLink (action) {
     }
 
     let relativePath = `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` + 
-        `&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login`;    
+        `&redirect_uri=__redirectURI__&scope=openid&response_type=id_token&prompt=login`;    
 
     return relativePath;
 
