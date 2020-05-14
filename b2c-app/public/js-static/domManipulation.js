@@ -1,4 +1,4 @@
-function onErrorsUpdate() {
+function onPageErrorsUpdate() {
     // manipulate the DOM so that we can find all page level errors and put them in the same place,
     // potentially outside the B2C container
     this._govUkPageErrorElement = document.createElement('div');
@@ -45,11 +45,6 @@ function onErrorsUpdate() {
 }
 
 function onDOMContentLoaded() {
-    console.log('DOM content loaded');
-    console.log(document.getElementById('api'));
-    console.log(document.getElementsByClassName('error pageLevel'));
-
-
     //Replace placeholder for redirect URI in all the links
     var queryParams = (new URL(document.location)).searchParams;
     var redirectURI = queryParams.get("redirect_uri");
@@ -111,20 +106,25 @@ var targetNode = document.getElementById('api');
 var config = { attributes: true, childList: true, subtree: true };
 
 // Callback function to execute when mutations are observed
-var callback = function(mutationsList, observer) {
-    // Use traditional 'for loops' for IE 11
+var mutationCallback = function(mutationsList, observer) {
+    //loop through mutated objects to se if at least one is a page level error
+    var refreshErrorsRequired = false;
     for(var mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            console.log('A child node has been added or removed.');
+        if(!refreshErrorsRequired &&
+            mutation.target.classList.contains('error') &&
+            mutation.target.classList.contains('pageLevel')
+            ){
+            refreshErrorsRequired = true;
         }
-        else if (mutation.type === 'attributes') {
-            console.log('The ' + mutation.attributeName + ' attribute was modified.');
-        }
+    }
+    //refresh the page level errors if there was at least one included
+    if(refreshErrorsRequired){
+        onPageErrorsUpdate();
     }
 };
 
 // Create an observer instance linked to the callback function
-var observer = new MutationObserver(callback);
+var observer = new MutationObserver(mutationCallback);
 
 // Start observing the target node for configured mutations
 observer.observe(targetNode, config);
