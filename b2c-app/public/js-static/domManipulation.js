@@ -103,20 +103,70 @@ else{
 var targetNode = document.getElementById('api');
 
 //options for the observer
-var config = { attributes: true, childList: true, subtree: true };
+var config = { attributes: true, childList: true, subtree: true};
 
 // Callback function to execute when mutations are observed
 var mutationCallback = function(mutationsList, observer) {
-    //loop through mutated objects to se if at least one is a page level error
+
+    //flag to see if we have to refresh page level errors
     var refreshErrorsRequired = false;
+    
+    //loop through mutated objects to run crazy logic and update the UI accordingly
     for(var mutation of mutationsList) {
+
+        //Determine if we will need to refresh the page level errors after the loop
         if(!refreshErrorsRequired &&
             mutation.target.classList.contains('error') &&
             mutation.target.classList.contains('pageLevel')
             ){
             refreshErrorsRequired = true;
         }
+
+        /**
+         * sign up page errors show/hide
+        **/
+
+        // highlight item level errors added
+        if(mutation.type === 'attributes' &&
+            mutation.attributeName === 'class' &&
+            mutation.target.classList.contains('error') &&
+            mutation.target.classList.contains('itemLevel') &&
+            mutation.target.classList.contains('show')
+            ){
+                //add class to highlight error
+                mutation.target.parentElement.classList.add('govuk-form-group--error');
+        }
+
+        //remove highlight from item level errors being removed
+        if(mutation.type === 'childList' &&
+            mutation.target.classList.contains('error') &&
+            mutation.target.classList.contains('itemLevel') &&
+            mutation.target.classList.contains('show') &&
+            mutation.removedNodes.length &&
+            mutation.removedNodes[0].ownerDocument.activeElement.classList.contains('invalid')
+            ){
+                //remove class to highlight error
+                mutation.target.parentElement.classList.remove('govuk-form-group--error');
+        }
+
+
+        /**
+         * log in page errors show/hide
+        **/        
+        if(mutation.type === 'attributes' &&
+            mutation.attributeName === 'style' &&
+            mutation.target.classList.contains('error') &&
+            mutation.target.classList.contains('itemLevel')
+            ){
+                if(mutation.target.style.display === 'none'){
+                    mutation.target.parentElement.classList.remove('govuk-form-group--error');
+                }
+                else{
+                    mutation.target.parentElement.classList.add('govuk-form-group--error');
+                }
+        }
     }
+
     //refresh the page level errors if there was at least one included
     if(refreshErrorsRequired){
         onPageErrorsUpdate();
