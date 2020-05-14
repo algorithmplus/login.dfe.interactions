@@ -1,3 +1,4 @@
+const listEndpoints = require('express-list-endpoints');
 const logger = require('./infrastructure/logger');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -171,6 +172,10 @@ app.use(getErrorHandler({
   logger,
   errorPageRenderer,
 }));
+
+app.get('/routes', (req, res) => {
+  res.json(listEndpoints(app));
+});
 
 app.get('*', (req, res) => {
   res.status(404).render('errors/views/notFound');
