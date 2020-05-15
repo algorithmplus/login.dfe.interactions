@@ -58,13 +58,11 @@
                     mutation.target.classList.contains('itemLevel') &&
                     mutation.target.classList.contains('show')
                 ) {
-                    if (mutation.removedNodes.length &&
-                        mutation.removedNodes[0].ownerDocument.activeElement.classList.contains('invalid')) {
+                    if (mutation.removedNodes.length) {
                         //remove class to highlight error
                         mutation.target.parentElement.classList.remove('govuk-form-group--error');
                     }
-                    else if (mutation.addedNodes.length &&
-                        mutation.addedNodes[0].ownerDocument.activeElement.classList.contains('invalid')) {
+                    else if (mutation.addedNodes.length) {
                         //add class to highlight error
                         mutation.target.parentElement.classList.add('govuk-form-group--error');
                     }
