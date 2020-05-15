@@ -2,9 +2,9 @@ import React from 'react';
 import components from '../components';
 import { getB2CLink } from '../helpers/urls';
 
-export default function AccountActivated() {
+export default function ResetPassword() {
     return (
-        <div id="accountActivated">
+        <div id="resetPassword">
 
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
@@ -14,18 +14,16 @@ export default function AccountActivated() {
                 <main className="govuk-main-wrapper">
                     <div className="govuk-grid-row">
                         <div className="govuk-grid-column-two-thirds">
-                            <components.PageTitle size='xl' title="We've activated your account"/>
+                            <components.PageTitle size='xl' title="Access your account"/>
                             <components.B2C />
-                            <a href={getB2CLink('login')} role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-                                Sign in to your account
-                            </a>
+                            
                         </div>
                     </div>
                 </main>
 
             </div>
 
-            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/accountActivated.js"></script>
+            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/resetPassword.js"></script>
 
         </div>
     )

@@ -24,7 +24,7 @@ export default function AccountLocked() {
 
             </div>
 
-            <script src="/__++b2cPath++__/b2c/assets/js-static/pages/accountLocked.js"></script>
+            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/accountLocked.js"></script>
 
         </div>
     )
