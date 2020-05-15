@@ -28,7 +28,7 @@
                     }
                 }
             }
-        }
+        };
 
         /**
          * Callback that will look for class changes to show/hide item level errors
@@ -68,7 +68,7 @@
                     }
                 }
             }
-        }
+        };
 
         /**
          * Callback that will look for class changes to show/hide page level errors
@@ -93,7 +93,7 @@
             if (refreshErrorsRequired) {
                 self.refreshPageLevelErrors();
             }
-        }
+        };
 
         this.refreshPageLevelErrors = function refreshPageLevelErrors() {
             // manipulate the DOM so that we can find all page level errors and put them in the same place,
@@ -139,7 +139,7 @@
                     });
                 }
             }
-        }
+        };
 
         // Create an observer instance linked to the callback function
         this.observers = [
@@ -162,47 +162,6 @@
                 });
             }
 
-            //manipulate the DOM to move forgot password link outside its parent
-            if(this.forgotPassword){
-                //get its actual wrapper that contains the class
-                this.forgotPasswordWrapper = this.forgotPassword.parentNode;
-                if (this.forgotPasswordWrapper){
-                    this.forgotPasswordContainer = this.forgotPasswordWrapper.parentNode;
-                    //move the password element with its class, put it after its current container
-                    this.forgotPasswordContainer.parentNode.insertBefore(this.forgotPasswordWrapper, this.forgotPasswordContainer.nextSibling);
-                }
-            }
-
-
-            // manipulate the DOM so that we can include the password help item
-            this._passWordHelp = document.createElement('div');
-            /* eslint-disable */
-            this._passWordHelp.innerHTML = `
-                <details class="govuk-details govuk-!-margin-top-3" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                            <span class="govuk-details__summary-text">
-                            Help choosing a valid password
-                            </span>
-                    </summary>
-                    <div class="govuk-details__text">
-                            <p>Your password must be between 8 and 16 characters and contain 3 out of 4 of the following:</p>
-                            <ul class="govuk-list govuk-list--bulllet">
-                                <li>lowercase characters</li>
-                                <li>uppercase characters</li>
-                                <li>digits (0-9)</li>
-                                <li>one or more of the following symbols: @ # $ % ^ & * - _ + = [ ] { } | \ : ' , ? / \` ~ " ( ) ; . </li>
-                            </ul>
-                    </div>
-                </details>
-              `;
-            /* eslint-enable */
-
-            //Add password help
-            this._passwordElement = document.getElementById('newPassword');
-            if (this._passwordElement) {
-                this._passwordElement.parentNode.insertBefore(this._passWordHelp, this._passwordElement.nextSibling);
-            }
-
             //observe changes into the API node coming from B2C
             self.targetNode = document.getElementById('api');
 
@@ -214,7 +173,7 @@
                 // Start observing the target node for configured mutations
                 observer.observe(self.targetNode, observerConfig);
             });
-        }
+        };
 
         this.init = function init() {
             if (document.readyState === "complete"
@@ -227,7 +186,7 @@
             else {
                 document.addEventListener("DOMContentLoaded", this.onDOMContentLoaded);
             }
-        }
+        };
     }
 
     new Controller().init();
