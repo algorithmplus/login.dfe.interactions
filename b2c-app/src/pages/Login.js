@@ -33,7 +33,7 @@ export default function Login() {
                 
             </div>
 
-            <script src="/__++b2cPath++__/b2c/assets/js-static/pages/login.js"></script>
+            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/login.js"></script>
 
         </div>
     )
