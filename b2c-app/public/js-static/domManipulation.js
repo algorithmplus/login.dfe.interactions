@@ -40,11 +40,16 @@
                 if (mutation.type === 'attributes' &&
                     mutation.attributeName === 'class' &&
                     mutation.target.classList.contains('error') &&
-                    mutation.target.classList.contains('itemLevel') &&
-                    mutation.target.classList.contains('show')
+                    mutation.target.classList.contains('itemLevel')
                 ) {
-                    //add class to highlight error
-                    mutation.target.parentElement.classList.add('govuk-form-group--error');
+                    if (mutation.target.classList.contains('show')) {
+                        //add class to highlight error
+                        mutation.target.parentElement.classList.add('govuk-form-group--error');
+                    }
+                    else {
+                        //remove class to highlight error
+                        mutation.target.parentElement.classList.remove('govuk-form-group--error');
+                    }
                 }
 
                 //add/remove highlight from item level errors being added/removed
