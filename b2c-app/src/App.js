@@ -3,7 +3,7 @@ import React from 'react';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import EmailSent from './pages/EmailSent';
-import LockedAccount from './pages/LockedAccount';
+import AccountLocked from './pages/AccountLocked';
 import AccountActivated from './pages/AccountActivated';
 
 import components from './components';
@@ -145,7 +145,7 @@ export default class App extends React.Component {
               <EmailSent />
             </Route>
             <Route path="/locked">
-              <LockedAccount />
+              <AccountLocked />
             </Route>
             <Route path="/activated">
               <AccountActivated />

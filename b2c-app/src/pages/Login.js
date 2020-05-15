@@ -3,9 +3,11 @@ import components from '../components';
 import { getB2CLink } from '../helpers/urls';
 
 export default function Login() {
+
     return (
         
         <div id="login">
+
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -24,16 +26,15 @@ export default function Login() {
                                     <a href={getB2CLink('signup')} className="govuk-link">Creating an account</a>
                                     &nbsp;allows you to access and save your skills health check reports.
                                 </p>
-                                <ul className="govuk-list govuk-list--bullet">
-                                    <li>course searches</li>
-                                    <li>Skills health check reports</li>
-                                </ul>
                             </div>
                         </div>
                     </main>
                 </div>
                 
             </div>
+
+            <script src="/__b2cPath__/b2c/assets/js-static/pages/login.js"></script>
+
         </div>
     )
 }

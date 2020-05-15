@@ -28,7 +28,7 @@
                     }
                 }
             }
-        }
+        };
 
         /**
          * Callback that will look for class changes to show/hide item level errors
@@ -40,11 +40,16 @@
                 if (mutation.type === 'attributes' &&
                     mutation.attributeName === 'class' &&
                     mutation.target.classList.contains('error') &&
-                    mutation.target.classList.contains('itemLevel') &&
-                    mutation.target.classList.contains('show')
+                    mutation.target.classList.contains('itemLevel')
                 ) {
-                    //add class to highlight error
-                    mutation.target.parentElement.classList.add('govuk-form-group--error');
+                    if (mutation.target.classList.contains('show')) {
+                        //add class to highlight error
+                        mutation.target.parentElement.classList.add('govuk-form-group--error');
+                    }
+                    else {
+                        //remove class to highlight error
+                        mutation.target.parentElement.classList.remove('govuk-form-group--error');
+                    }
                 }
 
                 //add/remove highlight from item level errors being added/removed
@@ -53,19 +58,17 @@
                     mutation.target.classList.contains('itemLevel') &&
                     mutation.target.classList.contains('show')
                 ) {
-                    if (mutation.removedNodes.length &&
-                        mutation.removedNodes[0].ownerDocument.activeElement.classList.contains('invalid')) {
+                    if (mutation.removedNodes.length) {
                         //remove class to highlight error
                         mutation.target.parentElement.classList.remove('govuk-form-group--error');
                     }
-                    else if (mutation.addedNodes.length &&
-                        mutation.addedNodes[0].ownerDocument.activeElement.classList.contains('invalid')) {
+                    else if (mutation.addedNodes.length) {
                         //add class to highlight error
                         mutation.target.parentElement.classList.add('govuk-form-group--error');
                     }
                 }
             }
-        }
+        };
 
         /**
          * Callback that will look for class changes to show/hide page level errors
@@ -90,7 +93,7 @@
             if (refreshErrorsRequired) {
                 self.refreshPageLevelErrors();
             }
-        }
+        };
 
         this.refreshPageLevelErrors = function refreshPageLevelErrors() {
             // manipulate the DOM so that we can find all page level errors and put them in the same place,
@@ -136,7 +139,7 @@
                     });
                 }
             }
-        }
+        };
 
         // Create an observer instance linked to the callback function
         this.observers = [
@@ -159,36 +162,6 @@
                 });
             }
 
-
-            // manipulate the DOM so that we can include the password help item
-            this._passWordHelp = document.createElement('div');
-            /* eslint-disable */
-            this._passWordHelp.innerHTML = `
-                <details class="govuk-details govuk-!-margin-top-3" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                            <span class="govuk-details__summary-text">
-                            Help choosing a valid password
-                            </span>
-                    </summary>
-                    <div class="govuk-details__text">
-                            <p>Your password must be between 8 and 16 characters and contain 3 out of 4 of the following:</p>
-                            <ul class="govuk-list govuk-list--bulllet">
-                                <li>lowercase characters</li>
-                                <li>uppercase characters</li>
-                                <li>digits (0-9)</li>
-                                <li>one or more of the following symbols: @ # $ % ^ & * - _ + = [ ] { } | \ : ' , ? / \` ~ " ( ) ; . </li>
-                            </ul>
-                    </div>
-                </details>
-              `;
-            /* eslint-enable */
-
-            //Add password help
-            this._passwordElement = document.getElementById('newPassword');
-            if (this._passwordElement) {
-                this._passwordElement.parentNode.insertBefore(this._passWordHelp, this._passwordElement.nextSibling);
-            }
-
             //observe changes into the API node coming from B2C
             self.targetNode = document.getElementById('api');
 
@@ -200,7 +173,7 @@
                 // Start observing the target node for configured mutations
                 observer.observe(self.targetNode, observerConfig);
             });
-        }
+        };
 
         this.init = function init() {
             if (document.readyState === "complete"
@@ -213,7 +186,7 @@
             else {
                 document.addEventListener("DOMContentLoaded", this.onDOMContentLoaded);
             }
-        }
+        };
     }
 
     new Controller().init();
