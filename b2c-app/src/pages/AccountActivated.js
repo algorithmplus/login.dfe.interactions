@@ -5,6 +5,7 @@ import { getB2CLink } from '../helpers/urls';
 export default function AccountActivated() {
     return (
         <div id="accountActivated">
+
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -23,6 +24,9 @@ export default function AccountActivated() {
                 </main>
 
             </div>
+
+            <script src="/__b2cPath__/b2c/assets/js-static/pages/accountActivated.js"></script>
+
         </div>
     )
 }

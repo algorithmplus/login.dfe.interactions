@@ -1,9 +1,10 @@
 import React from 'react';
 import components from '../components';
 
-export default function LockedAccount() {
+export default function AccountLocked() {
     return (
         <div id="lockedAccount">
+
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -22,6 +23,9 @@ export default function LockedAccount() {
                 </main>
 
             </div>
+
+            <script src="/__b2cPath__/b2c/assets/js-static/pages/accountLocked.js"></script>
+
         </div>
     )
 }

@@ -3,9 +3,11 @@ import components from '../components';
 import { getB2CLink } from '../helpers/urls';
 
 export default function Login() {
+
     return (
         
         <div id="login">
+
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -30,6 +32,9 @@ export default function Login() {
                 </div>
                 
             </div>
+
+            <script src="/__b2cPath__/b2c/assets/js-static/pages/login.js"></script>
+
         </div>
     )
 }

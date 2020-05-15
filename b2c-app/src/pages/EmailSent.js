@@ -5,6 +5,7 @@ import { getB2CLink } from '../helpers/urls';
 export default function EmailSent() {
     return (
         <div id="emailSent">
+
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
@@ -26,6 +27,9 @@ export default function EmailSent() {
                 </main>
 
             </div>
+
+            <script src="/__b2cPath__/b2c/assets/js-static/pages/emailSent.js"></script>
+
         </div>
     )
 }
