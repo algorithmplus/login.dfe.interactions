@@ -1,6 +1,5 @@
 import React from 'react';
 import components from '../components';
-import { getB2CLink } from '../helpers/urls';
 
 export default function ResetPassword() {
     return (
@@ -23,7 +22,7 @@ export default function ResetPassword() {
 
             </div>
 
-            <script src="/__++b2cPath++__/b2c/assets/js-static/pages/resetPassword.js"></script>
+            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/resetPassword.js"></script>
 
         </div>
     )
