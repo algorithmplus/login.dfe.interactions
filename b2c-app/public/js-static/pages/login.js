@@ -8,6 +8,15 @@
             // and also update its href
             this.forgotPassword = document.getElementById('forgotPassword');
             if(this.forgotPassword){
+                //modify href
+                //TODO see if we can reuse code in urls helper
+                //TODO if so, see if we can reuse code to replace __redirectURI__
+                var queryParams = (new URL(document.location)).searchParams;
+                var redirectURI = queryParams.get("redirect_uri");
+                this.forgotPassword.href = `authorize?p=B2C_1A_passwordreset&client_id=488c321f-10e4-48f2-b9c2-261e2add2f8d&nonce=defaultNonce` + 
+                    `&redirect_uri=${redirectURI}&scope=openid&response_type=id_token&prompt=login`;   
+                
+                //now move the element to the desired location
                 //get its actual wrapper that contains the class
                 this.forgotPasswordWrapper = this.forgotPassword.parentNode;
                 if (this.forgotPasswordWrapper){
