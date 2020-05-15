@@ -4,7 +4,9 @@
         
         this.onDOMContentLoaded = function onDOMContentLoaded() {
 
-            //manipulate the DOM to move forgot password link outside its parent
+            // manipulate the DOM to move forgot password link outside its parent
+            // and also update its href
+            this.forgotPassword = document.getElementById('forgotPassword');
             if(this.forgotPassword){
                 //get its actual wrapper that contains the class
                 this.forgotPasswordWrapper = this.forgotPassword.parentNode;
@@ -14,7 +16,7 @@
                     this.forgotPasswordContainer.parentNode.insertBefore(this.forgotPasswordWrapper, this.forgotPasswordContainer.nextSibling);
                 }
             }
-
+            
         };
         
         this.init = function init() {
