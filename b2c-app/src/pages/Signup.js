@@ -12,7 +12,7 @@ export default function Signup() {
                 <components.B2C />
             </div>
 
-            <script src="/__b2cPath__/b2c/assets/js-static/pages/signup.js"></script>
+            <script src="/__++b2cPath++__/b2c/assets/js-static/pages/signup.js"></script>
 
         </div>
     )

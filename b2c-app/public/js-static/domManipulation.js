@@ -158,7 +158,7 @@
             if (redirectURI) {
                 var links = document.querySelectorAll("a[href^='authorize?']");
                 links.forEach(function (item) {
-                    item.href = item.href.replace(/__redirectURI__/g, redirectURI);
+                    item.href = item.href.replace(/__\+\+redirectURI\+\+__/g, redirectURI);
                 });
             }
 
