@@ -28,7 +28,7 @@ export default function EmailSent() {
 
             </div>
 
-            <script src="/__b2cPath__/b2c/assets/js-static/pages/emailSent.js"></script>
+            <script src="/__++b2cPath++__/b2c/assets/js-static/pages/emailSent.js"></script>
 
         </div>
     )
