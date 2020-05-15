@@ -24,10 +24,6 @@ export default function Login() {
                                     <a href={getB2CLink('signup')} className="govuk-link">Creating an account</a>
                                     &nbsp;allows you to access and save your skills health check reports.
                                 </p>
-                                <ul className="govuk-list govuk-list--bullet">
-                                    <li>course searches</li>
-                                    <li>Skills health check reports</li>
-                                </ul>
                             </div>
                         </div>
                     </main>
