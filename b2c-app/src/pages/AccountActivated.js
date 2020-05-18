@@ -25,7 +25,7 @@ export default function AccountActivated() {
 
             </div>
 
-            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/accountActivated.js"></script>
+            <script src="__--b2cPath--__/b2c/assets/js-static/pages/accountActivated.js"></script>
 
         </div>
     )

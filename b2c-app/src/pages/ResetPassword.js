@@ -25,7 +25,7 @@ export default function ResetPassword() {
 
             </div>
 
-            <script src="/__--b2cPath--__/b2c/assets/js-static/pages/resetPassword.js"></script>
+            <script src="__--b2cPath--__/b2c/assets/js-static/pages/resetPassword.js"></script>
 
         </div>
     )
