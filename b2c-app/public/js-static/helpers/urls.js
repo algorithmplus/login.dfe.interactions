@@ -1,8 +1,7 @@
-export function getB2CLink (action) {
+function getB2CLink (action) {
+    var clientId = '488c321f-10e4-48f2-b9c2-261e2add2f8d'; 
 
-    const clientId = '488c321f-10e4-48f2-b9c2-261e2add2f8d'; 
-
-    let actionURL;
+    var actionURL;
 
     switch(action){
         case 'signup':
@@ -20,8 +19,8 @@ export function getB2CLink (action) {
             break;
     }
 
-    let relativePath = `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` + 
-        `&redirect_uri=__redirectURI__&scope=openid&response_type=id_token&prompt=login`;    
+    var relativePath = `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` + 
+        `&redirect_uri=__redirectURI__&scope=openid&response_type=id_token&prompt=login`;
 
     return relativePath;
 

@@ -8,6 +8,13 @@
             // and also update its href
             this.forgotPassword = document.getElementById('forgotPassword');
             if(this.forgotPassword){
+                //modify href
+                var queryParams = (new URL(document.location)).searchParams;
+                var redirectURI = queryParams.get("redirect_uri");
+                this.forgotPassword.href = getB2CLink('reset-password');
+                this.forgotPassword.href = this.forgotPassword.href.replace(/__redirectURI__/g, redirectURI);  
+                
+                //now move the element to the desired location
                 //get its actual wrapper that contains the class
                 this.forgotPasswordWrapper = this.forgotPassword.parentNode;
                 if (this.forgotPasswordWrapper){
