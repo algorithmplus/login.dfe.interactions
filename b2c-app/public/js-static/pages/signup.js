@@ -32,6 +32,26 @@
             if (this._passwordElement) {
                 this._passwordElement.parentNode.insertBefore(this._passWordHelp, this._passwordElement.nextSibling);
             }
+
+
+            //manipulate the DOM to tweak the UI for Terms and Conditions box
+            this.newTsAndCs = `
+                <h1 class="govuk-heading-m">Terms and conditions</h1>
+                <div class="govuk-form-group">
+                    <div class="error itemLevel" role="alert"></div>
+                    <div class="attrEntry">
+                        <input id="tncCheckbox_true" name="tncCheckbox" type="checkbox" value="true" />
+                        <label for="tncCheckbox_true">I accept the 
+                        <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" target="_blank">terms and conditions</a>
+                        and I am 13 or over</label>
+                    </div>
+                </div>
+              `;
+
+            this.tsAndCsElement = document.getElementById('tncCheckbox_true');
+            if(this.tsAndCsElement){
+                this.tsAndCsElement.parentNode.parentNode.innerHTML = this.newTsAndCs;
+            }
             
         };
 
