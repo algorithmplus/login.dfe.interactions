@@ -30,7 +30,7 @@ function getComponent(req) {
                     <App />
                 </StaticRouter>
             );
-            html = html.replace('__--b2cPath--__', reqURL);
+            html = html.replace(/__--b2cPath--__/g, reqURL);
             resolve(html);
         } catch (e) {
             reject(e)
