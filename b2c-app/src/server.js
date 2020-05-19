@@ -5,6 +5,7 @@ import App from './App';
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const url = require('url');
 
 const express = require('express');
 const router = express.Router({ mergeParams: true });
@@ -13,7 +14,13 @@ const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 import { StaticRouter } from 'react-router-dom';
 
-function getComponent(route) {
+function getComponent(req) {
+    let route = req.url;
+    let reqURL = url.format({
+        protocol: req.protocol,
+        host: req.get('host')
+    });
+    
     return new Promise((resolve, reject) => {
         let html;
         let context = {};
@@ -23,6 +30,7 @@ function getComponent(route) {
                     <App />
                 </StaticRouter>
             );
+            html = html.replace('__--b2cPath--__', reqURL);
             resolve(html);
         } catch (e) {
             reject(e)
@@ -49,7 +57,7 @@ module.exports = (csrf) => {
     router.use('/images', cors(), express.static(`${process.cwd()}/b2c-app/static-assets`));
 
     router.get('*', cors(), csrf, (req, res) => {
-        getComponent(req.url)
+        getComponent(req)
             .then((comp) => {
                 return getHTML(comp);
             })
