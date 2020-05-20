@@ -95,33 +95,36 @@
 
 
             //manipulate the DOM to tweak the UI for Terms and Conditions box
-            //1-add class govuk-form-group--error when error shown in itemLevel error
-            //2-change display property of element with id tncErrorMessage when error shown in itemLevel error 
-            this.newTsAndCs = `
-                <h1 class="govuk-heading-m">Terms and conditions</h1>
-                <div class="govuk-form-group">
-                    <div id="tncErrorMessage" class="govuk-error-message" role="alert" style="display: none">You must accept our Terms and Conditions</div>
-                    <div class="attrEntry">
-                        <div class="error itemLevel" role="alert" style="display: none"></div>
-                        <input id="tncCheckbox_true" name="tncCheckbox" type="checkbox" value="true" />
-                        <label for="tncCheckbox_true">I accept the 
-                            <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" target="_blank">terms and conditions</a>
-                            and I am 13 or over
-                        </label>
-                    </div>
+            this.newTsAndCsHeader = document.createElement('h1');
+            this.newTsAndCsHeader.className = 'govuk-heading-m';
+            this.newTsAndCsHeader.innerHTML = 'Terms and conditions';
+
+            this.newTsAndCsBox = document.createElement('div');
+            this.newTsAndCsBox.className = 'govuk-form-group';
+            this.newTsAndCsBox.innerHTML = `
+                <div id="tncErrorMessage" class="govuk-error-message" role="alert" style="display: none">You must accept our Terms and Conditions</div>
+                <div class="attrEntry">
+                    <div class="error itemLevel" role="alert" style="display: none"></div>
+                    <input id="tncCheckbox_true" name="tncCheckbox" type="checkbox" value="true" />
+                    <label for="tncCheckbox_true">I accept the 
+                        <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" target="_blank">terms and conditions</a>
+                        and I am 13 or over
+                    </label>
                 </div>
               `;
 
+            //Add new Terms and Conditions element and remove the original one
             this.tsAndCsElement = document.getElementById('tncCheckbox_true');
             if (this.tsAndCsElement) {
-                this.tsAndCsElement.parentNode.parentNode.innerHTML = this.newTsAndCs;
+                this.tsAndCsElement.parentNode.parentNode.insertBefore(this.newTsAndCsHeader, this.tsAndCsElement.parentNode);
+                this.tsAndCsElement.parentNode.parentNode.insertBefore(this.newTsAndCsBox, this.tsAndCsElement.parentNode);
+                this.tsAndCsElement.parentNode.parentNode.removeChild(this.tsAndCsElement.parentNode);
             }
 
-            //observe changes into the API node coming from B2C
-            self.targetNode = document.getElementById('api');
+            //observe changes into the Terms and Conditions element node coming from B2C
+            self.targetNode = this.newTsAndCsBox;
 
             //options for the observer
-            //TODO: adapt config for what each observer needs
             var observerConfig = { attributes: true, childList: true, subtree: true };
 
             self.observers.forEach(function (observer) {
