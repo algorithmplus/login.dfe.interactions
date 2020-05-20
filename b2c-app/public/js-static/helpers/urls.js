@@ -13,6 +13,9 @@ function getB2CLink (action) {
         case 'reset-password':
             actionURL = 'B2C_1A_passwordreset';
             break;
+        case 'find-email':
+            actionURL = 'B2C_1A_findEmail';
+            break;
         default:
             //point to login page by default
             actionURL = 'B2C_1A_signin_invitation';
