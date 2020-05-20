@@ -49,6 +49,10 @@ label {
     }
 }
 
+.govuk-hint {
+    margin-bottom: 5px !important;
+}
+
 
 //CHECKBOXES
 
@@ -132,10 +136,7 @@ button {
 
 .error.itemLevel {
     @extend .govuk-error-message;
-
-    p {
-        margin: 0;
-    }
+    margin: 0;
 }
 
 .error.pageLevel, .govuk-error-summary__body {
