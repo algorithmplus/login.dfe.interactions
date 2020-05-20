@@ -1,17 +1,27 @@
+var ACTIONS = {
+    SIGNUP: 'signup',
+    LOGIN: 'login',
+    RESET_PASSWORD: 'reset-password',
+    FIND_EMAIL: 'find-email'
+}
+
 function getB2CLink (action) {
     var clientId = '488c321f-10e4-48f2-b9c2-261e2add2f8d'; 
 
     var actionURL;
 
     switch(action){
-        case 'signup':
+        case ACTIONS.SIGNUP:
             actionURL = 'B2C_1A_account_signup';
             break;
-        case 'login':
+        case ACTIONS.LOGIN:
             actionURL = 'B2C_1A_signin_invitation';
             break;
-        case 'reset-password':
+        case ACTIONS.RESET_PASSWORD:
             actionURL = 'B2C_1A_passwordreset';
+            break;
+        case ACTIONS.FIND_EMAIL:
+            actionURL = 'B2C_1A_findEmail';
             break;
         default:
             //point to login page by default

@@ -11,7 +11,7 @@
                 //modify href
                 var queryParams = (new URL(document.location)).searchParams;
                 var redirectURI = queryParams.get("redirect_uri");
-                this.forgotPassword.href = getB2CLink('reset-password');
+                this.forgotPassword.href = getB2CLink(ACTIONS.RESET_PASSWORD);
                 this.forgotPassword.href = this.forgotPassword.href.replace(/__redirectURI__/g, redirectURI);  
                 
                 //now move the element to the desired location
