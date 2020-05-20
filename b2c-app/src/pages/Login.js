@@ -1,6 +1,7 @@
 import React from 'react';
 import components from '../components';
 import { getB2CLink } from '../helpers/urls';
+import { ACTIONS } from '../constants/actions';
 
 export default function Login() {
 
@@ -23,7 +24,7 @@ export default function Login() {
                             <div className="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Create an account'/>
                                 <p className="govuk-body">
-                                    <a href={getB2CLink('signup')} className="govuk-link">Creating an account</a>
+                                    <a href={getB2CLink(ACTIONS.SIGNUP)} className="govuk-link">Creating an account</a>
                                     &nbsp;allows you to access and save your skills health check reports.
                                 </p>
                             </div>
