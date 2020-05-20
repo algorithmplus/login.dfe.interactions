@@ -126,6 +126,10 @@ button {
 
 //ERRORS
 
+.govuk-error-summary {
+    margin-bottom: 0;
+}
+
 .error.itemLevel {
     @extend .govuk-error-message;
 
