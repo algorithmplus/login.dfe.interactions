@@ -6,6 +6,7 @@ import EmailSent from './pages/EmailSent';
 import AccountLocked from './pages/AccountLocked';
 import AccountActivated from './pages/AccountActivated';
 import ResetPassword from './pages/ResetPassword';
+import ForgottenEmail from './pages/ForgottenEmail';
 
 import components from './components';
 
@@ -57,6 +58,9 @@ function App() {
           </Route>
           <Route path="/resetpassword">
             <ResetPassword />
+          </Route>
+          <Route path="/forgottenemail">
+            <ForgottenEmail />
           </Route>
         </Switch>
       </div>
