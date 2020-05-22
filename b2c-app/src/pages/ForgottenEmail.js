@@ -14,7 +14,6 @@ export default function ForgottenEmail() {
                     <div className="govuk-grid-row">
                         <div className="govuk-grid-column-two-thirds">
                             <components.PageTitle size='xl' title="Find your email address"/>
-                            <p className="govuk-body">Please enter the details below to help us find your email address.</p>
                             <components.B2C />
                         </div>
                     </div>
