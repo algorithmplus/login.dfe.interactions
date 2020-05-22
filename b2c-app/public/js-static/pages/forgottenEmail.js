@@ -69,11 +69,7 @@
                 //validate the date input
                 var inputDate = new Date(year, month, day);
 
-                if (day > 31 ||
-                    month > 11 ||
-                    year > new Date().getFullYear() ||
-                    !inputDate instanceof Date ||
-                    isNaN(inputDate) ||
+                if (isNaN(inputDate.getTime()) ||
                     inputDate.getMonth() !== month //this one would mean user entered 29th of a month in a non leap year
                 ) {
                     //failed validation, show an error and prevent submit
