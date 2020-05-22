@@ -172,7 +172,7 @@
             //pre-submit button to do our own validation and prevent submit (already listened to so can't stop it there)
             self.preSubmitButton = document.createElement('button');
             self.preSubmitButton.className = 'govuk-button';
-            self.preSubmitButton.innerHTML = 'submit';
+            self.preSubmitButton.innerHTML = 'Find email address';
             //continue button coming from B2C
             self.continueButton = document.getElementById('continue');
             self.continueButton.parentNode.insertBefore(self.preSubmitButton, self.continueButton);
