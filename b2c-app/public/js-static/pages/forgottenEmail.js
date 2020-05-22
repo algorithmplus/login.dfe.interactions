@@ -2,117 +2,234 @@
 
     var Controller = function Controller() {
 
+        var self = this;
+
+        //declare all the items I will be manipulating across this controller
+        this.form = null;
+        this.givenNameElement = null;
+        this.lastNameElement = null;
+        this.postCodeElement = null;
+        this.dayElement = null;
+        this.monthElement = null;
+        this.yearElement = null;
+        this.preSubmitButton = null;
+        this.continueButton = null;
+        this.givenNameError = null;
+        this.givenNamePageError = null; //error at page level
+        this.lastNameError = null;
+        this.lastNamePageError = null;
+        this.postCodeError = null;
+        this.postCodePageError = null;
+        this.dobError = null; //error placeholder for custom DOB entry
+        this.dobPageError = null;
+
+        //function to show item level errors
+        this.showItemAndPageLevelError = function (message, itemLevelElem, pageLevelElem) {
+            if(itemLevelElem){
+                itemLevelElem.innerHTML = message;
+                itemLevelElem.classList.add('show');
+            }
+            if(pageLevelElem){
+                pageLevelElem.firstChild.innerHTML = message;
+                pageLevelElem.style.display = 'block';
+            }            
+        };
+
+        //function to hide item level errors
+        this.hideItemAndPageLevelError = function (itemLevelElem, pageLevelElem) {
+            if(itemLevelElem){
+                itemLevelElem.innerHTML = '';
+                itemLevelElem.classList.remove('show');
+            }
+            if(pageLevelElem){
+                pageLevelElem.firstChild.innerHTML = '';
+                pageLevelElem.style.display = 'none';
+            } 
+        };
+
+        //function to handle our own validation before calling the actual submit (in B2C continue button)
+        this.onBeforeSubmit = function (event) {
+
+            //flag used to determine if submit should go ahead or not
+            var valid = true;
+
+            //validate date of birth
+
+            //validate date fields not empty
+            if ( self.dayElement.value === '' && self.monthElement.value === '' && self.yearElement.value === '') {
+                valid = false;
+                self.showItemAndPageLevelError('Enter date of birth', self.dobError, self.dobPageError);
+            }
+            else {
+                //get values from the form
+                var day = self.dayElement.value;
+                var month = self.monthElement.value - 1;
+                var year = self.yearElement.value;
+
+                //validate the date input
+                var inputDate = new Date(year, month, day);
+
+                if (day > 31 ||
+                    month > 11 ||
+                    year > new Date().getFullYear() ||
+                    !inputDate instanceof Date ||
+                    isNaN(inputDate) ||
+                    inputDate.getMonth() !== month //this one would mean user entered 29th of a month in a non leap year
+                ) {
+                    //failed validation, show an error and prevent submit
+                    valid = false;
+                    self.showItemAndPageLevelError('Enter a valid date of birth', self.dobError, self.dobPageError);
+                }
+                else {
+                    self.hideItemAndPageLevelError(self.dobError, self.dobPageError);
+                }
+            }
+
+            //validate given name
+            if (self.givenNameElement.value === '') {
+                valid = false;
+                self.showItemAndPageLevelError('Enter your first name', self.givenNameError, self.givenNamePageError);
+            }
+            else {
+                self.hideItemAndPageLevelError(self.givenNameError, self.givenNamePageError);
+            }
+
+            //validate lastName
+            if (self.lastNameElement.value === '') {
+                valid = false;
+                self.showItemAndPageLevelError('Enter your last name', self.lastNameError, self.lastNamePageError);
+            }
+            else {
+                self.hideItemAndPageLevelError(self.lastNameError, self.lastNamePageError);
+            }
+
+            //validate postCode
+            if (self.postCodeElement.value === '') {
+                valid = false;
+                self.showItemAndPageLevelError('Enter your postcode', self.postCodeError, self.postCodePageError);
+            }
+            else {
+                self.hideItemAndPageLevelError(self.lastNameError, self.postCodePageError);
+            }
+
+            //if no errors, submit actually happens
+            if (valid) {
+                self.continueButton.click(event);
+            }
+        };
+
+        this.numericInputHandler = function (evt) {
+            var key = window.event ? event.keyCode : event.which;
+            if (key < 48 || key > 57) {
+                event.preventDefault();
+            }
+        };
+
+        //gets all list items and remove the ones left empty
+        this.removeEmptyListItems = function () {
+            var listItems = document.getElementsByTagName('li');
+            Array.from(listItems).forEach(function (item) {
+                if (!item.hasChildNodes()) {
+                    item.remove();
+                }
+            });
+        };
+
+        this.getErrorPlaceholder = function (elem) {
+            if (elem && elem.parentNode) {
+                var errorElements = elem.parentNode.getElementsByClassName('error itemLevel');
+                if(errorElements.length){
+                    //return first element
+                    return errorElements[0];
+                }
+            }
+        };
+
+        this.createPageLevelErrorPlaceholder = function (link) {
+            var elem = document.createElement('div');
+            elem.className = 'error pageLevel';
+            elem.style.display = 'none';
+            elem.innerHTML = `<a href=#${link}></a>`
+            return elem;
+        }
+
         this.onDOMContentLoaded = function onDOMContentLoaded() {
 
-            var self = this;
+            //get all the elements we will be manipulating at some point
+            self.form = document.getElementById('attributeVerification');
+            self.givenNameElement = document.getElementById('givenName');
+            self.lastNameElement = document.getElementById('surname');
+            self.postCodeElement = document.getElementById('postCode');
+            //get item level error placeholders
+            self.givenNameError = self.getErrorPlaceholder(self.givenNameElement);
+            self.lastNameError = self.getErrorPlaceholder(self.lastNameElement);
+            self.postCodeError = self.getErrorPlaceholder(self.postCodeElement);
 
-            this.onBeforeSubmit = function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                //flag used to determine if submit should go ahead or not
-                var error = false;
-
-                //get values from the form
-                var day = self.yearElement.value;
-                var month = self.monthElement.value - 1;
-                var year = self.dayElement.value;
-
-                try {
-                    //validate the date input
-                    var inputDate = new Date(year, month, day);
-                    if (day > 31 ||
-                        month > 11 ||
-                        year > new Date().getFullYear() ||
-                        !inputDate instanceof Date ||
-                        isNaN(inputDate) ||
-                        inputDate.getMonth() !== month //this one would mean user entered 29th of a month in a non leap year
-                    ) {
-                        //failed validation, show an error and prevent submit
-                        self.dobError.innerHTML = 'Enter a valid date of birth';
-                        self.dobError.classList.add('show');
-                        e.preventDefault();
-                        error = true;
-                    }
-                    else {
-                        self.dobError.innerHTML = '';
-                        self.dobError.classList.remove('show');
-                    }
-                }
-                finally {
-                    //if no errors return true so that submit actually happens
-                    return !error;
-                }
-            };
+            //date
+            self.dayElement = document.getElementById('day');
+            self.monthElement = document.getElementById('month');
+            self.yearElement = document.getElementById('year');
+            //pre-submit button to do our own validation and prevent submit (already listened to so can't stop it there)
+            self.preSubmitButton = document.createElement('button');
+            self.preSubmitButton.className = 'govuk-button';
+            self.preSubmitButton.innerHTML = 'submit';
+            //continue button coming from B2C
+            self.continueButton = document.getElementById('continue');
+            self.continueButton.parentNode.insertBefore(self.preSubmitButton, self.continueButton);
 
             //add validation on submit so that we can check dates are valid
-            // document.getElementById('attributeVerification').addEventListener('submit', this.onBeforeSubmit);
-            document.getElementById('attributeVerification').addEventListener('submit', function(e){
-                e.preventDefault();
-                console.log('submit');
-                return false;
-            })
+            self.form.addEventListener('submit', self.onBeforeSubmit);
 
-            document.getElementById('continue').addEventListener('click', function(e){
-                e.preventDefault();
-                console.log('click');
-                return false;
-            })
+            //hide continue button as we will be using our own pre-submit button
+            self.continueButton.style.display = 'none';
 
-            // manipulate the DOM to add extra class to input fields for day, month and year
-            // and also update its href
-            this.dayElement = document.getElementById('day');
-            this.monthElement = document.getElementById('month');
-            this.yearElement = document.getElementById('year');
 
-            //set input type doesn't work so adding some events to allow user to enter only numbers
-            this.numericInputHandler = function(evt){
-                var key = window.event ? event.keyCode : event.which;
-                if ( key < 48 || key > 57 ) {
-                    event.preventDefault();
-                }
-            };
-            this.dayElement.addEventListener('keypress', this.numericInputHandler);
-            this.monthElement.addEventListener('keypress', this.numericInputHandler);
-            this.yearElement.addEventListener('keypress', this.numericInputHandler);
+            // manipulate the DOM to show date input fields with the right format
+            if (self.dayElement && self.monthElement && self.yearElement && self.postCodeElement) {
 
-            //remove classes of textInput
-            this.dayElement.classList.remove('textInput');
-            this.dayElement.className = 'govuk-input govuk-date-input__input govuk-input--width-2';
-            this.monthElement.classList.remove('textInput');
-            this.monthElement.className = 'govuk-input govuk-date-input__input govuk-input--width-2';
-            this.yearElement.classList.remove('textInput');
-            this.yearElement.className = 'govuk-input govuk-date-input__input govuk-input--width-4';
+                //set input type doesn't work (value  not sent on submit) so adding some events to force user to enter only numbers
+                self.dayElement.addEventListener('keypress', self.numericInputHandler);
+                self.monthElement.addEventListener('keypress', self.numericInputHandler);
+                self.yearElement.addEventListener('keypress', self.numericInputHandler);
 
-            if (this.dayElement && this.monthElement && this.yearElement) {
+                //remove classes of textInput and add govuk classes
+                self.dayElement.classList.remove('textInput');
+                self.dayElement.className = 'govuk-input govuk-date-input__input govuk-input--width-2';
+                self.monthElement.classList.remove('textInput');
+                self.monthElement.className = 'govuk-input govuk-date-input__input govuk-input--width-2';
+                self.yearElement.classList.remove('textInput');
+                self.yearElement.className = 'govuk-input govuk-date-input__input govuk-input--width-4';
 
-                this.dateAttrEntry = document.createElement('div');
-                this.dateAttrEntry.className = 'attrEntry';
+                //create structure to accomomodate new elements
+                var dateAttrEntry = document.createElement('div');
+                dateAttrEntry.className = 'attrEntry';
 
-                this.dateContainer = document.createElement('div');
-                this.dateContainer.className = 'govuk-date-input';
+                var dateContainer = document.createElement('div');
+                dateContainer.className = 'govuk-date-input';
 
-                this.dayContainer = document.createElement('div');
-                this.dayContainer.className = 'govuk-date-input__item';
-                this.monthContainer = document.createElement('div');
-                this.monthContainer.className = 'govuk-date-input__item';
-                this.yearContainer = document.createElement('div');
-                this.yearContainer.className = 'govuk-date-input__item';
+                var dayContainer = document.createElement('div');
+                dayContainer.className = 'govuk-date-input__item';
+                var monthContainer = document.createElement('div');
+                monthContainer.className = 'govuk-date-input__item';
+                var yearContainer = document.createElement('div');
+                yearContainer.className = 'govuk-date-input__item';
 
-                this.dayContainer.appendChild(this.dayElement.parentNode);
-                this.monthContainer.appendChild(this.monthElement.parentNode);
-                this.yearContainer.appendChild(this.yearElement.parentNode);
+                //add elements to new structure
+                dayContainer.appendChild(self.dayElement.parentNode);
+                monthContainer.appendChild(self.monthElement.parentNode);
+                yearContainer.appendChild(self.yearElement.parentNode);
 
-                this.dateContainer.appendChild(this.dayContainer);
-                this.dateContainer.appendChild(this.monthContainer);
-                this.dateContainer.appendChild(this.yearContainer);
+                dateContainer.appendChild(dayContainer);
+                dateContainer.appendChild(monthContainer);
+                dateContainer.appendChild(yearContainer);
 
-                this.dateAttrEntry.appendChild(this.dateContainer);
+                dateAttrEntry.appendChild(dateContainer);
 
-                this.postCodeElement = document.getElementById('postCode');
-                this.postCodeElement.parentNode.parentNode.parentNode.insertBefore(this.dateAttrEntry, this.postCodeElement.parentNode.parentNode);
+                //insert it before the postCode element
+                self.postCodeElement.parentNode.parentNode.parentNode.insertBefore(dateAttrEntry, self.postCodeElement.parentNode.parentNode);
 
                 //remove item level error items from day, month and year
-                var errorItems = this.dateContainer.getElementsByClassName('error itemLevel');
+                var errorItems = dateContainer.getElementsByClassName('error itemLevel');
                 Array.from(errorItems).forEach(function (item) {
                     item.remove();
                 });
@@ -120,44 +237,44 @@
                 //add date error placeholder
                 this.dobError = document.createElement('div');
                 this.dobError.className = 'error itemLevel';
-                this.dateContainer.parentNode.insertBefore(this.dobError, this.dateContainer);
+                dateContainer.parentNode.insertBefore(this.dobError, dateContainer);
 
                 //add date of birth hint
-                this.dobHint = document.createElement('span');
-                this.dobHint.className = 'govuk-hint';
-                this.dobHint.innerHTML = `For example, 31 3 1980`;
-                this.dateContainer.parentNode.insertBefore(this.dobHint, this.dobError);
+                var dobHint = document.createElement('span');
+                dobHint.className = 'govuk-hint';
+                dobHint.innerHTML = `For example, 31 3 1980`;
+                dateContainer.parentNode.insertBefore(dobHint, this.dobError);
 
                 //add date of birth label
-                this.newDobLabel = document.createElement('label');
-                this.newDobLabel.innerHTML = `Date of birth`;
-                this.dobHint.parentNode.insertBefore(this.newDobLabel, this.dobHint);
+                var newDobLabel = document.createElement('label');
+                newDobLabel.id = 'dobLabel'
+                newDobLabel.innerHTML = `Date of birth`;
+                dobHint.parentNode.insertBefore(newDobLabel, dobHint);
                 //remove existing dob label
-                this.dobLabel = document.getElementById('dobLabel');
-                this.dobLabel.parentNode.parentNode.remove();
+                dobLabel = document.getElementById('dobLabel');
+                dobLabel.parentNode.parentNode.remove();
 
-
-                //add postcode hint
-                this.postcodeHint = document.createElement('span');
-                this.postcodeHint.className = 'govuk-hint';
-                this.postcodeHint.innerHTML = `For example, SW1A 1AA`;
-
-                this.postcodeElement = document.getElementById('postCode');
-                if (this.postcodeElement) {
-                    this.postcodeElement.parentNode.insertBefore(this.postcodeHint, this.postcodeElement);
-                }
-
-
-
-                //get all list items and remove the ones left empty
-                this.listItems = document.getElementsByTagName('li');
-                Array.from(this.listItems).forEach(function (item) {
-                    if (!item.hasChildNodes()) {
-                        item.remove();
-                    }
-                });
-
+                //add postCode hint
+                var postCodeHint = document.createElement('span');
+                postCodeHint.className = 'govuk-hint';
+                postCodeHint.innerHTML = `For example, SW1A 1AA`;
+                self.postCodeElement.parentNode.insertBefore(postCodeHint, self.postCodeElement);
             }
+
+            //create page level error placeholders
+            self.givenNamePageError = self.createPageLevelErrorPlaceholder(self.givenNameElement.id);
+            self.lastNamePageError = self.createPageLevelErrorPlaceholder(self.lastNameElement.id);
+            self.postCodePageError = self.createPageLevelErrorPlaceholder(self.postCodeElement.id);
+            self.dobPageError = self.createPageLevelErrorPlaceholder(newDobLabel.id);
+
+            //add them as children of the current form
+            self.form.appendChild(self.givenNamePageError);
+            self.form.appendChild(self.lastNamePageError);
+            self.form.appendChild(self.dobPageError);
+            self.form.appendChild(self.postCodePageError);
+
+            //remove list items that could be left empty after all dom manipulation
+            self.removeEmptyListItems();
 
         };
 
@@ -174,9 +291,7 @@
             else {
                 document.addEventListener("DOMContentLoaded", this.onDOMContentLoaded);
             }
-
         }
-
     }
 
     new Controller().init();
