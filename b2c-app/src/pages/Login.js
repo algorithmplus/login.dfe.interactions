@@ -12,7 +12,18 @@ export default function Login() {
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
-                <div id="pageLevelErrorContainer"></div>
+                <div id="pageLevelErrorContainer" style={{ display: 'none' }}>
+                    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                                There is a problem
+                            </h2>
+                            <div class="govuk-error-summary__body">
+                                <ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list">
+                                    {/* we will add children here */}
+                                </ul>
+                            </div>
+                    </div>
+                </div>
 
                 <div className="govuk-width-container ">
                     <main className="govuk-main-wrapper " id="main-content" role="main">
@@ -20,6 +31,30 @@ export default function Login() {
                             <div className="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Sign in'/>
                                 <components.B2C />
+
+                                <form id="loginFormCopy" novalidate>
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label" for="emailCopy">
+                                            Copy Email address
+                                        </label>
+                                        <span id="emailCopyError" class="govuk-error-message" style={{ display: 'none' }}></span>
+                                        <input class="govuk-input govuk-!-width-one-half" id="emailCopy" name="emailCopy" type="text"/>
+                                    </div>
+                                    <div class="govuk-form-group">
+                                        <label class="govuk-label" for="passwordCopy">
+                                            Copy Password
+                                        </label>
+                                        <span id="passwordCopyError" class="govuk-error-message" style={{ display: 'none' }}></span>
+                                        <input class="govuk-input govuk-!-width-one-half" id="passwordCopy" name="passwordCopy" type="password"/>
+                                    </div>
+                                    <button class="button" id="preSubmit" type="submit">Sign in</button>
+                                </form>
+                                <p class="govuk-body">
+                                    <a href={getB2CLink(ACTIONS.RESET_PASSWORD)} id="resetPasswordCopy" class="govuk-link">
+                                        I cannot access my account
+                                    </a>
+                                </p>
+
                             </div>
                             <div className="govuk-grid-column-one-half">
                                 <components.PageTitle size='l' title='Create an account'/>
@@ -34,7 +69,7 @@ export default function Login() {
                 
             </div>
 
-            <script src="__--b2cPath--__/b2c/assets/js-static/pages/login.js"></script>
+            <script src="__--b2cPath--__/b2c/assets/js-static/pages/loginCopy.js"></script>
 
         </div>
     )
