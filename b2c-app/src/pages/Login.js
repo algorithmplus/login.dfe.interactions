@@ -18,6 +18,14 @@ export default function Login() {
                                 There is a problem
                             </h2>
                             <div class="govuk-error-summary__body">
+                                {/* TODO deal with different headers depending on the actual error
+                                TODO style header and links differently */}
+                                {/* <p> Your sign in details are incorrect. Try again.</p>
+                                <p>
+                                    <a href={getB2CLink(ACTIONS.RESET_PASSWORD)} id="resetPasswordCopy" class="govuk-link">
+                                        I cannot access my account
+                                    </a>
+                                </p> */}
                                 <ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list">
                                     {/* we will add children here */}
                                 </ul>
