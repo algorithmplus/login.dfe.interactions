@@ -117,7 +117,7 @@
 
             // find out how many of these errors are visible
             var numVisibleItems = Array.from(this._pageErrors).filter(function (item) {
-                return item.offsetParent !== null;
+                return item.style.display !== 'none';
             }).length;
 
             // only add the error summary if there is at least one error visible

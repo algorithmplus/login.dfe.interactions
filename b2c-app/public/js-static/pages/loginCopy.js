@@ -141,22 +141,22 @@
 
 
             //CODE TO TEST IN SESSION
-            var copyForm = document.createElement('FORM');
-            copyForm.id = 'loginFormCopy';
-            copyForm.innerHTML = `
-                <div class="govuk-form-group"><label class="govuk-label" for="emailCopy">Copy Email address</label><span id="emailCopyError" class="govuk-error-message" style="display:none"></span><input type="text" class="govuk-input govuk-!-width-one-half" id="emailCopy" name="emailCopy"></div><div class="govuk-form-group"><label class="govuk-label" for="passwordCopy">Copy Password</label><span id="passwordCopyError" class="govuk-error-message" style="display: none;"></span><input type="password" class="govuk-input govuk-!-width-one-half" id="passwordCopy" name="passwordCopy"></div><button class="button" id="preSubmit" type="submit">Sign in</button>
-            `;
+            // var copyForm = document.createElement('FORM');
+            // copyForm.id = 'loginFormCopy';
+            // copyForm.innerHTML = `
+            //     <div class="govuk-form-group"><label class="govuk-label" for="emailCopy">Copy Email address</label><span id="emailCopyError" class="govuk-error-message" style="display:none"></span><input type="text" class="govuk-input govuk-!-width-one-half" id="emailCopy" name="emailCopy"></div><div class="govuk-form-group"><label class="govuk-label" for="passwordCopy">Copy Password</label><span id="passwordCopyError" class="govuk-error-message" style="display: none;"></span><input type="password" class="govuk-input govuk-!-width-one-half" id="passwordCopy" name="passwordCopy"></div><button class="button" id="preSubmit" type="submit">Sign in</button>
+            // `;
             var apiNode = document.getElementById('api');
-            apiNode.parentNode.insertBefore(copyForm, apiNode.nextSibling);
+            // apiNode.parentNode.insertBefore(copyForm, apiNode.nextSibling);
 
-            var errorContainer = document.createElement('DIV');
-            errorContainer.id = 'pageLevelErrorContainerCopy';
-            errorContainer.style.display = 'none';
-            errorContainer.innerHTML = `
-                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary"><h2 class="govuk-error-summary__title" id="error-summary-title">COPY - There is a problem</h2><div class="govuk-error-summary__body"><ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list"></ul></div></div>
-            `;
+            // var errorContainer = document.createElement('DIV');
+            // errorContainer.id = 'pageLevelErrorContainerCopy';
+            // errorContainer.style.display = 'none';
+            // errorContainer.innerHTML = `
+            //     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary"><h2 class="govuk-error-summary__title" id="error-summary-title">COPY - There is a problem</h2><div class="govuk-error-summary__body"><ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list"></ul></div></div>
+            // `;
 
-            apiNode.parentNode.insertBefore(errorContainer, apiNode.nextSibling);
+            // apiNode.parentNode.insertBefore(errorContainer, apiNode.nextSibling);
 
             apiNode.style.display = 'none';
             //END CODE TO TEST IN SESSION
@@ -178,7 +178,8 @@
             //store them in an array to clear them easily later on
             self.itemLevelErrors = [self.emailCopyError, self.passwordCopyError];
             //TODO change to point to actual page error container after removing code to test in session
-            self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainerCopy');
+            //self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainerCopy');
+            self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainer');
             self.errorSummaryItems = document.getElementById('errorSummaryItems');
 
             self.formCopy.addEventListener('submit', self.onBeforeSubmit);

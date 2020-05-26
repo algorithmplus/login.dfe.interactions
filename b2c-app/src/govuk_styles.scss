@@ -1,9 +1,12 @@
+#api {
+    display: none;
+}
+
 
 $govuk-images-path: "/b2c/images/";
 $govuk-fonts-path: "/b2c/assets/static/media/";
 
 @import '../node_modules/govuk-frontend/govuk/all';
-
 
 
 //LISTS
@@ -107,10 +110,10 @@ a {
     @extend .govuk-link;
 }
 
-.forgot-password {
-    @extend .govuk-body;
-    margin-top: govuk-spacing(6);
-}
+// .forgot-password {
+//     @extend .govuk-body;
+//     margin-top: govuk-spacing(6);
+// }
 
 
 //BUTTONS

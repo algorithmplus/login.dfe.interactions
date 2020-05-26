@@ -55,7 +55,7 @@ export default function Login() {
                                         <span id="passwordCopyError" class="govuk-error-message" style={{ display: 'none' }}></span>
                                         <input class="govuk-input govuk-!-width-one-half" id="passwordCopy" name="passwordCopy" type="password"/>
                                     </div>
-                                    <button class="button" id="preSubmit" type="submit">Sign in</button>
+                                    <button class="govuk-button" id="preSubmit" type="submit">Sign in</button>
                                 </form>
                                 <p class="govuk-body">
                                     <a href={getB2CLink(ACTIONS.RESET_PASSWORD)} id="resetPasswordCopy" class="govuk-link">
