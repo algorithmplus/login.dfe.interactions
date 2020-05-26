@@ -8,6 +8,7 @@ import AccountActivated from './pages/AccountActivated';
 import ResetPassword from './pages/ResetPassword';
 import ForgottenEmail from './pages/ForgottenEmail';
 import AccountNotFound from './pages/AccountNotFound';
+import AccountFound from './pages/AccountFound';
 
 import components from './components';
 
@@ -65,6 +66,9 @@ function App() {
           </Route>
           <Route path="/account-not-found">
             <AccountNotFound />
+          </Route>
+          <Route path="/account-found">
+            <AccountFound />
           </Route>
         </Switch>
       </div>
