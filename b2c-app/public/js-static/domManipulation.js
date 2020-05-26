@@ -151,16 +151,16 @@
 
         this.onDOMContentLoaded = function onDOMContentLoaded() {
 
-            //Replace placeholder for redirect URI in all the links
+            //Replace placeholder for redirect URI and B2C tenant in all the links
             var queryParams = (new URL(document.location)).searchParams;
-            var redirectURI = queryParams.get("redirect_uri");
+            var redirectURI = queryParams.get("redirect_uri") || 'https://jwt.ms';
+            var b2cTenant = window.location.host.slice(0, window.location.host.indexOf('.'));
 
-            if (redirectURI) {
-                var links = document.querySelectorAll("a[href^='authorize?']");
-                links.forEach(function (item) {
-                    item.href = item.href.replace(/__redirectURI__/g, redirectURI);
-                });
-            }
+            var links = document.querySelectorAll("a[href^='https://__b2c-tenant__.b2clogin.com']");
+            links.forEach(function (item) {
+                item.href = item.href.replace(/__b2c-tenant__/g, b2cTenant);
+                item.href = item.href.replace(/__redirect-uri__/g, redirectURI);
+            });
 
             //observe changes into the API node coming from B2C
             self.targetNode = document.getElementById('api');
