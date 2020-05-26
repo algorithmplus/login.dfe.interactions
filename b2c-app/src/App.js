@@ -7,6 +7,7 @@ import AccountLocked from './pages/AccountLocked';
 import AccountActivated from './pages/AccountActivated';
 import ResetPassword from './pages/ResetPassword';
 import ForgottenEmail from './pages/ForgottenEmail';
+import AccountNotFound from './pages/AccountNotFound';
 
 import components from './components';
 
@@ -47,7 +48,7 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/emailsent">
+          <Route path="/email-sent">
             <EmailSent />
           </Route>
           <Route path="/locked">
@@ -56,11 +57,14 @@ function App() {
           <Route path="/activated">
             <AccountActivated />
           </Route>
-          <Route path="/resetpassword">
+          <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <Route path="/forgottenemail">
+          <Route path="/forgotten-email">
             <ForgottenEmail />
+          </Route>
+          <Route path="/account-not-found">
+            <AccountNotFound />
           </Route>
         </Switch>
       </div>
