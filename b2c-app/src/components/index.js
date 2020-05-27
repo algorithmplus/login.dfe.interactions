@@ -9,6 +9,7 @@ import MainContainer from './MainContainer/MainContainer';
 import PageTitle from './PageTitle/PageTitle';
 import FooterNavigation from './FooterNavigation/FooterNavigation';
 import FooterLink from './FooterLink/FooterLink';
+import ResendActivationLink from  './ResendEmailLink/ResendEmailLink';
 
 export default {
     Header: Header,
@@ -21,5 +22,6 @@ export default {
     MainContainer: MainContainer,
     PageTitle: PageTitle,
     FooterNavigation: FooterNavigation,
-    FooterLink: FooterLink
+    FooterLink: FooterLink,
+    ResendActivationLink: ResendActivationLink
 }

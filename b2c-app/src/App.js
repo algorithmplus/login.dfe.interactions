@@ -1,5 +1,7 @@
 import React from 'react';
-//import './App.scss';
+
+import { ACTIONS } from './constants/actions';
+
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import EmailSent from './pages/EmailSent';
@@ -49,9 +51,9 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/email-sent">
-            <EmailSent />
-          </Route>
+          <Route path="/email-sent"
+            render = { () => <EmailSent action={ACTIONS.SIGNUP} />}
+          />
           <Route path="/locked">
             <AccountLocked />
           </Route>
@@ -61,6 +63,9 @@ function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
+          <Route path="/reset-password-email-sent"
+            render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
+          />
           <Route path="/forgotten-email">
             <ForgottenEmail />
           </Route>
