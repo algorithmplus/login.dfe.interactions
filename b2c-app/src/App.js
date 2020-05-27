@@ -12,6 +12,7 @@ import ForgottenEmail from './pages/ForgottenEmail';
 import AccountNotFound from './pages/AccountNotFound';
 import AccountFound from './pages/AccountFound';
 import PasswordChanged from './pages/PasswordChanged';
+import Placeholder from './pages/Placeholder';
 
 import components from './components';
 
@@ -31,20 +32,7 @@ function App() {
       <div id="routes">
         <Switch>
           <Route exact path="/">
-            <header className="App-header">
-              <img src="/b2c/images/logo.svg" className="App-logo" alt="logo" />
-              <p>
-                Edit <code>src/App.js</code> and save to reloadssss.
-                  </p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-                  </a>
-            </header>
+            <Placeholder />
           </Route>
           <Route path="/signup">
             <Signup />
