@@ -132,6 +132,9 @@
                 observer.observe(self.targetNode, observerConfig);
             });
 
+            //set the common observers for B2C changes
+            setB2CObservers();
+
         };
 
         this.init = function init() {

@@ -5,6 +5,9 @@
         this.onDOMContentLoaded = function onDOMContentLoaded() {
 
             //DOM manipulation happens here
+
+            //set the common observers for B2C changes
+            setB2CObservers();
             
         };        
         
