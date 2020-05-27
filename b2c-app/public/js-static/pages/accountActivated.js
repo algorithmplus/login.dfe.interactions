@@ -4,7 +4,7 @@
         
         
         this.init = function init() {
-            document.title = 'Your accout has been activated | National Careers Service';            
+            document.title = 'We\'ve activated your account | National Careers Service';            
         }
 
     }
