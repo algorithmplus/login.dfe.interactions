@@ -272,6 +272,9 @@
             //remove list items that could be left empty after all dom manipulation
             self.removeEmptyListItems();
 
+            //set the common observers for B2C changes
+            setB2CObservers();
+
         };
 
         this.init = function init() {
