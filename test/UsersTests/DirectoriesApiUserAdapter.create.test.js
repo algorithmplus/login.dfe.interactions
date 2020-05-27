@@ -1,9 +1,7 @@
 jest.mock('login.dfe.request-promise-retry');
 jest.mock('login.dfe.jwt-strategies');
 jest.mock('../../src/infrastructure/Config');
-const rp = jest.fn();
-const requestPromise = require('login.dfe.request-promise-retry');
-requestPromise.defaults.mockReturnValue(rp);
+const rp = require('login.dfe.request-promise-retry');
 
 describe('When creating a user with the api', () => {
   const username = 'user.one@unit.tests';
@@ -41,66 +39,64 @@ describe('When creating a user with the api', () => {
     directoriesApiUserAdapter = require('./../../src/infrastructure/Users/DirectoriesApiUserAdapter');
   });
 
-  it('should pass', () => {
-    expect(true).toBe(true);
-  });
 
-  // it('it should post to the directories api', async () => {
-  //   await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
 
-  //   expect(rp.mock.calls[0][0].method).toBe('POST');
-  //   expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/users');
-  // });
+   it('it should post to the directories api', async () => {
+     await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
 
-  // it('it should send entered user information', async () => {
-  //   await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
+     expect(rp.mock.calls[0][0].method).toBe('POST');
+     expect(rp.mock.calls[0][0].uri).toBe('https://directories.login.dfe.test/users');
+   });
 
-  //   expect(rp.mock.calls[0][0].body.email).toBe(username);
-  //   expect(rp.mock.calls[0][0].body.password).toBe(password);
-  //   expect(rp.mock.calls[0][0].body.firstName).toBe(firstName);
-  //   expect(rp.mock.calls[0][0].body.lastName).toBe(lastName);
-  //   expect(rp.mock.calls[0][0].body.legacy_username).toBe(legacyUsername);
-  // });
+   it('it should send entered user information', async () => {
+     await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
 
-  // it('then the correlation id is passed in the header', async () => {
-  //   await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
+     expect(rp.mock.calls[0][0].body.email).toBe(username);
+     expect(rp.mock.calls[0][0].body.password).toBe(password);
+     expect(rp.mock.calls[0][0].body.firstName).toBe(firstName);
+     expect(rp.mock.calls[0][0].body.lastName).toBe(lastName);
+     expect(rp.mock.calls[0][0].body.legacy_username).toBe(legacyUsername);
+   });
 
-  //   expect(rp.mock.calls[0][0].headers['x-correlation-id']).toBe(expectedCorrelationId);
-  // });
+   it('then the correlation id is passed in the header', async () => {
+     await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
 
-  // it('it should user the jwt token for authorization', async () => {
-  //   await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
+     expect(rp.mock.calls[0][0].headers['x-correlation-id']).toBe(expectedCorrelationId);
+   });
 
-  //   expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
-  // });
+   it('it should user the jwt token for authorization', async () => {
+     await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
 
-  // it('then null is returned if a conflict status code is returned', async () => {
-  //   rp.mockImplementation(() => {
-  //     const error = new Error();
-  //     error.statusCode = 409;
-  //     throw error;
-  //   });
+     expect(rp.mock.calls[0][0].headers.authorization).toBe(`bearer ${bearerToken}`);
+   });
 
-  //   const actual = await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
+   it('then null is returned if a conflict status code is returned', async () => {
+     rp.mockImplementation(() => {
+       const error = new Error();
+       error.statusCode = 409;
+       throw error;
+     });
 
-  //   expect(actual).toBe(null);
-  // });
+     const actual = await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
 
-  // it('then it should throw an error if the api call failed', async () => {
-  //   rp.mockImplementation(() => {
-  //     const error = new Error();
-  //     error.statusCode = 500;
-  //     throw error;
-  //   });
+     expect(actual).toBe(null);
+   });
 
-  //   try {
-  //     await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
-  //     throw new Error('No error thrown!');
-  //   } catch (e) {
-  //     if (e.message === 'No error thrown!') {
-  //       throw e;
-  //     }
-  //   }
-  // });
+   it('then it should throw an error if the api call failed', async () => {
+     rp.mockImplementation(() => {
+       const error = new Error();
+       error.statusCode = 500;
+       throw error;
+     });
+
+     try {
+       await directoriesApiUserAdapter.create(username, password, firstName, lastName, legacyUsername, expectedCorrelationId);
+       throw new Error('No error thrown!');
+     } catch (e) {
+       if (e.message === 'No error thrown!') {
+         throw e;
+       }
+     }
+   });
 
 });
