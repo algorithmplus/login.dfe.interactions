@@ -76,7 +76,7 @@
                     </summary>
                     <div class="govuk-details__text">
                             <p>Your password must be between 8 and 16 characters and contain 3 out of 4 of the following:</p>
-                            <ul class="govuk-list govuk-list--bulllet">
+                            <ul class="govuk-list govuk-list--bullet">
                                 <li>lowercase characters</li>
                                 <li>uppercase characters</li>
                                 <li>digits (0-9)</li>
