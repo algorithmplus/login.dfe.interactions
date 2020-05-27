@@ -1,7 +1,7 @@
 (function () {
 
     var Controller = function Controller() {
-        
+
         this.onDOMContentLoaded = function onDOMContentLoaded() {
 
             // manipulate the DOM to move forgot password link outside its parent
@@ -10,9 +10,11 @@
             if(this.forgotPassword){
                 //modify href
                 var queryParams = (new URL(document.location)).searchParams;
-                var redirectURI = queryParams.get("redirect_uri");
+                var redirectURI = queryParams.get("redirect_uri") || 'https://jwt.ms';
+                var b2cTenant = window.location.host.slice(0, window.location.host.indexOf('.'));
                 this.forgotPassword.href = getB2CLink(ACTIONS.RESET_PASSWORD);
-                this.forgotPassword.href = this.forgotPassword.href.replace(/__redirectURI__/g, redirectURI);  
+                this.forgotPassword.href = this.forgotPassword.href.replace(/__b2c-tenant__/g, b2cTenant);
+                this.forgotPassword.href = this.forgotPassword.href.replace(/__redirect-uri__/g, redirectURI);  
                 
                 //now move the element to the desired location
                 //get its actual wrapper that contains the class

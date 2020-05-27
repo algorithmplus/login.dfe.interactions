@@ -29,9 +29,10 @@ function getB2CLink (action) {
             break;
     }
 
-    var relativePath = `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` + 
-        `&redirect_uri=__redirectURI__&scope=openid&response_type=id_token&prompt=login`;
+    var absolutePath = `https://__b2c-tenant__.b2clogin.com/__b2c-tenant__.onmicrosoft.com/oauth2/v2.0/` +
+        `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` + 
+        `&redirect_uri=__redirect-uri__&scope=openid&response_type=id_token&prompt=login`;
 
-    return relativePath;
+    return absolutePath;
 
 }
