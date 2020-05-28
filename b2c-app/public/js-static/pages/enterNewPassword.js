@@ -97,24 +97,6 @@
             var apiNode = document.getElementById('api');
             apiNode.style.display = 'none';
 
-            //CODE TO TEST IN SESSION
-            // var copyForm = document.createElement('FORM');
-            // copyForm.id = 'resetPasswordFormCopy';
-            // copyForm.innerHTML = `
-            //     <br/><div class="govuk-form-group"><label class="govuk-label" for="newPasswordCopy">Create new password</label><span id="newPasswordCopyError" class="govuk-error-message" style="display:none"></span><input type="password" class="govuk-input govuk-!-width-one-half" id="newPasswordCopy" name="newPasswordCopy"></div><div class="govuk-form-group"><details class="govuk-details"><summary class="govuk-details__summary"><span class="govuk-details__summary-text">Help choosing a valid password</span></summary><div class="govuk-details__text"><p>Your password must:</p><ul class="govuk-list govuk-list--bullet"><li>be between 8 and 64 characters</li><li>include at least one uppercase letter and one lowercase letter</li><li>include at least one number or one symbol</li></ul></div></details></div><div class="govuk-form-group"><label class="govuk-label" for="reenterPasswordCopy">Re-type password</label><span id="reenterPasswordCopyError" class="govuk-error-message" style="display:none"></span><input type="password" class="govuk-input govuk-!-width-one-half" id="reenterPasswordCopy" name="reenterPasswordCopy"></div><button class="govuk-button" id="preSubmit" type="submit">Reset password</button>`;
-            // apiNode.parentNode.insertBefore(copyForm, apiNode.nextSibling);
-
-            // var errorContainer = document.createElement('DIV');
-            // errorContainer.id = 'pageLevelErrorContainerCopy';
-            // errorContainer.style.display = 'none';
-            // errorContainer.innerHTML = `
-            //     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary"><h2 class="govuk-error-summary__title" id="error-summary-title">COPY - There is a problem</h2><div id="errorSummaryText" style={{ display: 'none' }}><p class="govuk-body">Your password must:</p></div><div class="govuk-error-summary__body"><ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list"></ul></div></div>
-            // `;
-
-            // apiNode.parentNode.insertBefore(errorContainer, apiNode.nextSibling);
-
-            //END CODE TO TEST IN SESSION
-
             //retrieve all elements we will need
             self.form = document.getElementById('attributeVerification');
             self.formCopy = document.getElementById('resetPasswordFormCopy');
