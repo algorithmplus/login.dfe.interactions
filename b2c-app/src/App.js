@@ -13,6 +13,7 @@ import AccountNotFound from './pages/AccountNotFound';
 import AccountFound from './pages/AccountFound';
 import PasswordChanged from './pages/PasswordChanged';
 import Placeholder from './pages/Placeholder';
+import EnterNewPassword from './pages/EnterNewPassword';
 
 import components from './components';
 
@@ -55,6 +56,9 @@ function App() {
           <Route path="/reset-password-email-sent"
             render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
           />
+          <Route path="/enter-new-password">
+            <EnterNewPassword />
+          </Route>
           <Route path="/password-changed">
             <PasswordChanged />
           </Route>
