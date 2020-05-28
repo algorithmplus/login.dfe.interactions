@@ -63,12 +63,20 @@
             }
             else if (reenteredPassword === '') {
                 valid = false;
-                showItemAndPageLevelError('Re-enter your password', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
+                showItemAndPageLevelError(
+                    'Re-enter your password',
+                    self.reenterPasswordCopyError,
+                    self.reenterPasswordCopyElement.id
+                    );
             }
 
             else if (reenteredPassword !== '' && password !== reenteredPassword) {
                 valid = false;
-                showItemAndPageLevelError('Your passwords do not match', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
+                showItemAndPageLevelError(
+                    'Your passwords do not match',
+                    self.reenterPasswordCopyError,
+                    self.reenterPasswordCopyElement.id
+                    );
             }
 
             //if no errors, submit actually happens
