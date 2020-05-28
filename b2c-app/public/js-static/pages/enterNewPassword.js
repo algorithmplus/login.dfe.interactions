@@ -19,43 +19,6 @@
         this.reenterPasswordCopyError = null;
         this.itemLevelErrors = null; //array used to clear errors easily
 
-        //Page level errors
-        this.pageLevelErrorContainer = null;
-        this.errorSummaryText = null;
-        this.errorSummaryItems = null;
-
-
-        //function to show item level errors
-        this.showItemAndPageLevelError = function (message, itemLevelElem, itemId, showText) {
-            if(itemLevelElem){
-                itemLevelElem.innerHTML = `<span class="govuk-visually-hidden">Error:</span>${message}`;
-                itemLevelElem.style.display = 'block';
-                itemLevelElem.parentNode.classList.add('govuk-form-group--error');
-
-                //show text if required
-                showText ? self.errorSummaryText.style.display = 'block' : self.errorSummaryText.style.display = 'none';
-
-                //page level error
-                var pageError = document.createElement('LI');
-                pageError.innerHTML = `<a href="#${itemId}">${message}</a>`
-                self.errorSummaryItems.appendChild(pageError);
-                self.pageLevelErrorContainer.style.display = 'block';
-            }        
-        };
-
-        //function to clear all the page level errors
-        this.clearPageLevelErrors = function(){
-            self.pageLevelErrorContainer.style.display = 'none';
-            self.errorSummaryItems.innerHTML = '';
-        };
-
-        //function to clear all the item level errors
-        this.clearItemLevelErrors = function(){
-            self.itemLevelErrors.forEach(function(itemLevelElem){
-                itemLevelElem.style.display = 'none';
-                itemLevelElem.parentNode.classList.remove('govuk-form-group--error');
-            });
-        };
 
         //function to handle our own validation before calling the actual submit (in B2C continue button)
         this.onBeforeSubmit = function (event) {
@@ -66,15 +29,15 @@
             var valid = true;
 
             //clear errors
-            self.clearPageLevelErrors();
-            self.clearItemLevelErrors();
+            clearPageLevelErrors();
+            clearItemLevelErrors(self.itemLevelErrors);
 
             var password = self.newPasswordCopyElement.value;
             var reenteredPassword = self.reenterPasswordCopyElement.value;
 
             if (password === '') {
                 valid = false;
-                self.showItemAndPageLevelError(
+                showItemAndPageLevelError(
                     'Enter your password',
                     self.newPasswordCopyError,
                     self.newPasswordCopyElement.id
@@ -82,7 +45,7 @@
             }
             else if(password.length < 8 || password.length > 16){
                 valid = false;
-                self.showItemAndPageLevelError(
+                showItemAndPageLevelError(
                     'Enter between 8 and 16 characters',
                     self.newPasswordCopyError,
                     self.newPasswordCopyElement.id
@@ -91,7 +54,7 @@
             //run validation as it has been set up in B2C (default values as suggested here: https://msdn.microsoft.com/en-us/library/azure/jj943764.aspx )
             else if(!password.match(/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)|(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])|(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])|(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]))([A-Za-z\d@#$%^&*\-_+=[\]{}|\\:',?\/`~"();!]|\.(?!@)){8,16}$/)){
                 valid = false;
-                self.showItemAndPageLevelError(
+                showItemAndPageLevelError(
                     'Invalid password',
                     self.newPasswordCopyError,
                     self.newPasswordCopyElement.id,
@@ -100,12 +63,12 @@
             }
             else if (reenteredPassword === '') {
                 valid = false;
-                self.showItemAndPageLevelError('Re-enter your password', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
+                showItemAndPageLevelError('Re-enter your password', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
             }
 
             else if (reenteredPassword !== '' && password !== reenteredPassword) {
                 valid = false;
-                self.showItemAndPageLevelError('Your passwords do not match', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
+                showItemAndPageLevelError('Your passwords do not match', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
             }
 
             //if no errors, submit actually happens
@@ -119,56 +82,6 @@
             }
         };
 
-
-        /**
-         * Callback that will look for class changes to show/hide page level errors
-         */
-        this.pageLevelErrorCallback = function pageLevelErrorCallback(mutationsList, observer) {
-            //flag to see if we have to refresh page level errors
-            var refreshErrorsRequired = false;
-
-            //loop through mutated objects to run crazy logic and update the UI accordingly
-            for (var mutation of mutationsList) {
-
-                //Determine if we will need to refresh the page level errors after the loop
-                if (!refreshErrorsRequired &&
-                    mutation.target.classList.contains('error') &&
-                    mutation.target.classList.contains('pageLevel')
-                ) {
-                    refreshErrorsRequired = true;
-                }
-            }
-
-            //refresh the page level errors if there was at least one included
-            if (refreshErrorsRequired) {
-                self.refreshPageLevelErrors();
-            }
-        };
-
-        //function to refresh the page level errors in our govuk container with the right format
-        this.refreshPageLevelErrors = function refreshPageLevelErrors() {
-
-            //get all page level error elements
-            this._pageErrors = document.getElementsByClassName('error pageLevel');
-
-            // find out how many of these errors are visible
-            var numVisibleItems = Array.from(this._pageErrors).filter(function (item) {
-                return item.style.display !== 'none';
-            }).length;
-
-            // only add the error summary if there is at least one error visible
-            if (numVisibleItems > 0) {
-
-                //add all page level errors to the list
-                Array.from(this._pageErrors).forEach((errorItem) => {
-                    //and add each page level error as list items
-                    var pageError = document.createElement('LI');
-                    pageError.appendChild(errorItem);
-                    self.errorSummaryItems.appendChild(pageError);
-                    self.pageLevelErrorContainer.style.display = 'block';
-                });
-            }
-        };
 
         this.onDOMContentLoaded = function onDOMContentLoaded() {
 
@@ -187,7 +100,7 @@
             // errorContainer.id = 'pageLevelErrorContainerCopy';
             // errorContainer.style.display = 'none';
             // errorContainer.innerHTML = `
-            //     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary"><h2 class="govuk-error-summary__title" id="error-summary-title">COPY - There is a problem</h2><div class="govuk-error-summary__body"><ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list"></ul></div></div>
+            //     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary"><h2 class="govuk-error-summary__title" id="error-summary-title">COPY - There is a problem</h2><div id="errorSummaryText" style={{ display: 'none' }}><p class="govuk-body">Your password must:</p></div><div class="govuk-error-summary__body"><ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list"></ul></div></div>
             // `;
 
             // apiNode.parentNode.insertBefore(errorContainer, apiNode.nextSibling);
@@ -210,14 +123,10 @@
             //store them in an array to clear them easily later on
             self.itemLevelErrors = [self.newPasswordCopyError, self.reenterPasswordCopyError];
 
-            //retrieve elements needed for page level errors
-            self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainer');
-            //TO TEST IN SESSION
-            //self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainerCopy');
-            self.errorSummaryText = document.getElementById('errorSummaryText');
-            self.errorSummaryItems = document.getElementById('errorSummaryItems');
-
             self.formCopy.addEventListener('submit', self.onBeforeSubmit);
+
+            //start observing page level errors
+            setB2CErrorObservers();
 
         };        
         

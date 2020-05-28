@@ -62,31 +62,6 @@ function itemLevelErrorClassCallback(mutationsList, observer) {
     }
 };
 
-/**
- * Callback that will look for class changes to show/hide page level errors
- */
-function pageLevelErrorCallback(mutationsList, observer) {
-    //flag to see if we have to refresh page level errors
-    var refreshErrorsRequired = false;
-
-    //loop through mutated objects to run crazy logic and update the UI accordingly
-    for (var mutation of mutationsList) {
-
-        //Determine if we will need to refresh the page level errors after the loop
-        if (!refreshErrorsRequired &&
-            mutation.target.classList.contains('error') &&
-            mutation.target.classList.contains('pageLevel')
-        ) {
-            refreshErrorsRequired = true;
-        }
-    }
-
-    //refresh the page level errors if there was at least one included
-    if (refreshErrorsRequired) {
-        self.refreshPageLevelErrors();
-    }
-};
-
 function refreshPageLevelErrors() {
     // manipulate the DOM so that we can find all page level errors and put them in the same place,
     // potentially outside the B2C container
@@ -130,6 +105,31 @@ function refreshPageLevelErrors() {
                 this._pageLevelErrorItemsContainer.appendChild(listItem);
             });
         }
+    }
+};
+
+/**
+ * Callback that will look for class changes to show/hide page level errors
+ */
+function pageLevelErrorCallback(mutationsList, observer) {
+    //flag to see if we have to refresh page level errors
+    var refreshErrorsRequired = false;
+
+    //loop through mutated objects to run crazy logic and update the UI accordingly
+    for (var mutation of mutationsList) {
+
+        //Determine if we will need to refresh the page level errors after the loop
+        if (!refreshErrorsRequired &&
+            mutation.target.classList.contains('error') &&
+            mutation.target.classList.contains('pageLevel')
+        ) {
+            refreshErrorsRequired = true;
+        }
+    }
+
+    //refresh the page level errors if there was at least one included
+    if (refreshErrorsRequired) {
+        refreshPageLevelErrors();
     }
 };
 
