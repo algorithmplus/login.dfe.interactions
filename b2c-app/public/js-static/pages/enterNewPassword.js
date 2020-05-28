@@ -21,15 +21,19 @@
 
         //Page level errors
         this.pageLevelErrorContainer = null;
+        this.errorSummaryText = null;
         this.errorSummaryItems = null;
 
 
         //function to show item level errors
-        this.showItemAndPageLevelError = function (message, itemLevelElem, itemId) {
+        this.showItemAndPageLevelError = function (message, itemLevelElem, itemId, showText) {
             if(itemLevelElem){
                 itemLevelElem.innerHTML = `<span class="govuk-visually-hidden">Error:</span>${message}`;
                 itemLevelElem.style.display = 'block';
                 itemLevelElem.parentNode.classList.add('govuk-form-group--error');
+
+                //show text if required
+                showText ? self.errorSummaryText.style.display = 'block' : self.errorSummaryText.style.display = 'none';
 
                 //page level error
                 var pageError = document.createElement('LI');
@@ -65,30 +69,49 @@
             self.clearPageLevelErrors();
             self.clearItemLevelErrors();
 
-            if (self.newPasswordCopyElement.value === '') {
+            var password = self.newPasswordCopyElement.value;
+            var reenteredPassword = self.reenterPasswordCopyElement.value;
+
+            if (password === '') {
                 valid = false;
-                self.showItemAndPageLevelError('Enter your password', self.newPasswordCopyError, self.newPasswordCopyElement.id);
+                self.showItemAndPageLevelError(
+                    'Enter your password',
+                    self.newPasswordCopyError,
+                    self.newPasswordCopyElement.id
+                    );
             }
-            else if(self.newPasswordCopyElement.value.length < 8){
+            else if(password.length < 8 || password.length > 16){
                 valid = false;
-                self.showItemAndPageLevelError('Enter at least 8 characters', self.newPasswordCopyError, self.newPasswordCopyElement.id);
+                self.showItemAndPageLevelError(
+                    'Enter between 8 and 16 characters',
+                    self.newPasswordCopyError,
+                    self.newPasswordCopyElement.id
+                    );
             }
-            else if (self.reenterPasswordCopyElement.value === '') {
+            //run validation as it has been set up in B2C (default values as suggested here: https://msdn.microsoft.com/en-us/library/azure/jj943764.aspx )
+            else if(!password.match(/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)|(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])|(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])|(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]))([A-Za-z\d@#$%^&*\-_+=[\]{}|\\:',?\/`~"();!]|\.(?!@)){8,16}$/)){
+                valid = false;
+                self.showItemAndPageLevelError(
+                    'Invalid password',
+                    self.newPasswordCopyError,
+                    self.newPasswordCopyElement.id,
+                    true
+                    );
+            }
+            else if (reenteredPassword === '') {
                 valid = false;
                 self.showItemAndPageLevelError('Re-enter your password', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
             }
-            else if (self.newPasswordCopyElement.value !== '' &&
-                self.reenterPasswordCopyElement.value !== '' &&
-                self.newPasswordCopyElement.value !== self.reenterPasswordCopyElement.value) {
-                
+
+            else if (reenteredPassword !== '' && password !== reenteredPassword) {
                 valid = false;
                 self.showItemAndPageLevelError('Your passwords do not match', self.reenterPasswordCopyError, self.reenterPasswordCopyElement.id);
             }
 
             //if no errors, submit actually happens
             if (valid) {
-                self.newPasswordElement.value = self.newPasswordCopyElement.value;
-                self.reenterPasswordElement.value = self.reenterPasswordCopyElement.value;
+                self.newPasswordElement.value = password;
+                self.reenterPasswordElement.value = reenteredPassword;
                 self.submitButton.click(event);
             }
             else{
@@ -153,6 +176,24 @@
             var apiNode = document.getElementById('api');
             apiNode.style.display = 'none';
 
+            //CODE TO TEST IN SESSION
+            // var copyForm = document.createElement('FORM');
+            // copyForm.id = 'resetPasswordFormCopy';
+            // copyForm.innerHTML = `
+            //     <br/><div class="govuk-form-group"><label class="govuk-label" for="newPasswordCopy">Create new password</label><span id="newPasswordCopyError" class="govuk-error-message" style="display:none"></span><input type="password" class="govuk-input govuk-!-width-one-half" id="newPasswordCopy" name="newPasswordCopy"></div><div class="govuk-form-group"><details class="govuk-details"><summary class="govuk-details__summary"><span class="govuk-details__summary-text">Help choosing a valid password</span></summary><div class="govuk-details__text"><p>Your password must:</p><ul class="govuk-list govuk-list--bullet"><li>be between 8 and 64 characters</li><li>include at least one uppercase letter and one lowercase letter</li><li>include at least one number or one symbol</li></ul></div></details></div><div class="govuk-form-group"><label class="govuk-label" for="reenterPasswordCopy">Re-type password</label><span id="reenterPasswordCopyError" class="govuk-error-message" style="display:none"></span><input type="password" class="govuk-input govuk-!-width-one-half" id="reenterPasswordCopy" name="reenterPasswordCopy"></div><button class="govuk-button" id="preSubmit" type="submit">Reset password</button>`;
+            // apiNode.parentNode.insertBefore(copyForm, apiNode.nextSibling);
+
+            // var errorContainer = document.createElement('DIV');
+            // errorContainer.id = 'pageLevelErrorContainerCopy';
+            // errorContainer.style.display = 'none';
+            // errorContainer.innerHTML = `
+            //     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary"><h2 class="govuk-error-summary__title" id="error-summary-title">COPY - There is a problem</h2><div class="govuk-error-summary__body"><ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list"></ul></div></div>
+            // `;
+
+            // apiNode.parentNode.insertBefore(errorContainer, apiNode.nextSibling);
+
+            //END CODE TO TEST IN SESSION
+
             //retrieve all elements we will need
             self.form = document.getElementById('attributeVerification');
             self.formCopy = document.getElementById('resetPasswordFormCopy');
@@ -171,6 +212,9 @@
 
             //retrieve elements needed for page level errors
             self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainer');
+            //TO TEST IN SESSION
+            //self.pageLevelErrorContainer = document.getElementById('pageLevelErrorContainerCopy');
+            self.errorSummaryText = document.getElementById('errorSummaryText');
             self.errorSummaryItems = document.getElementById('errorSummaryItems');
 
             self.formCopy.addEventListener('submit', self.onBeforeSubmit);

@@ -13,6 +13,14 @@ export default function EnterNewPassword() {
                             <h2 class="govuk-error-summary__title" id="error-summary-title">
                                 There is a problem
                             </h2>
+                            <div id="errorSummaryText" style={{ display: 'none' }}>
+                                <p class="govuk-body">Your password must:</p>
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>be between 8 and 16 characters</li>
+                                    <li>include at least one uppercase letter and one lowercase letter</li>
+                                    <li>include at least one number or one symbol</li>
+                                </ul>
+                            </div>
                             <div class="govuk-error-summary__body">
                                 <ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list">
                                     {/* we will add children here when errors occur */}
@@ -44,9 +52,9 @@ export default function EnterNewPassword() {
                                             </span>
                                         </summary>
                                         <div class="govuk-details__text">
-                                            <p>Your password must:</p>
+                                            <p class="govuk-body">Your password must:</p>
                                             <ul class="govuk-list govuk-list--bullet">
-                                                <li>be between 8 and 64 characters</li>
+                                                <li>be between 8 and 16 characters</li>
                                                 <li>include at least one uppercase letter and one lowercase letter</li>
                                                 <li>include at least one number or one symbol</li>
                                             </ul>
