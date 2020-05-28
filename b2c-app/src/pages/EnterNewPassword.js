@@ -8,31 +8,12 @@ export default function EnterNewPassword() {
             <div className="govuk-width-container">
                 <components.Breadcrumbs />
 
-                <div id="pageLevelErrorContainer" style={{ display: 'none' }}>
-                    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
-                            <h2 class="govuk-error-summary__title" id="error-summary-title">
-                                There is a problem
-                            </h2>
-                            <div id="errorSummaryText" style={{ display: 'none' }}>
-                                <p class="govuk-body">Your password must:</p>
-                                <ul class="govuk-list govuk-list--bullet">
-                                    <li>be between 8 and 16 characters</li>
-                                    <li>include at least one uppercase letter and one lowercase letter</li>
-                                    <li>include at least one number or one symbol</li>
-                                </ul>
-                            </div>
-                            <div class="govuk-error-summary__body">
-                                <ul id="errorSummaryItems" class="govuk-list govuk-error-summary__list">
-                                    {/* we will add children here when errors occur */}
-                                </ul>
-                            </div>
-                    </div>
-                </div>
+                <components.PageLevelErrorContainer summaryTextContent={<components.PasswordHelp />} />
 
                 <main className="govuk-main-wrapper">
                     <div className="govuk-grid-row">
                         <div className="govuk-grid-column-two-thirds">
-                            <components.PageTitle size='xl' title="Reset your password"/>
+                            <components.PageTitle size='xl' title="Reset your password" />
 
                             <form id="resetPasswordFormCopy" novalidate>
 
@@ -45,21 +26,7 @@ export default function EnterNewPassword() {
                                 </div>
 
                                 <div class="govuk-form-group">
-                                    <details class="govuk-details">
-                                        <summary class="govuk-details__summary">
-                                            <span class="govuk-details__summary-text">
-                                                Help choosing a valid password
-                                            </span>
-                                        </summary>
-                                        <div class="govuk-details__text">
-                                            <p class="govuk-body">Your password must:</p>
-                                            <ul class="govuk-list govuk-list--bullet">
-                                                <li>be between 8 and 16 characters</li>
-                                                <li>include at least one uppercase letter and one lowercase letter</li>
-                                                <li>include at least one number or one symbol</li>
-                                            </ul>
-                                        </div>
-                                    </details>
+                                    <components.PasswordHelpContainer />
                                 </div>
 
                                 <div class="govuk-form-group">
@@ -73,7 +40,7 @@ export default function EnterNewPassword() {
                                 <button class="govuk-button" id="preSubmit" type="submit">Reset password</button>
 
                             </form>
-                            
+
 
                             {/* add B2C component, it will be hidden but needs to be loaded */}
                             <components.B2C />
