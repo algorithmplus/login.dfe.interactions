@@ -1,7 +1,5 @@
 import React from 'react';
 
-import components from '../../components';
-
 function PageLevelErrorContainer(props) {
 
     return (
