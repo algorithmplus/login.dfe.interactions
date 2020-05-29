@@ -38,7 +38,8 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-          <Route path={/B2C_1A_signin_invitation/}>
+          {/* we will need to use url instead of path to also check in query string */}
+          <Route url={/B2C_1A_signin_invitation/}>
             <Login />
           </Route>
           <Route path="/email-sent"
