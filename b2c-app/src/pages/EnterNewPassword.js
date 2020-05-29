@@ -41,6 +41,9 @@ export default function EnterNewPassword() {
 
                             </form>
 
+
+                            {/* add B2C component, it will be hidden but needs to be loaded */}
+                            <components.B2C />
                         </div>
                     </div>
                 </main>
