@@ -38,7 +38,7 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-          <Route path={/B2C_1A_signin_invitation/}>
+          <Route path="/login">
             <Login />
           </Route>
           <Route path="/email-sent"
@@ -56,7 +56,7 @@ function App() {
           <Route path="/reset-password-email-sent"
             render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
             />
-          <Route path={/B2C_1A_passwordResetConformation/}>
+          <Route path="/enter-new-password">
             <EnterNewPassword />
           </Route>
           <Route path="/password-changed">
