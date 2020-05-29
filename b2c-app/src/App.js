@@ -38,12 +38,12 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-          <Route path="/login">
+          <Route path={/B2C_1A_signin_invitation/}>
             <Login />
           </Route>
           <Route path="/email-sent"
             render = { () => <EmailSent action={ACTIONS.SIGNUP} />}
-          />
+            />
           <Route path="/locked">
             <AccountLocked />
           </Route>
@@ -55,8 +55,8 @@ function App() {
           </Route>
           <Route path="/reset-password-email-sent"
             render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
-          />
-          <Route path="/enter-new-password">
+            />
+          <Route path={/B2C_1A_passwordResetConformation/}>
             <EnterNewPassword />
           </Route>
           <Route path="/password-changed">
@@ -70,6 +70,9 @@ function App() {
           </Route>
           <Route path="/account-found">
             <AccountFound />
+          </Route>
+          <Route>
+            <div>Page not found!</div>
           </Route>
         </Switch>
       </div>
