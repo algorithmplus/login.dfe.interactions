@@ -51,13 +51,13 @@
         this.onBeforeSubmit = function (event) {
 
             //flag used to determine if submit should go ahead or not
-            var valid = true;
+            var isValid = true;
 
             //validate date of birth
 
             //validate date fields not empty
             if ( self.dayElement.value === '' && self.monthElement.value === '' && self.yearElement.value === '') {
-                valid = false;
+                isValid = false;
                 self.showItemAndPageLevelError('Enter date of birth', self.dobError, self.dobPageError);
             }
             else {
@@ -83,7 +83,7 @@
 
             //validate given name
             if (self.givenNameElement.value === '') {
-                valid = false;
+                isValid = false;
                 self.showItemAndPageLevelError('Enter your first name', self.givenNameError, self.givenNamePageError);
             }
             else {
@@ -92,7 +92,7 @@
 
             //validate lastName
             if (self.lastNameElement.value === '') {
-                valid = false;
+                isValid = false;
                 self.showItemAndPageLevelError('Enter your last name', self.lastNameError, self.lastNamePageError);
             }
             else {
@@ -101,7 +101,7 @@
 
             //validate postCode
             if (self.postCodeElement.value === '') {
-                valid = false;
+                isValid = false;
                 self.showItemAndPageLevelError('Enter your postcode', self.postCodeError, self.postCodePageError);
             }
             else {
@@ -109,7 +109,7 @@
             }
 
             //if no errors, submit actually happens
-            if (valid) {
+            if (isValid) {
                 self.continueButton.click(event);
             }
         };

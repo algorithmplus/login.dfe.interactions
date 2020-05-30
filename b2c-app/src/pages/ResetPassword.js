@@ -18,7 +18,7 @@ export default function ResetPassword() {
                             <components.PageTitle size='xl' title="Access your account"/>
                             <p className="govuk-body">You can reset your password if you've forgotten it.</p>
                             <p className="govuk-body">If you cannot remember your email address you can also retrieve it here.</p>
-                            <h3 class="govuk-heading-m">Reset your password</h3>
+                            <h3 className="govuk-heading-m">Reset your password</h3>
                             <p className="govuk-body">To reset your password we need to send an email to the address registered to your account.</p>
                             <components.B2C />
                             <p className="govuk-body">
