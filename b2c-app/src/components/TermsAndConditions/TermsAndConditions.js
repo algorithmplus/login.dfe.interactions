@@ -13,7 +13,7 @@ function TermsAndConditions() {
                 <label className="block-label" for="termsAndConditionsCopy">
                     <input id="termsAndConditionsCopy" name="termsAndConditionsCopy" type="checkbox" value="true" aria-invalid="true" />
                     I accept the&nbsp;
-                    <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" id="termsAndConditionsLink" target="_blank">
+                    <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" id="termsAndConditionsLink" target="_blank" rel="noopener noreferrer" >
                         terms and conditions
                     </a>
                     &nbsp;and I am 13 or over
