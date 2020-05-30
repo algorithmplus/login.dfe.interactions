@@ -1,5 +1,5 @@
 
-function validatePasswordInput() {
+function isValidPasswordInput() {
     
     var isValid = true;
 

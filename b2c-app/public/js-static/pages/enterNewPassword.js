@@ -15,17 +15,11 @@
 
             event.preventDefault();
 
-            //flag used to determine if submit should go ahead or not
-            var valid = true;
-
             //clear errors
             clearPageLevelErrors();
 
-            //run password validation
-            isValid = validatePasswordInput();
-
-            //if no errors, submit actually happens
-            if (isValid) {
+            //run password validation. If no errors, submit actually happens
+            if (isValidPasswordInput()) {
                 self.submitButton.click(event);
             }
             else{

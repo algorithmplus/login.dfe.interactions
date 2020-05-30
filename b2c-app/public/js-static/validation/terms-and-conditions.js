@@ -1,5 +1,5 @@
 
-function validateTsAndCsInput(passwordElem, passwordError, reenteredPasswordElem, reenteredPasswordError) {
+function isValidTsAndCsInput(passwordElem, passwordError, reenteredPasswordElem, reenteredPasswordError) {
     
     var isValid = true;
 

@@ -18,23 +18,13 @@
 
             event.preventDefault();
 
-            //flag used to determine if submit should go ahead or not
-            var isValid = true;
-
             //clear errors
             clearPageLevelErrors();
 
-            //run password validation
-            isValid = validatePasswordInput();
-
-            //run date of birth validation
-            isValid = validateDateOfBirthInput();
-
-            //run terms and conditions validation
-            isValid = validateTsAndCsInput();
-
+            //run password, date of birth and terms and conditions validation
+            //using single & to run all validation steps
             //if no errors, submit actually happens
-            if (isValid) {
+            if (isValidPasswordInput() & isValidDateOfBirthInput() & isValidTsAndCsInput()) {
                 self.submitButton.click(event);
             }
             else {

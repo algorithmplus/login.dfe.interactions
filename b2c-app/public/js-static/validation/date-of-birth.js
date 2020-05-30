@@ -1,5 +1,5 @@
 
-function validateDateOfBirthInput() {
+function isValidDateOfBirthInput() {
 
     var isValid = true;
 
