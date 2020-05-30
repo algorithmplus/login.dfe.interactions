@@ -4,7 +4,7 @@ function isValidTsAndCsInput(passwordElem, passwordError, reenteredPasswordElem,
     var isValid = true;
 
     //input fields from B2C
-    var tsAndCsElement = document.getElementById('termsAndConditions');
+    var tsAndCsElement = document.getElementById('tncCheckbox_true');
     //input fields from our own version of Ts & Cs input
     var tsAndCsCopyElement = document.getElementById('termsAndConditionsCopy');
     //error placeholders in our own Ts & Cs input
