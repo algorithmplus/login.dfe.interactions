@@ -13,6 +13,9 @@ import ResendActivationLink from  './ResendEmailLink/ResendEmailLink';
 import PasswordHelpContainer from './PasswordHelp/PasswordHelpContainer';
 import PasswordHelp from './PasswordHelp/PasswordHelp';
 import PageLevelErrorContainer from './PageLevelErrorContainer/PageLevelErrorContainer';
+import ResetPasswordInput from './ResetPasswordInput/ResetPasswordInput';
+import DateOfBirthInput from './DateOfBirthInput/DateOfBirthInput';
+import TermsAndConditions from './TermsAndConditions/TermsAndConditions';
 
 export default {
     Header: Header,
@@ -29,5 +32,8 @@ export default {
     ResendActivationLink: ResendActivationLink,
     PasswordHelpContainer: PasswordHelpContainer,
     PasswordHelp: PasswordHelp,
-    PageLevelErrorContainer: PageLevelErrorContainer
+    PageLevelErrorContainer: PageLevelErrorContainer,
+    ResetPasswordInput: ResetPasswordInput,
+    DateOfBirthInput: DateOfBirthInput,
+    TermsAndConditions: TermsAndConditions
 }
