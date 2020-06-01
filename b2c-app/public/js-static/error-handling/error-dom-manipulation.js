@@ -11,11 +11,19 @@ function clearPageLevelErrors () {
     }
 };
 
+//function to find closest parent that has class govuk-form-group
+function findClosestFormGroupParent (elem){
+    return elem.closest('.govuk-form-group');
+};
+
 //function to clear all the item level errors
 function clearItemLevelErrors (itemLevelErrors) {
     itemLevelErrors.forEach(function(itemLevelElem){
         itemLevelElem.style.display = 'none';
-        itemLevelElem.parentNode.classList.remove('govuk-form-group--error');
+        var highlightedParent = findClosestFormGroupParent(itemLevelElem);
+        if(highlightedParent){
+            highlightedParent.classList.remove('govuk-form-group--error');
+        }
     });
 };
 
@@ -30,7 +38,11 @@ function showItemAndPageLevelError (message, itemLevelElem, itemId, showText) {
     if(pageLevelErrorContainer && errorSummaryItems && itemLevelElem){
         itemLevelElem.innerHTML = `<span class="govuk-visually-hidden">Error:</span>${message}`;
         itemLevelElem.style.display = 'block';
-        itemLevelElem.parentNode.classList.add('govuk-form-group--error');
+        //find closest parent that has class govuk-form-group as we will be highlighting it
+        var parentToHighlight = findClosestFormGroupParent(itemLevelElem);
+        if(parentToHighlight){
+            parentToHighlight.classList.add('govuk-form-group--error');
+        }
 
         //show text if required
         if(errorSummaryText){

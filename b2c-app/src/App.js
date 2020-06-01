@@ -14,6 +14,7 @@ import AccountFound from './pages/AccountFound';
 import PasswordChanged from './pages/PasswordChanged';
 import Placeholder from './pages/Placeholder';
 import EnterNewPassword from './pages/EnterNewPassword';
+import ActivateAccount from './pages/AidedRegistration/ActivateAccount';
 
 import components from './components';
 
@@ -71,8 +72,8 @@ function App() {
           <Route path="/account-found">
             <AccountFound />
           </Route>
-          <Route>
-            <div>Page not found!</div>
+          <Route path="/aided-registration-activate-account">
+            <ActivateAccount />
           </Route>
         </Switch>
       </div>

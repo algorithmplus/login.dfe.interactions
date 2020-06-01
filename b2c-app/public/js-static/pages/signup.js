@@ -107,7 +107,7 @@
                     <div class="error itemLevel" role="alert" style="display: none"></div>
                     <input id="tncCheckbox_true" name="tncCheckbox" type="checkbox" value="true" />
                     <label for="tncCheckbox_true">I accept the 
-                        <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" target="_blank">terms and conditions</a>
+                        <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" target="_blank" rel="noopener noreferrer" >terms and conditions</a>
                         and I am 13 or over
                     </label>
                 </div>

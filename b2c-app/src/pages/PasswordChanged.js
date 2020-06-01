@@ -17,7 +17,7 @@ export default function PasswordChanged() {
                         <div className="govuk-grid-column-two-thirds">
                             <components.PageTitle size='xl' title="We've changed your password"/>
                             <p className="govuk-body">Use your new details to sign in and access your information.</p>
-                            <a href={getB2CLink(ACTIONS.LOGIN)} role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+                            <a href={getB2CLink(ACTIONS.LOGIN)} role="button" draggable="false" className="govuk-button govuk-button--start" data-module="govuk-button">
                                 Sign in to your account
                             </a>
 
