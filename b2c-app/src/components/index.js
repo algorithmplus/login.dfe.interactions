@@ -13,7 +13,7 @@ import ResendActivationLink from  './ResendEmailLink/ResendEmailLink';
 import PasswordHelpContainer from './PasswordHelp/PasswordHelpContainer';
 import PasswordHelp from './PasswordHelp/PasswordHelp';
 import PageLevelErrorContainer from './PageLevelErrorContainer/PageLevelErrorContainer';
-import ResetPasswordInput from './ResetPasswordInput/ResetPasswordInput';
+import CreateNewPassword from './CreateNewPassword/CreateNewPassword';
 import DateOfBirthInput from './DateOfBirthInput/DateOfBirthInput';
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions';
 
@@ -33,7 +33,7 @@ export default {
     PasswordHelpContainer: PasswordHelpContainer,
     PasswordHelp: PasswordHelp,
     PageLevelErrorContainer: PageLevelErrorContainer,
-    ResetPasswordInput: ResetPasswordInput,
+    CreateNewPassword: CreateNewPassword,
     DateOfBirthInput: DateOfBirthInput,
     TermsAndConditions: TermsAndConditions
 }

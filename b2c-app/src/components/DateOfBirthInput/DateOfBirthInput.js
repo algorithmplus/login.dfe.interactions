@@ -17,26 +17,26 @@ function DateOfBirthInput() {
                 <div className="govuk-date-input" id="date-of-birth">
                     <div className="govuk-date-input__item">
                         <div className="govuk-form-group">
-                            <label className="govuk-label govuk-date-input__label" for="dayCopy">
+                            <label className="govuk-label govuk-date-input__label" htmlFor="dayCopy">
                                 Day
                             </label>
-                            <input className="govuk-input govuk-date-input__input govuk-input--width-2" id="dayCopy" name="dayCopy" type="text" pattern="[0-9]*" inputmode="numeric" />
+                            <input className="govuk-input govuk-date-input__input govuk-input--width-2" id="dayCopy" name="dayCopy" type="text" pattern="[0-9]*" inputMode="numeric" />
                         </div>
                     </div>
                     <div className="govuk-date-input__item">
                         <div className="govuk-form-group">
-                            <label className="govuk-label govuk-date-input__label" for="monthCopy">
+                            <label className="govuk-label govuk-date-input__label" htmlFor="monthCopy">
                                 Month
                             </label>
-                            <input className="govuk-input govuk-date-input__input govuk-input--width-2" id="monthCopy" name="monthCopy" type="text" pattern="[0-9]*" inputmode="numeric" />
+                            <input className="govuk-input govuk-date-input__input govuk-input--width-2" id="monthCopy" name="monthCopy" type="text" pattern="[0-9]*" inputMode="numeric" />
                         </div>
                     </div>
                     <div className="govuk-date-input__item">
                         <div className="govuk-form-group">
-                            <label className="govuk-label govuk-date-input__label" for="yearCopy">
+                            <label className="govuk-label govuk-date-input__label" htmlFor="yearCopy">
                                 Year
                             </label>
-                            <input className="govuk-input govuk-date-input__input govuk-input--width-4" id="yearCopy" name="yearCopy" type="text" pattern="[0-9]*" inputmode="numeric" />
+                            <input className="govuk-input govuk-date-input__input govuk-input--width-4" id="yearCopy" name="yearCopy" type="text" pattern="[0-9]*" inputMode="numeric" />
                         </div>
                     </div>
                 </div>

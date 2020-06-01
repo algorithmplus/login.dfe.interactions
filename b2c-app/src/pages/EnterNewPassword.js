@@ -15,7 +15,7 @@ export default function EnterNewPassword() {
                         <div className="govuk-grid-column-two-thirds">
                             <components.PageTitle size='xl' title="Reset your password" />
 
-                            <form id="resetPasswordFormCopy" novalidate>
+                            <form id="resetPasswordFormCopy" noValidate>
                                 <components.ResetPasswordInput />
                                 <button className="govuk-button" id="preSubmit" type="submit">Reset password</button>
                             </form>

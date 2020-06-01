@@ -10,7 +10,7 @@ function TermsAndConditions() {
             <h1 className='govuk-heading-m'>Terms and conditions</h1>
             <div className="govuk-form-group">
                 <span id="termsAndConditionsCopyError" className="govuk-error-message" style={{ display: 'none' }}></span>
-                <label className="block-label" for="termsAndConditionsCopy">
+                <label className="block-label" htmlFor="termsAndConditionsCopy">
                     <input id="termsAndConditionsCopy" name="termsAndConditionsCopy" type="checkbox" value="true" aria-invalid="true" />
                     I accept the&nbsp;
                     <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" id="termsAndConditionsLink" target="_blank" rel="noopener noreferrer" >
