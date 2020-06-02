@@ -10,17 +10,48 @@ class ActivateAccount extends React.Component {
             dobDay: null,
             dobMonth: null,
             dobYear: null,
-            termsAndConditionsAccepted: false
+            termsAndConditionsAccepted: false,
+            showErrors: false,
+            errors: null
         };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onPasswordError = this.onPasswordError.bind(this);
     }
 
-    onPasswordChange = (value) => {
-        this.setState({ password: value }, () => {
-            console.log('password in page set to ' + this.state.password);
-        });
+    onPasswordChange(value) {
+        this.setState({ password: value });
+        this.setState({ showErrors: false });
+    }
+
+    onPasswordError(errors) {
+        this.setState({ errors: [errors.newPassword, errors.reenteredPassword] });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        //do something to validate and decide if we submit or show errors
+        if (this.password &&
+            this.dobDay &&
+            this.dobMonth &&
+            this.dobYear &&
+            this.termsAndConditionsAccepted) {
+                this.setState({ showErrors: false });
+                console.log('everything is valid, submit');
+        }
+        else {
+            //show errors in each component
+            this.setState({ showErrors: true });
+        }
     }
 
     render() {
+
+        const errorSummary = this.state.showErrors ?
+            (
+                <components.PageLevelErrorContainer errorItems={this.state.errors} summaryTextContent={<components.PasswordHelp />} />
+            ) :
+            '';
 
         return (
             <div id="activateAccount">
@@ -28,15 +59,15 @@ class ActivateAccount extends React.Component {
                 <div className="govuk-width-container">
                     <components.Breadcrumbs />
 
-                    <components.PageLevelErrorContainer summaryTextContent={<components.PasswordHelp />} />
+                    {errorSummary}
 
                     <main className="govuk-main-wrapper">
                         <div className="govuk-grid-row">
                             <div className="govuk-grid-column-two-thirds">
                                 <components.PageTitle size='xl' title="Activate your account" />
 
-                                <form id="activateAccountForm" noValidate>
-                                    <components.CreateNewPassword onChange={this.onPasswordChange} />
+                                <form id="activateAccountForm" onSubmit={this.handleSubmit} noValidate>
+                                    <components.CreateNewPassword onChange={this.onPasswordChange} onError={this.onPasswordError} showErrors={this.state.showErrors} />
                                     <p className="govuk-body">As an extra security check, enter your date of birth.</p>
                                     <components.DateOfBirthInput />
                                     <components.TermsAndConditions />
@@ -52,10 +83,10 @@ class ActivateAccount extends React.Component {
 
                 </div>
 
-                <script src="__--b2cPath--__/b2c/assets/js-static/pages/aidedRegistration/activateAccount.js"></script>
+                {/* <script src="__--b2cPath--__/b2c/assets/js-static/pages/aidedRegistration/activateAccount.js"></script>
                 <script src="__--b2cPath--__/b2c/assets/js-static/validation/new-password.js"></script>
                 <script src="__--b2cPath--__/b2c/assets/js-static/validation/date-of-birth.js"></script>
-                <script src="__--b2cPath--__/b2c/assets/js-static/validation/terms-and-conditions.js"></script>
+                <script src="__--b2cPath--__/b2c/assets/js-static/validation/terms-and-conditions.js"></script> */}
 
             </div>
         )
