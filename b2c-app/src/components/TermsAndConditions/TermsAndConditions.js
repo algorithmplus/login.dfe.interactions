@@ -7,7 +7,7 @@ class TermsAndConditions extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tsAndCsAccepted: null,
+            tsAndCsAccepted: false,
             errors: {
                 tsAndCs: {
                     currentMessage: 'You must accept our Terms and Conditions',
@@ -70,10 +70,13 @@ class TermsAndConditions extends React.Component {
 
             <div>
                 <h1 className='govuk-heading-m'>Terms and conditions</h1>
-                <div className="govuk-form-group">
+                <div className={`govuk-form-group ${this.props.showErrors && errors.tsAndCs.visibleMessage.length > 0 ? "govuk-form-group--error" : ""}`}>
                     {tsAndCsErrorElement}
                     <label className="block-label" htmlFor="tsAndCsCustom">
-                        <input id="tsAndCsCustom" name="tsAndCsAccepted" type="checkbox" value="true" aria-invalid="true" onChange={this.handleChange} noValidate />
+                        <input id="tsAndCsCustom" name="tsAndCsAccepted" type="checkbox" value={true} aria-invalid="true" 
+                            checked={this.state.tsAndCsAccepted}
+                            onChange={this.handleChange}
+                            noValidate />
                         I accept the&nbsp;
                         <a href="https://nationalcareers.service.gov.uk/help/terms-and-conditions" id="tsAndCsLink" target="_blank" rel="noopener noreferrer" >
                             terms and conditions
