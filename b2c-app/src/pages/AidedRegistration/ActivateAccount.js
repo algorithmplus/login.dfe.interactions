@@ -35,11 +35,11 @@ class ActivateAccount extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         //do something to validate and decide if we submit or show errors
-        if (this.password &&
-            this.dobDay &&
-            this.dobMonth &&
-            this.dobYear &&
-            this.termsAndConditionsAccepted) {
+        if (this.state.password &&
+            this.state.dobDay &&
+            this.state.dobMonth &&
+            this.state.dobYear &&
+            this.state.termsAndConditionsAccepted) {
             this.setState({ showErrors: false });
             //everything is valid, set data and submit B2C form
             this.setDataAndSubmit();
@@ -61,9 +61,11 @@ class ActivateAccount extends React.Component {
     }
 
     setDataAndSubmit() {
-        //retrieve all elements we will need
-        //put the data into them
+        //retrieve all elements we will need and set their values
+        document.getElementById('newPassword').value = this.state.password;
+        document.getElementById('reenteredPassword').value = this.state.password;
         //submit B2C form
+        document.getElementById('continue').click();
     }
 
     render() {

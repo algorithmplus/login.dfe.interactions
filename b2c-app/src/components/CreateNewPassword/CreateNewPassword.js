@@ -13,12 +13,12 @@ class CreateNewPassword extends React.Component {
                 newPassword: {
                     currentMessage: 'Enter your password',
                     visibleMessage: '',
-                    id: 'newPassword'
+                    id: 'newPasswordCustom'
                 },
                 reenteredPassword: {
                     currentMessage: '',
                     visibleMessage: '',
-                    id: 'reenteredPassword'
+                    id: 'reenteredPasswordCustom'
                 }
             }
         };
@@ -110,11 +110,11 @@ class CreateNewPassword extends React.Component {
 
             <div>
                 <div className={`govuk-form-group ${this.props.showErrors && errors.newPassword.visibleMessage.length > 0 ? "govuk-form-group--error" : ""}`}>
-                    <label className="govuk-label" htmlFor="newPassword">
+                    <label className="govuk-label" htmlFor="newPasswordCustom">
                         Create new password
                     </label>
                     {newPasswordErrorElement}
-                    <input className="govuk-input govuk-!-width-one-half" id="newPassword" name="newPassword" type="password" onChange={this.handleChange} noValidate />
+                    <input className="govuk-input govuk-!-width-one-half" id="newPasswordCustom" name="newPasswordCustom" type="password" onChange={this.handleChange} noValidate />
                 </div>
 
                 <div className="govuk-form-group">
@@ -122,11 +122,11 @@ class CreateNewPassword extends React.Component {
                 </div>
 
                 <div className={`govuk-form-group ${this.props.showErrors && errors.reenteredPassword.visibleMessage.length > 0 ? "govuk-form-group--error" : ""}`}>
-                    <label className="govuk-label" htmlFor="reenterPreenteredPasswordassword">
+                    <label className="govuk-label" htmlFor="reenteredPasswordCustom">
                         Re-type password
                     </label>
                     {reenteredPasswordErrorElement}
-                    <input className="govuk-input govuk-!-width-one-half" id="reenteredPassword" name="reenteredPassword" type="password" onChange={this.handleChange} noValidate />
+                    <input className="govuk-input govuk-!-width-one-half" id="reenteredPasswordCustom" name="reenteredPasswordCustom" type="password" onChange={this.handleChange} noValidate />
                 </div>
             </div>
 
