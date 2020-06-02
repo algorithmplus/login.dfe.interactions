@@ -7,7 +7,7 @@ function PageLevelErrorContainer(props) {
             return error ?
                 (
                     <li key={error.id}>
-                        <a href={`#${error.id}`}>{error.message}</a>
+                        <a href={`#${error.id}`}>{error.visibleMessage}</a>
                     </li>
                 ) :
                 null

@@ -11,11 +11,13 @@ class CreateNewPassword extends React.Component {
             reenteredPassword: null,
             errors: {
                 newPassword: {
-                    message: 'Enter your password',
+                    currentMessage: 'Enter your password',
+                    visibleMessage: '',
                     id: 'newPassword'
                 },
                 reenteredPassword: {
-                    message: '',
+                    currentMessage: '',
+                    visibleMessage: '',
                     id: 'reenteredPassword'
                 }
             }
@@ -50,31 +52,31 @@ class CreateNewPassword extends React.Component {
         let errors = this.state.errors;
 
         //clear errors
-        errors.newPassword.message = '';
-        errors.reenteredPassword.message = '';
+        errors.newPassword.currentMessage = '';
+        errors.reenteredPassword.currentMessage = '';
 
         if (!password || password === '') {
             isValid = false;
-            errors.newPassword.message = 'Enter your password';
+            errors.newPassword.currentMessage = 'Enter your password';
         }
         else if (password.length < 8 || password.length > 16) {
             isValid = false;
-            errors.newPassword.message = 'Enter between 8 and 16 characters';
+            errors.newPassword.currentMessage = 'Enter between 8 and 16 characters';
         }
         //run validation as it has been set up in B2C (default values as suggested here: https://msdn.microsoft.com/en-us/library/azure/jj943764.aspx )
         // eslint-disable-next-line
         else if (!password.match(/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)|(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])|(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])|(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]))([A-Za-z\d@#$%^&*\-_+=[\]{}|\\:',?\/`~"();!]|\.(?!@)){8,16}$/)) {
             isValid = false;
-            errors.newPassword.message = 'Invalid password';
+            errors.newPassword.currentMessage = 'Invalid password';
         }
         else if (reenteredPassword === '') {
             isValid = false;
-            errors.reenteredPassword.message = 'Re-enter your password';
+            errors.reenteredPassword.currentMessage = 'Re-enter your password';
         }
 
         else if (reenteredPassword !== '' && password !== reenteredPassword) {
             isValid = false;
-            errors.reenteredPassword.message = 'Your passwords do not match';
+            errors.reenteredPassword.currentMessage = 'Your passwords do not match';
         }
 
         this.setState({ errors });
@@ -86,20 +88,20 @@ class CreateNewPassword extends React.Component {
 
         const { errors } = this.state;
 
-        const newPasswordErrorElement = this.props.showErrors && errors.newPassword.message.length > 0 ?
+        const newPasswordErrorElement = this.props.showErrors && errors.newPassword.visibleMessage.length > 0 ?
             (
                 <span id="newPasswordError" className="govuk-error-message">
                     <span className="govuk-visually-hidden">Error:</span>
-                    {errors.newPassword.message}
+                    {errors.newPassword.visibleMessage}
                 </span>
             ) :
             null;
 
-        const reenteredPasswordErrorElement = this.props.showErrors && errors.reenteredPassword.message.length > 0 ?
+        const reenteredPasswordErrorElement = this.props.showErrors && errors.reenteredPassword.visibleMessage.length > 0 ?
             (
                 <span id="reenteredPasswordError" className="govuk-error-message">
                     <span className="govuk-visually-hidden">Error:</span>
-                    {errors.reenteredPassword.message}
+                    {errors.reenteredPassword.visibleMessage}
                 </span>
             ) :
             null;
@@ -107,7 +109,7 @@ class CreateNewPassword extends React.Component {
         return (
 
             <div>
-                <div className={`govuk-form-group ${this.props.showErrors && errors.newPassword.message.length > 0 ? "govuk-form-group--error" : ""}`}>
+                <div className={`govuk-form-group ${this.props.showErrors && errors.newPassword.visibleMessage.length > 0 ? "govuk-form-group--error" : ""}`}>
                     <label className="govuk-label" htmlFor="newPassword">
                         Create new password
                     </label>
@@ -119,7 +121,7 @@ class CreateNewPassword extends React.Component {
                     <components.PasswordHelpContainer />
                 </div>
 
-                <div className={`govuk-form-group ${this.props.showErrors && errors.reenteredPassword.message.length > 0 ? "govuk-form-group--error" : ""}`}>
+                <div className={`govuk-form-group ${this.props.showErrors && errors.reenteredPassword.visibleMessage.length > 0 ? "govuk-form-group--error" : ""}`}>
                     <label className="govuk-label" htmlFor="reenterPreenteredPasswordassword">
                         Re-type password
                     </label>

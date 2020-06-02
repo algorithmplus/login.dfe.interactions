@@ -17,6 +17,7 @@ class ActivateAccount extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onPasswordError = this.onPasswordError.bind(this);
+        this.hasErrorItems = this.hasErrorItems.bind(this);
     }
 
     componentDidMount() {
@@ -25,7 +26,6 @@ class ActivateAccount extends React.Component {
 
     onPasswordChange(value) {
         this.setState({ password: value });
-        this.setState({ showErrors: false });
     }
 
     onPasswordError(errors) {
@@ -46,8 +46,18 @@ class ActivateAccount extends React.Component {
         }
         else {
             //show errors in each component
+            this.state.errors.forEach( (error) => {
+                error.visibleMessage = error.currentMessage;
+            });
             this.setState({ showErrors: true });
         }
+    }
+
+    hasErrorItems() {
+        const hasErrors = this.state.errors.some(errorItem => {
+            return !!errorItem.visibleMessage;
+        });
+        return hasErrors;
     }
 
     setDataAndSubmit() {
@@ -58,7 +68,7 @@ class ActivateAccount extends React.Component {
 
     render() {
 
-        const errorSummary = this.state.showErrors ?
+        const errorSummary = this.state.showErrors &&  this.hasErrorItems() ?
             (
                 <components.PageLevelErrorContainer errorItems={this.state.errors} summaryTextContent={<components.PasswordHelp />} />
             ) :
