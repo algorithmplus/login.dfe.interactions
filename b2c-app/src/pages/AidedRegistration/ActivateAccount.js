@@ -10,7 +10,7 @@ class ActivateAccount extends React.Component {
             dobDay: null,
             dobMonth: null,
             dobYear: null,
-            termsAndConditionsAccepted: false,
+            tsAndCsAccepted: false,
             showErrors: false,
             errors: []
         };
@@ -18,6 +18,7 @@ class ActivateAccount extends React.Component {
         this.onError = this.onError.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onDobChange = this.onDobChange.bind(this);
+        this.onTsAndCsChange = this.onTsAndCsChange.bind(this);
         this.hasErrorItems = this.hasErrorItems.bind(this);
     }
 
@@ -46,6 +47,10 @@ class ActivateAccount extends React.Component {
         this.setState({ dobYear: dobValues.year });
     }
 
+    onTsAndCsChange(tsAndCsAccepted) {
+        this.setState({ tsAndCsAccepted: tsAndCsAccepted });
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         //do something to validate and decide if we submit or show errors
@@ -53,7 +58,7 @@ class ActivateAccount extends React.Component {
             this.state.dobDay &&
             this.state.dobMonth &&
             this.state.dobYear &&
-            this.state.termsAndConditionsAccepted) {
+            this.state.tsAndCsAccepted) {
             this.setState({ showErrors: false });
             //everything is valid, set data and submit B2C form
             this.setDataAndSubmit();
@@ -81,6 +86,7 @@ class ActivateAccount extends React.Component {
         document.getElementById('day').value = this.state.dobDay;
         document.getElementById('month').value = this.state.dobMonth;
         document.getElementById('year').value = this.state.dobYear;
+        document.getElementById('tncCheckbox_true').checked = this.state.tsAndCsAccepted;
         //submit B2C form
         document.getElementById('continue').click();
     }
@@ -110,7 +116,7 @@ class ActivateAccount extends React.Component {
                                     <components.CreateNewPassword onChange={this.onPasswordChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <p className="govuk-body">As an extra security check, enter your date of birth.</p>
                                     <components.DateOfBirth onChange={this.onDobChange} onError={this.onError} showErrors={this.state.showErrors} />
-                                    <components.TermsAndConditions />
+                                    <components.TermsAndConditions onChange={this.onTsAndCsChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <button className="govuk-button" id="preSubmit" type="submit">Activate account</button>
                                 </form>
 
