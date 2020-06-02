@@ -12,11 +12,12 @@ class ActivateAccount extends React.Component {
             dobYear: null,
             termsAndConditionsAccepted: false,
             showErrors: false,
-            errors: null
+            errors: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onError = this.onError.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onPasswordError = this.onPasswordError.bind(this);
+        this.onDobChange = this.onDobChange.bind(this);
         this.hasErrorItems = this.hasErrorItems.bind(this);
     }
 
@@ -24,12 +25,25 @@ class ActivateAccount extends React.Component {
         document.title = 'Activate your account | National Careers Service';
     }
 
+    onError(errors) {
+        Object.keys(errors).forEach((key) => {
+            const found = this.state.errors.some(el => {
+                return el.id === errors[key].id;
+            });
+            if (!found){               
+                this.state.errors.push(errors[key]);
+            }
+        });
+    }
+
     onPasswordChange(value) {
         this.setState({ password: value });
     }
 
-    onPasswordError(errors) {
-        this.setState({ errors: [errors.newPassword, errors.reenteredPassword] });
+    onDobChange(dobValues) {
+        this.setState({ dobDay: dobValues.day });
+        this.setState({ dobMonth: dobValues.month });
+        this.setState({ dobYear: dobValues.year });
     }
 
     handleSubmit(e) {
@@ -64,6 +78,9 @@ class ActivateAccount extends React.Component {
         //retrieve all elements we will need and set their values
         document.getElementById('newPassword').value = this.state.password;
         document.getElementById('reenteredPassword').value = this.state.password;
+        document.getElementById('day').value = this.state.dobDay;
+        document.getElementById('month').value = this.state.dobMonth;
+        document.getElementById('year').value = this.state.dobYear;
         //submit B2C form
         document.getElementById('continue').click();
     }
@@ -90,9 +107,9 @@ class ActivateAccount extends React.Component {
                                 <components.PageTitle size='xl' title="Activate your account" />
 
                                 <form id="activateAccountForm" onSubmit={this.handleSubmit} noValidate>
-                                    <components.CreateNewPassword onChange={this.onPasswordChange} onError={this.onPasswordError} showErrors={this.state.showErrors} />
+                                    <components.CreateNewPassword onChange={this.onPasswordChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <p className="govuk-body">As an extra security check, enter your date of birth.</p>
-                                    <components.DateOfBirthInput />
+                                    <components.DateOfBirth onChange={this.onDobChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <components.TermsAndConditions />
                                     <button className="govuk-button" id="preSubmit" type="submit">Activate account</button>
                                 </form>

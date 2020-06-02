@@ -25,7 +25,7 @@ class CreateNewPassword extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.isValidPassword = this.isValidPassword.bind(this);
 
-        //initialise errors in parent component (as some might occur even without a change)
+        //initialise errors in parent component, which will contain a reference to them
         props.onError(this.state.errors);
     }
 
@@ -38,9 +38,6 @@ class CreateNewPassword extends React.Component {
             if (this.isValidPassword()) {
                 //update data in the page state
                 this.props.onChange(value);
-            }
-            else {
-                this.props.onError(this.state.errors);
             }
         });
     }
@@ -114,7 +111,7 @@ class CreateNewPassword extends React.Component {
                         Create new password
                     </label>
                     {newPasswordErrorElement}
-                    <input className="govuk-input govuk-!-width-one-half" id="newPasswordCustom" name="newPasswordCustom" type="password" onChange={this.handleChange} noValidate />
+                    <input className="govuk-input govuk-!-width-one-half" id="newPasswordCustom" name="newPassword" type="password" onChange={this.handleChange} noValidate />
                 </div>
 
                 <div className="govuk-form-group">
@@ -126,7 +123,7 @@ class CreateNewPassword extends React.Component {
                         Re-type password
                     </label>
                     {reenteredPasswordErrorElement}
-                    <input className="govuk-input govuk-!-width-one-half" id="reenteredPasswordCustom" name="reenteredPasswordCustom" type="password" onChange={this.handleChange} noValidate />
+                    <input className="govuk-input govuk-!-width-one-half" id="reenteredPasswordCustom" name="reenteredPassword" type="password" onChange={this.handleChange} noValidate />
                 </div>
             </div>
 

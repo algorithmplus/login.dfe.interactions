@@ -14,7 +14,7 @@ import PasswordHelpContainer from './PasswordHelp/PasswordHelpContainer';
 import PasswordHelp from './PasswordHelp/PasswordHelp';
 import PageLevelErrorContainer from './PageLevelErrorContainer/PageLevelErrorContainer';
 import CreateNewPassword from './CreateNewPassword/CreateNewPassword';
-import DateOfBirthInput from './DateOfBirthInput/DateOfBirthInput';
+import DateOfBirth from './DateOfBirth/DateOfBirth';
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions';
 
 export default {
@@ -34,6 +34,6 @@ export default {
     PasswordHelp: PasswordHelp,
     PageLevelErrorContainer: PageLevelErrorContainer,
     CreateNewPassword: CreateNewPassword,
-    DateOfBirthInput: DateOfBirthInput,
+    DateOfBirth: DateOfBirth,
     TermsAndConditions: TermsAndConditions
 }
