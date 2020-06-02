@@ -18,71 +18,80 @@ import ActivateAccount from './pages/AidedRegistration/ActivateAccount';
 
 import components from './components';
 
+import B2CObserver from './services/B2CObserver';
+
 import {
   Switch,
   Route
 } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App" id="app">
+class App extends React.Component {
 
-      {/* header */}
-      <components.Header />
+  componentDidMount() {
+    new B2CObserver().setB2CErrorObservers();
+  }
 
-      {/* routing */}
-      <div id="routes">
-        <Switch>
-          <Route exact path="/">
-            <Placeholder />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/email-sent"
-            render = { () => <EmailSent action={ACTIONS.SIGNUP} />}
+  render() {
+    return (
+      <div className="App" id="app">
+
+        {/* header */}
+        <components.Header />
+
+        {/* routing */}
+        <div id="routes">
+          <Switch>
+            <Route exact path="/">
+              <Placeholder />
+            </Route>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/email-sent"
+              render = { () => <EmailSent action={ACTIONS.SIGNUP} />}
             />
-          <Route path="/locked">
-            <AccountLocked />
-          </Route>
-          <Route path="/activated">
-            <AccountActivated />
-          </Route>
-          <Route path="/reset-password">
-            <ResetPassword />
-          </Route>
-          <Route path="/reset-password-email-sent"
-            render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
+            <Route path="/locked">
+              <AccountLocked />
+            </Route>
+            <Route path="/activated">
+              <AccountActivated />
+            </Route>
+            <Route path="/reset-password">
+              <ResetPassword />
+            </Route>
+            <Route path="/reset-password-email-sent"
+              render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
             />
-          <Route path="/enter-new-password">
-            <EnterNewPassword />
-          </Route>
-          <Route path="/password-changed">
-            <PasswordChanged />
-          </Route>
-          <Route path="/forgotten-email">
-            <ForgottenEmail />
-          </Route>
-          <Route path="/account-not-found">
-            <AccountNotFound />
-          </Route>
-          <Route path="/account-found">
-            <AccountFound />
-          </Route>
-          <Route path="/aided-registration-activate-account">
-            <ActivateAccount />
-          </Route>
-        </Switch>
+            <Route path="/enter-new-password">
+              <EnterNewPassword />
+            </Route>
+            <Route path="/password-changed">
+              <PasswordChanged />
+            </Route>
+            <Route path="/forgotten-email">
+              <ForgottenEmail />
+            </Route>
+            <Route path="/account-not-found">
+              <AccountNotFound />
+            </Route>
+            <Route path="/account-found">
+              <AccountFound />
+            </Route>
+            <Route url={/B2C_1A_signup_invitation/}>
+              <ActivateAccount />
+            </Route>
+          </Switch>
+        </div>
+
+        {/* footer */}
+        <components.Footer />
+
       </div>
-
-      {/* footer */}
-      <components.Footer />
-
-    </div>
-  );
+    )
+  }
 }
 
 export default App;
