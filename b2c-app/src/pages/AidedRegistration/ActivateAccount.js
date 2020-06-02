@@ -47,8 +47,8 @@ class ActivateAccount extends React.Component {
         this.setState({ dobYear: dobValues.year });
     }
 
-    onTsAndCsChange(tsAndCsAccepted) {
-        this.setState({ tsAndCsAccepted: tsAndCsAccepted });
+    onTsAndCsChange(value) {
+        this.setState({ tsAndCsAccepted: value });
     }
 
     handleSubmit(e) {
@@ -79,16 +79,29 @@ class ActivateAccount extends React.Component {
         return hasErrors;
     }
 
-    setDataAndSubmit() {
+    setDataAndSubmit() {        
         //retrieve all elements we will need and set their values
-        document.getElementById('newPassword').value = this.state.password;
-        document.getElementById('reenteredPassword').value = this.state.password;
-        document.getElementById('day').value = this.state.dobDay;
-        document.getElementById('month').value = this.state.dobMonth;
-        document.getElementById('year').value = this.state.dobYear;
-        document.getElementById('tncCheckbox_true').checked = this.state.tsAndCsAccepted;
-        //submit B2C form
-        document.getElementById('continue').click();
+        let b2cPassword = document.getElementById('newPassword');
+        let b2cReenteredPassword = document.getElementById('reenteredPassword');
+        let b2cDobDay = document.getElementById('day');
+        let b2cDobMonth = document.getElementById('month');
+        let b2cDobYear = document.getElementById('year');
+        let b2cTermsAndConditions = document.getElementById('tncCheckbox_true');
+        let b2cSubmitButton = document.getElementById('continue');
+
+        if(b2cPassword && b2cReenteredPassword &&
+            b2cDobYear && b2cDobMonth && b2cDobYear &&
+            b2cTermsAndConditions && 
+            b2cSubmitButton){
+                b2cPassword.value = this.state.password;
+                b2cReenteredPassword.value = this.state.password;
+                b2cDobDay.value = this.state.dobDay;
+                b2cDobMonth.value = this.state.dobMonth;
+                b2cDobYear.value = this.state.dobYear;
+                b2cTermsAndConditions.checked = this.state.tsAndCsAccepted;
+                //submit B2C form
+                b2cSubmitButton.click();
+            }
     }
 
     render() {
@@ -128,11 +141,6 @@ class ActivateAccount extends React.Component {
                     </main>
 
                 </div>
-
-                {/* <script src="__--b2cPath--__/b2c/assets/js-static/pages/aidedRegistration/activateAccount.js"></script>
-                <script src="__--b2cPath--__/b2c/assets/js-static/validation/new-password.js"></script>
-                <script src="__--b2cPath--__/b2c/assets/js-static/validation/date-of-birth.js"></script>
-                <script src="__--b2cPath--__/b2c/assets/js-static/validation/terms-and-conditions.js"></script> */}
 
             </div>
         )
