@@ -14,15 +14,16 @@ class CreateNewPassword extends React.Component {
                 reenteredPassword: ''
             }
         };
-        this.onChange = props.onChange;
+        this.handleChange = this.handleChange.bind(this);
+        this.isValidPassword = this.isValidPassword.bind(this);
     }
 
-    handleChange = (event) => {
+    handleChange(e) {
         console.log('handle change');
 
-        event.preventDefault();
+        e.preventDefault();
 
-        const { name, value } = event.target;
+        const { name, value } = e.target;
 
         console.log('validate');
 
@@ -30,12 +31,12 @@ class CreateNewPassword extends React.Component {
             console.log('state updated in component');
             if (this.isValidPassword()) {
                 //update data in the page state
-                this.onChange(value);
+                this.props.onChange(value)
             }
         });
     }
 
-    isValidPassword = () => {
+    isValidPassword() {
         let isValid = true;
         let password = this.state.newPassword;
         let reenteredPassword = this.state.reenteredPassword;
@@ -69,7 +70,7 @@ class CreateNewPassword extends React.Component {
             errors.reenteredPassword = 'Your passwords do not match';
         }
 
-        this.setState({errors});
+        this.setState({ errors });
 
         return isValid;
     }
@@ -78,6 +79,24 @@ class CreateNewPassword extends React.Component {
 
         const { errors } = this.state;
 
+        const newPasswordErrorElement = errors.newPassword.length > 0 ?
+            (
+                <span id="newPasswordError" className="govuk-error-message">
+                    <span className="govuk-visually-hidden">Error:</span>
+                    {errors.newPassword}
+                </span>
+            ) :
+            '';
+
+        const reenteredPasswordErrorElement = errors.reenteredPassword.length > 0 ?
+            (
+                <span id="reenteredPasswordError" className="govuk-error-message">
+                    <span className="govuk-visually-hidden">Error:</span>
+                    {errors.reenteredPassword}
+                </span>
+            ) :
+            '';
+
         return (
 
             <div>
@@ -85,12 +104,7 @@ class CreateNewPassword extends React.Component {
                     <label className="govuk-label" htmlFor="newPassword">
                         Create new password
                     </label>
-                    {errors.newPassword.length > 0 && (
-                        <span id="newPasswordError" className="govuk-error-message">
-                            <span className="govuk-visually-hidden">Error:</span>
-                            {errors.newPassword}
-                        </span>
-                    )}
+                    {newPasswordErrorElement}
                     <input className="govuk-input govuk-!-width-one-half" id="newPassword" name="newPassword" type="password" onChange={this.handleChange} noValidate />
                 </div>
 
@@ -102,12 +116,7 @@ class CreateNewPassword extends React.Component {
                     <label className="govuk-label" htmlFor="reenterPreenteredPasswordassword">
                         Re-type password
                     </label>
-                    {errors.reenteredPassword.length > 0 && (
-                        <span id="reenteredPasswordError" className="govuk-error-message">
-                            <span className="govuk-visually-hidden">Error:</span>
-                            {errors.reenteredPassword}
-                        </span>
-                    )}
+                    {reenteredPasswordErrorElement}
                     <input className="govuk-input govuk-!-width-one-half" id="reenteredPassword" name="reenteredPassword" type="password" onChange={this.handleChange} noValidate />
                 </div>
             </div>
