@@ -50,6 +50,7 @@ class CreateNewPassword extends React.Component {
 
         //clear errors
         errors.newPassword.currentMessage = '';
+        errors.newPassword.showSummaryText = false;
         errors.reenteredPassword.currentMessage = '';
 
         if (!password || password === '') {
@@ -65,6 +66,7 @@ class CreateNewPassword extends React.Component {
         else if (!password.match(/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)|(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])|(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])|(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]))([A-Za-z\d@#$%^&*\-_+=[\]{}|\\:',?\/`~"();!]|\.(?!@)){8,16}$/)) {
             isValid = false;
             errors.newPassword.currentMessage = 'Invalid password';
+            errors.newPassword.showSummaryText = true;
         }
         else if (reenteredPassword === '') {
             isValid = false;

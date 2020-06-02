@@ -2,6 +2,12 @@ import React from 'react';
 
 function PageLevelErrorContainer(props) {
 
+    let showSummaryText = function(){
+        return props.errorItems.some( item => {
+            return item.showSummaryText;
+        });
+    };
+
     const errorItems = props.errorItems ?
         props.errorItems.map(error => {
             return error ?
@@ -13,7 +19,14 @@ function PageLevelErrorContainer(props) {
                 null
         }) :
         null;
-    
+
+    const errorSummary = props.summaryTextContent && showSummaryText() ?
+        (
+            <div id="errorSummaryText">
+                {props.summaryTextContent}
+            </div>
+        ) :
+        null;
 
     return (
         <div id="pageLevelErrorContainer">
@@ -21,9 +34,7 @@ function PageLevelErrorContainer(props) {
                 <h2 className="govuk-error-summary__title" id="error-summary-title">
                     There is a problem
                 </h2>
-                <div id="errorSummaryText" style={{ display: 'none' }}>
-                    {props.summaryTextContent && ( props.summaryTextContent )}
-                </div>
+                {errorSummary}
                 <div className="govuk-error-summary__body">
                     <ul id="errorSummaryItems" className="govuk-list govuk-error-summary__list">
                         {errorItems}
