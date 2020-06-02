@@ -19,6 +19,10 @@ class ActivateAccount extends React.Component {
         this.onPasswordError = this.onPasswordError.bind(this);
     }
 
+    componentDidMount() {
+        document.title = 'Activate your account | National Careers Service';
+    }
+
     onPasswordChange(value) {
         this.setState({ password: value });
         this.setState({ showErrors: false });
@@ -36,13 +40,20 @@ class ActivateAccount extends React.Component {
             this.dobMonth &&
             this.dobYear &&
             this.termsAndConditionsAccepted) {
-                this.setState({ showErrors: false });
-                console.log('everything is valid, submit');
+            this.setState({ showErrors: false });
+            //everything is valid, set data and submit B2C form
+            this.setDataAndSubmit();
         }
         else {
             //show errors in each component
             this.setState({ showErrors: true });
         }
+    }
+
+    setDataAndSubmit() {
+        //retrieve all elements we will need
+        //put the data into them
+        //submit B2C form
     }
 
     render() {
@@ -51,7 +62,7 @@ class ActivateAccount extends React.Component {
             (
                 <components.PageLevelErrorContainer errorItems={this.state.errors} summaryTextContent={<components.PasswordHelp />} />
             ) :
-            '';
+            null;
 
         return (
             <div id="activateAccount">

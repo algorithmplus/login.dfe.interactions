@@ -93,7 +93,7 @@ class CreateNewPassword extends React.Component {
                     {errors.newPassword.message}
                 </span>
             ) :
-            '';
+            null;
 
         const reenteredPasswordErrorElement = this.props.showErrors && errors.reenteredPassword.message.length > 0 ?
             (
@@ -102,7 +102,7 @@ class CreateNewPassword extends React.Component {
                     {errors.reenteredPassword.message}
                 </span>
             ) :
-            '';
+            null;
 
         return (
 

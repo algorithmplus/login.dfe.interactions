@@ -10,9 +10,9 @@ function PageLevelErrorContainer(props) {
                         <a href={`#${error.id}`}>{error.message}</a>
                     </li>
                 ) :
-                ''
+                null
         }) :
-        '';
+        null;
     
 
     return (
