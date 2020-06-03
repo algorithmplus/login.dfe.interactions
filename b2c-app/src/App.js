@@ -24,17 +24,8 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import PropTypes from "prop-types";
-// eslint-disable-next-line
-import { withRouter } from "react-router";
 
 class App extends React.Component {
-
-  static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
-  };
 
   componentDidMount() {
     new B2CObserver().setB2CErrorObservers();
@@ -94,7 +85,7 @@ class App extends React.Component {
 
   render() {
 
-    let component = this.getComponentByLocation();
+    //let component = this.getComponentByLocation();
 
     return (
       <div className="App" id="app">
@@ -105,8 +96,8 @@ class App extends React.Component {
         {/* routing */}
         <div id="routes">
           <Switch>
-            <Route path="/">
-              {component}
+            <Route path="/aided-registration-activate-account">
+              <ActivateAccount />
             </Route>
           </Switch>
         </div>
@@ -119,4 +110,4 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+export default App;
