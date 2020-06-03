@@ -4,18 +4,20 @@ import "./TermsAndConditions.scss";
 
 class TermsAndConditions extends React.Component {
 
+    state = {
+        tsAndCsAccepted: false,
+        errors: {
+            tsAndCs: {
+                currentMessage: 'You must accept our Terms and Conditions',
+                visibleMessage: '',
+                id: 'tsAndCsCustom'
+            }
+        }
+    };
+
     constructor(props) {
         super(props);
-        this.state = {
-            tsAndCsAccepted: false,
-            errors: {
-                tsAndCs: {
-                    currentMessage: 'You must accept our Terms and Conditions',
-                    visibleMessage: '',
-                    id: 'tsAndCsCustom'
-                }
-            }
-        };
+        
         this.handleChange = this.handleChange.bind(this);
         this.isValidTsAndCs = this.isValidTsAndCs.bind(this);
 
@@ -27,10 +29,7 @@ class TermsAndConditions extends React.Component {
         const { name, checked } = e.target;
 
         this.setState({ [name]: checked }, () => {
-            if (this.isValidTsAndCs()) {
-                //update data in the page state
-                this.props.onChange(checked);
-            }
+            this.isValidTsAndCs() ? this.props.onChange(checked) : this.props.onChange(null);
         });
     }
 

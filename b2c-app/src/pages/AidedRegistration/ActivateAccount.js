@@ -3,17 +3,19 @@ import components from '../../components';
 
 class ActivateAccount extends React.Component {
 
+    state = {
+        password: null,
+        dobDay: null,
+        dobMonth: null,
+        dobYear: null,
+        tsAndCsAccepted: false,
+        showErrors: false,
+        errors: []
+    };
+
     constructor(props) {
         super(props);
-        this.state = {
-            password: null,
-            dobDay: null,
-            dobMonth: null,
-            dobYear: null,
-            tsAndCsAccepted: false,
-            showErrors: false,
-            errors: []
-        };
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onError = this.onError.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);

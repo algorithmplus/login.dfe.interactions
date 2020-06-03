@@ -4,24 +4,26 @@ import components from '..';
 
 class CreateNewPassword extends React.Component {
 
+    state = {
+        newPassword: null,
+        reenteredPassword: null,
+        errors: {
+            newPassword: {
+                currentMessage: 'Enter your password',
+                visibleMessage: '',
+                id: 'newPasswordCustom'
+            },
+            reenteredPassword: {
+                currentMessage: '',
+                visibleMessage: '',
+                id: 'reenteredPasswordCustom'
+            }
+        }
+    };
+
     constructor(props) {
         super(props);
-        this.state = {
-            newPassword: null,
-            reenteredPassword: null,
-            errors: {
-                newPassword: {
-                    currentMessage: 'Enter your password',
-                    visibleMessage: '',
-                    id: 'newPasswordCustom'
-                },
-                reenteredPassword: {
-                    currentMessage: '',
-                    visibleMessage: '',
-                    id: 'reenteredPasswordCustom'
-                }
-            }
-        };
+  
         this.handleChange = this.handleChange.bind(this);
         this.isValidPassword = this.isValidPassword.bind(this);
 
@@ -35,10 +37,7 @@ class CreateNewPassword extends React.Component {
         const { name, value } = e.target;
 
         this.setState({ [name]: value }, () => {
-            if (this.isValidPassword()) {
-                //update data in the page state
-                this.props.onChange(value);
-            }
+            this.isValidPassword() ? this.props.onChange(value) : this.props.onChange(null);
         });
     }
 
