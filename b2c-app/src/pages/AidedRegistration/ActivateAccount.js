@@ -25,6 +25,9 @@ class ActivateAccount extends React.Component {
     }
 
     componentDidMount() {
+        //hide B2C api element as we are overwritting it
+        document.getElementById('api').style.display = 'none';
+        //set page title
         document.title = 'Activate your account | National Careers Service';
     }
 

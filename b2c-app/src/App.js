@@ -45,7 +45,7 @@ class App extends React.Component {
     console.log(location);
     
 
-    if (this.matchesPath(location, '/login')) {
+    if (this.matchesPath(location, 'B2C_1A_signin_invitation')) {
       return <Login />;
     }
     if (this.matchesPath(location, '/signup')) {
@@ -72,14 +72,14 @@ class App extends React.Component {
     if (this.matchesPath(location, '/password-changed')) {
       return <PasswordChanged />;
     }
-    if (this.matchesPath(location, '/forgotten-email')) {
-      return <ForgottenEmail />;
-    }
     if (this.matchesPath(location, '/account-not-found')) {
       return <AccountNotFound />;
     }
-    if (this.matchesPath(location, '/account-found')) {
+    if (this.matchesPath(location, 'B2C_1A_findEmail/api')) {
       return <AccountFound />;
+    }
+    if (this.matchesPath(location, 'B2C_1A_findEmail')) {
+      return <ForgottenEmail />;
     }
     if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {
       return <ActivateAccount />;
