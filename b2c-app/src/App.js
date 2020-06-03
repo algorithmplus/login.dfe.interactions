@@ -85,7 +85,7 @@ class App extends React.Component {
       return <ActivateAccount />;
     }
     //default
-    return <Placeholder />;
+    //return <Placeholder />;
   }
 
   render() {
