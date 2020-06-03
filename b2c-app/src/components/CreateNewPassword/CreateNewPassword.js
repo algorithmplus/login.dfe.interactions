@@ -35,10 +35,7 @@ class CreateNewPassword extends React.Component {
         const { name, value } = e.target;
 
         this.setState({ [name]: value }, () => {
-            if (this.isValidPassword()) {
-                //update data in the page state
-                this.props.onChange(value);
-            }
+            this.isValidPassword() ? this.props.onChange(value) : this.props.onChange(null);
         });
     }
 

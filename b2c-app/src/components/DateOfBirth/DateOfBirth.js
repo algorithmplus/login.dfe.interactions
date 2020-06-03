@@ -29,14 +29,17 @@ class DateOfBirth extends React.Component {
         const { name, value } = e.target;
 
         this.setState({ [name]: value }, () => {
-            if (this.isValidDob()) {
-                //update data in the page state
+            this.isValidDob() ?
                 this.props.onChange({
                     day: this.state.dobDay,
                     month: this.state.dobMonth,
                     year: this.state.dobYear
+                }) : 
+                this.props.onChange({
+                    day: null,
+                    month: null,
+                    year: null
                 });
-            }
         });
     }
 
@@ -53,6 +56,10 @@ class DateOfBirth extends React.Component {
         if (!day && !month && !year) {
             isValid = false;
             errors.dob.currentMessage = 'Enter date of birth';
+        }
+        else if( !day || !month || !year || year.length !== 4){
+            isValid = false;
+            errors.dob.currentMessage = 'Enter a valid date of birth';
         }
         else {
             //get value for month ready to be used by Date functions
