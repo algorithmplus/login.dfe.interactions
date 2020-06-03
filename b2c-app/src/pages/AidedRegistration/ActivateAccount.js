@@ -23,6 +23,7 @@ class ActivateAccount extends React.Component {
     }
 
     componentDidMount() {
+        document.getElementById('api').style.display = 'none';
         document.title = 'Activate your account | National Careers Service';
     }
 
@@ -82,7 +83,7 @@ class ActivateAccount extends React.Component {
     setDataAndSubmit() {        
         //retrieve all elements we will need and set their values
         let b2cPassword = document.getElementById('newPassword');
-        let b2cReenteredPassword = document.getElementById('reenteredPassword');
+        let b2cReenteredPassword = document.getElementById('reenterPassword');
         let b2cDobDay = document.getElementById('day');
         let b2cDobMonth = document.getElementById('month');
         let b2cDobYear = document.getElementById('year');
