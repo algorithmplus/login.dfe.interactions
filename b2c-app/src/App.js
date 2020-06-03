@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 // eslint-disable-next-line
 import { withRouter } from "react-router";
-import { Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import { ACTIONS } from './constants/actions';
 
@@ -16,7 +16,7 @@ import ForgottenEmail from './pages/ForgottenEmail';
 import AccountNotFound from './pages/AccountNotFound';
 import AccountFound from './pages/AccountFound';
 import PasswordChanged from './pages/PasswordChanged';
-//import Placeholder from './pages/Placeholder';
+import Placeholder from './pages/Placeholder';
 import EnterNewPassword from './pages/EnterNewPassword';
 import ActivateAccount from './pages/AidedRegistration/ActivateAccount';
 
@@ -44,7 +44,7 @@ class App extends React.Component {
     const { location } = this.props;
 
     console.log(location);
-    
+
 
     if (this.matchesPath(location, 'B2C_1A_signin_invitation')) {
       return <Login />;
@@ -91,7 +91,7 @@ class App extends React.Component {
 
   render() {
 
-    let component = this.getComponentByLocation();
+    //let component = this.getComponentByLocation();
 
     return (
       <div className="App" id="app">
@@ -102,7 +102,51 @@ class App extends React.Component {
         {/* routing */}
         <div id="routes">
           <Route>
-            {component}
+            {/* {component} */}
+            <Switch>
+              <Route exact path="/">
+                <Placeholder />
+              </Route>
+              <Route path="/signup">
+                <Signup />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/email-sent"
+                render={() => <EmailSent action={ACTIONS.SIGNUP} />}
+              />
+              <Route path="/locked">
+                <AccountLocked />
+              </Route>
+              <Route path="/activated">
+                <AccountActivated />
+              </Route>
+              <Route path="/reset-password">
+                <ResetPassword />
+              </Route>
+              <Route path="/reset-password-email-sent"
+                render={() => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
+              />
+              <Route path="/enter-new-password">
+                <EnterNewPassword />
+              </Route>
+              <Route path="/password-changed">
+                <PasswordChanged />
+              </Route>
+              <Route path="/forgotten-email">
+                <ForgottenEmail />
+              </Route>
+              <Route path="/account-not-found">
+                <AccountNotFound />
+              </Route>
+              <Route path="/account-found">
+                <AccountFound />
+              </Route>
+              <Route url="/B2C_1A_signup_invitation">
+                <ActivateAccount />
+              </Route>
+            </Switch>
           </Route>
         </div>
 
