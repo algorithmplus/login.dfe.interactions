@@ -24,14 +24,78 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import PropTypes from "prop-types";
+// eslint-disable-next-line
+import { withRouter } from "react-router";
 
 class App extends React.Component {
+
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
+  };
 
   componentDidMount() {
     new B2CObserver().setB2CErrorObservers();
   }
 
+  matchesPath(location, path) {
+    return location.pathname.search(path) !== -1;
+  }
+
+  getComponentByLocation() {
+    const { location } = this.props;
+
+    console.log(location);
+
+    if (this.matchesPath(location, 'B2C_1A_signin_invitation')) {
+      return <Login />;
+    }
+    if (this.matchesPath(location, '/signup')) {
+      return <Signup />;
+    }
+    if (this.matchesPath(location, '/email-sent')) {
+      return <EmailSent action={ACTIONS.SIGNUP} />;
+    }
+    if (this.matchesPath(location, '/locked')) {
+      return <AccountLocked />;
+    }
+    if (this.matchesPath(location, '/activated')) {
+      return <AccountActivated />;
+    }
+    if (this.matchesPath(location, '/reset-password')) {
+      return <ResetPassword />;
+    }
+    if (this.matchesPath(location, '/reset-password-email-sent')) {
+      return <EmailSent action={ACTIONS.RESET_PASSWORD} />;
+    }
+    if (this.matchesPath(location, '/enter-new-password')) {
+      return <EnterNewPassword />;
+    }
+    if (this.matchesPath(location, '/password-changed')) {
+      return <PasswordChanged />;
+    }
+    if (this.matchesPath(location, '/account-not-found')) {
+      return <AccountNotFound />;
+    }
+    if (this.matchesPath(location, 'B2C_1A_findEmail/api')) {
+      return <AccountFound />;
+    }
+    if (this.matchesPath(location, 'B2C_1A_findEmail')) {
+      return <ForgottenEmail />;
+    }
+    if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {
+      return <ActivateAccount />;
+    }
+    //default
+    return <Placeholder />;
+  }
+
   render() {
+
+    let component = this.getComponentByLocation();
+
     return (
       <div className="App" id="app">
 
@@ -41,47 +105,8 @@ class App extends React.Component {
         {/* routing */}
         <div id="routes">
           <Switch>
-            <Route exact path="/">
-              <Placeholder />
-            </Route>
-            <Route path="/signup">
-              <Signup />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/email-sent"
-              render = { () => <EmailSent action={ACTIONS.SIGNUP} />}
-            />
-            <Route path="/locked">
-              <AccountLocked />
-            </Route>
-            <Route path="/activated">
-              <AccountActivated />
-            </Route>
-            <Route path="/reset-password">
-              <ResetPassword />
-            </Route>
-            <Route path="/reset-password-email-sent"
-              render = { () => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
-            />
-            <Route path="/enter-new-password">
-              <EnterNewPassword />
-            </Route>
-            <Route path="/password-changed">
-              <PasswordChanged />
-            </Route>
-            <Route path="/forgotten-email">
-              <ForgottenEmail />
-            </Route>
-            <Route path="/account-not-found">
-              <AccountNotFound />
-            </Route>
-            <Route path="/account-found">
-              <AccountFound />
-            </Route>
-            <Route url={/B2C_1A_signup_invitation/}>
-              <ActivateAccount />
+            <Route path="/">
+              {component}
             </Route>
           </Switch>
         </div>
@@ -94,4 +119,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
