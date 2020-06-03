@@ -59,10 +59,10 @@ class B2CObserver {
         if(targetNode){
             const obs = new MutationObserver(this.newPageLevelErrorCallback);
             const observerConfig = { attributes: true, childList: true, subtree: true };
-            obs.observe(targetNode, observerConfig);            
+            obs.observe(targetNode, observerConfig);
         }
     }
 
 }
 
-export default B2CObserver;
+export default new B2CObserver();

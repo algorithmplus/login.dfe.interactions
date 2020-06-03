@@ -28,7 +28,7 @@ import {
 class App extends React.Component {
 
   componentDidMount() {
-    new B2CObserver().setB2CErrorObservers();
+    B2CObserver.setB2CErrorObservers();
   }
 
   render() {
