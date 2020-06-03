@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 // eslint-disable-next-line
 import { withRouter } from "react-router";
+import { Route } from "react-router-dom";
 
 import { ACTIONS } from './constants/actions';
 
@@ -100,7 +101,9 @@ class App extends React.Component {
 
         {/* routing */}
         <div id="routes">
-          {component}
+          <Route>
+            {component}
+          </Route>
         </div>
 
         {/* footer */}
