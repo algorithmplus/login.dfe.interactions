@@ -86,7 +86,7 @@ class App extends React.Component {
       return <ActivateAccount />;
     }
     //default
-    //return <Placeholder />;
+    return <Placeholder />;
   }
 
   render() {
@@ -101,53 +101,11 @@ class App extends React.Component {
 
         {/* routing */}
         <div id="routes">
-          <Route>
-            {/* {component} */}
-            <Switch>
-              <Route exact path="/">
-                <Placeholder />
-              </Route>
-              <Route path="/signup">
-                <Signup />
-              </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/email-sent"
-                render={() => <EmailSent action={ACTIONS.SIGNUP} />}
-              />
-              <Route path="/locked">
-                <AccountLocked />
-              </Route>
-              <Route path="/activated">
-                <AccountActivated />
-              </Route>
-              <Route path="/reset-password">
-                <ResetPassword />
-              </Route>
-              <Route path="/reset-password-email-sent"
-                render={() => <EmailSent action={ACTIONS.RESET_PASSWORD} />}
-              />
-              <Route path="/enter-new-password">
-                <EnterNewPassword />
-              </Route>
-              <Route path="/password-changed">
-                <PasswordChanged />
-              </Route>
-              <Route path="/forgotten-email">
-                <ForgottenEmail />
-              </Route>
-              <Route path="/account-not-found">
-                <AccountNotFound />
-              </Route>
-              <Route path="/account-found">
-                <AccountFound />
-              </Route>
-              <Route url="/B2C_1A_signup_invitation">
-                <ActivateAccount />
-              </Route>
-            </Switch>
-          </Route>
+          <Switch>
+            <Route path="/"
+              render={() => this.getComponentByLocation()}
+            />
+          </Switch>
         </div>
 
         {/* footer */}
