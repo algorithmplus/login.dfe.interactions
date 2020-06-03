@@ -24,17 +24,10 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import PropTypes from "prop-types";
 // eslint-disable-next-line
 import { withRouter } from "react-router";
 
 class App extends React.Component {
-
-  static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
-  };
 
   componentDidMount() {
     new B2CObserver().setB2CErrorObservers();
