@@ -132,10 +132,6 @@ class ActivateAccount extends React.Component {
                                     <components.TermsAndConditions onChange={this.onTsAndCsChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <button className="govuk-button" id="preSubmit" type="submit">Activate account</button>
                                 </form>
-
-                                {/* add B2C component, it will be hidden but needs to be loaded */}
-                                {/* TODO move to index.html and remove from all pages */}
-                                <div id="api" />
                             </div>
                         </div>
                     </main>
