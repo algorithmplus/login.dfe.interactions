@@ -5,10 +5,11 @@ class PageLevelErrorContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            b2cErrors: null
+            b2cErrors: []
         };
         this.showSummaryText = this.showSummaryText.bind(this);
-        // this.pageLevelErrorCallback = this.pageLevelErrorCallback.bind(this);
+        this.pageLevelErrorCallback = this.pageLevelErrorCallback.bind(this);
+        this.hasErrorItems = this.hasErrorItems.bind(this);
     }
 
     pageLevelErrorCallback(mutationsList, observer) {
@@ -17,7 +18,7 @@ class PageLevelErrorContainer extends React.Component {
 
         //define function here temporarily to make it work
         //function to refresh the page level errors in our govuk container with the right format
-        let refreshErrors = function () {
+        let refreshErrors = () => {
 
             //get all page level error elements
             let pageErrors = document.getElementsByClassName('error pageLevel');
@@ -27,17 +28,21 @@ class PageLevelErrorContainer extends React.Component {
                 return item.style.display !== 'none';
             }).length;
 
-            // only add the error summary if there is at least one error visible
+            // add the visible errors
             if (numVisibleItems > 0) {
-                this.setState({ b2cErrors: Array.from(pageErrors) });
+                let errors = Array.from(pageErrors).map(                    
+                    error => {
+                        return error.innerText
+                    }
+                );
+
+                //set them in the state
+                this.setState({ b2cErrors: Array.from(errors) });
             }
         }
 
         //loop through mutated objects to run crazy logic and update the UI accordingly
-        for (let mutation of mutationsList) {
-
-            console.log(mutation);
-            
+        for (let mutation of mutationsList) {            
 
             //Determine if we will need to refresh the page level errors after the loop
             if (!refreshErrorsRequired &&
@@ -67,12 +72,10 @@ class PageLevelErrorContainer extends React.Component {
         //end testing
 
         if (targetNode) {
-            const obs = new MutationObserver(this.pageLevelErrorCallback.bind(this));
+            const obs = new MutationObserver(this.pageLevelErrorCallback);
             const observerConfig = { attributes: true, childList: true, subtree: true };
             obs.observe(targetNode, observerConfig);
         }
-
-
 
     }
 
@@ -81,6 +84,13 @@ class PageLevelErrorContainer extends React.Component {
             return item.showSummaryText;
         });
     };
+
+    hasErrorItems() {
+        const hasErrors = this.props.errorItems.some(errorItem => {
+            return !!errorItem.visibleMessage;
+        });
+        return hasErrors;
+    }
 
     render() {
         const errorItems = this.props.errorItems ?
@@ -97,13 +107,11 @@ class PageLevelErrorContainer extends React.Component {
 
         const b2cErrorItems = this.state.b2cErrors ?
             this.state.b2cErrors.map(error => {
-                console.log(error);
                 return error ?
                     (
-                        <li>{error}</li>
-                        // <li key={error.id}>
-                        //     <a href={`#${error.id}`}>{error.visibleMessage}</a>
-                        // </li>
+                        <li key={error}>
+                            <a href="#pageLevelErrorContainer">{error}</a>
+                        </li>
                     ) :
                     null
             }) :
@@ -118,7 +126,7 @@ class PageLevelErrorContainer extends React.Component {
             null;
 
         return (
-            <div id="pageLevelErrorContainer" >
+            <div className={`pageLevelErrorContainer ${this.state.b2cErrors.length > 0 || this.hasErrorItems() ? "show" : "hide"}`}>
                 <div className="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabIndex="-1" data-module="govuk-error-summary">
                     <h2 className="govuk-error-summary__title" id="error-summary-title">
                         There is a problem

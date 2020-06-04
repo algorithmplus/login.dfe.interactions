@@ -19,7 +19,6 @@ class ActivateAccount extends React.Component {
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onDobChange = this.onDobChange.bind(this);
         this.onTsAndCsChange = this.onTsAndCsChange.bind(this);
-        this.hasErrorItems = this.hasErrorItems.bind(this);
     }
 
     componentDidMount() {
@@ -54,6 +53,10 @@ class ActivateAccount extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        //update error messages
+        this.state.errors.forEach( (error) => {
+            error.visibleMessage = error.currentMessage;
+        });
         //do something to validate and decide if we submit or show errors
         if (this.state.password &&
             this.state.dobDay &&
@@ -66,18 +69,8 @@ class ActivateAccount extends React.Component {
         }
         else {
             //show errors in each component
-            this.state.errors.forEach( (error) => {
-                error.visibleMessage = error.currentMessage;
-            });
             this.setState({ showErrors: true });
         }
-    }
-
-    hasErrorItems() {
-        const hasErrors = this.state.errors.some(errorItem => {
-            return !!errorItem.visibleMessage;
-        });
-        return hasErrors;
     }
 
     setDataAndSubmit() {        
@@ -107,19 +100,13 @@ class ActivateAccount extends React.Component {
 
     render() {
 
-        const errorSummary = this.state.showErrors &&  this.hasErrorItems() ?
-            (
-                <components.PageLevelErrorContainer errorItems={this.state.errors} summaryTextContent={<components.PasswordHelp />} />
-            ) :
-            null;
-
         return (
             <div id="activateAccount">
 
                 <div className="govuk-width-container">
                     <components.Breadcrumbs />
 
-                    {errorSummary}
+                    <components.PageLevelErrorContainer errorItems={this.state.errors} summaryTextContent={<components.PasswordHelp />} />
 
                     <main className="govuk-main-wrapper">
                         <div className="govuk-grid-row">

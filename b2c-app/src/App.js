@@ -18,8 +18,6 @@ import ActivateAccount from './pages/AidedRegistration/ActivateAccount';
 
 import components from './components';
 
-// import B2CObserver from './services/B2CObserver';
-
 import {
   Switch,
   Route
@@ -28,10 +26,6 @@ import {
 import { withRouter } from "react-router";
 
 class App extends React.Component {
-
-  componentDidMount() {
-    //new B2CObserver().setB2CErrorObservers();
-  }
 
   matchesPath(location, path) {
     return location.pathname.search(path) !== -1;
