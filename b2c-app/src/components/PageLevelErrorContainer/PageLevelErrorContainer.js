@@ -28,13 +28,14 @@ class PageLevelErrorContainer extends React.Component {
                 return item.style.display !== 'none';
             }).length;
 
-            // add the visible errors
+            // add the visible errors if there are any
             if (numVisibleItems > 0) {
-                let errors = Array.from(pageErrors).map(                    
-                    error => {
-                        return error.innerText
+                let errors = Array.from(pageErrors).reduce(function (result, error) {
+                    if (error.style.display !== 'none') {
+                        result.push(error.innerText);
                     }
-                );
+                    return result;
+                }, []);
 
                 //set them in the state
                 this.setState({ b2cErrors: Array.from(errors) });
@@ -62,21 +63,11 @@ class PageLevelErrorContainer extends React.Component {
     componentDidMount() {
         const targetNode = document.getElementById('api');
 
-        //testing
-        var p = document.createElement('p');
-        p.id = 'asd';
-        p.classList.add('error');
-        p.classList.add('pageLevel');
-        p.innerText = 'aaa';
-        targetNode.appendChild(p);
-        //end testing
-
         if (targetNode) {
             const obs = new MutationObserver(this.pageLevelErrorCallback);
             const observerConfig = { attributes: true, childList: true, subtree: true };
             obs.observe(targetNode, observerConfig);
         }
-
     }
 
     showSummaryText() {
