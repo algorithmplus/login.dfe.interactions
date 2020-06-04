@@ -34,7 +34,11 @@ class App extends React.Component {
   getComponentByLocation() {
     const { location } = this.props;
 
+    console.log('Current location object:');    
     console.log(location);
+    console.log('API element from B2C:');    
+    console.log(document.getElementById('api'));
+    
 
     if (this.matchesPath(location, 'B2C_1A_signin_invitation')) {
       return <Login />;
@@ -47,9 +51,6 @@ class App extends React.Component {
     }
     if (this.matchesPath(location, '/locked')) {
       return <AccountLocked />;
-    }
-    if (this.matchesPath(location, '/activated')) {
-      return <AccountActivated />;
     }
     if (this.matchesPath(location, '/reset-password')) {
       return <ResetPassword />;
@@ -72,6 +73,9 @@ class App extends React.Component {
     if (this.matchesPath(location, 'B2C_1A_findEmail')) {
       return <ForgottenEmail />;
     }
+    if (this.matchesPath(location, '/B2C_1A_signup_invitation/api')) {
+      return <AccountActivated />;
+    }
     if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {
       return <ActivateAccount />;
     }
@@ -82,6 +86,7 @@ class App extends React.Component {
   render() {
 
     let component = this.getComponentByLocation();
+    console.log('We are going to render the component:');    
     console.log(component);
     
     return (
