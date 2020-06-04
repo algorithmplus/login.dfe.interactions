@@ -3,17 +3,18 @@ import components from '../../components';
 
 class ActivateAccount extends React.Component {
 
+    state = {
+        password: null,
+        dobDay: null,
+        dobMonth: null,
+        dobYear: null,
+        tsAndCsAccepted: false,
+        showErrors: false,
+        errors: []
+    }
+
     constructor(props) {
         super(props);
-        this.state = {
-            password: null,
-            dobDay: null,
-            dobMonth: null,
-            dobYear: null,
-            tsAndCsAccepted: false,
-            showErrors: false,
-            errors: []
-        };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onError = this.onError.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
@@ -115,7 +116,7 @@ class ActivateAccount extends React.Component {
 
                                 <form id="activateAccountForm" onSubmit={this.handleSubmit} noValidate>
                                     <components.CreateNewPassword onChange={this.onPasswordChange} onError={this.onError} showErrors={this.state.showErrors} />
-                                    <p className="govuk-body">As an extra security check, enter your date of birth.</p>
+                                    <components.Paragraph text='As an extra security check, enter your date of birth.' />
                                     <components.DateOfBirth onChange={this.onDobChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <components.TermsAndConditions onChange={this.onTsAndCsChange} onError={this.onError} showErrors={this.state.showErrors} />
                                     <button className="govuk-button" id="preSubmit" type="submit">Activate account</button>

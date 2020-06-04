@@ -16,6 +16,8 @@ import PageLevelErrorContainer from './PageLevelErrorContainer/PageLevelErrorCon
 import CreateNewPassword from './CreateNewPassword/CreateNewPassword';
 import DateOfBirth from './DateOfBirth/DateOfBirth';
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions';
+import ButtonLink from './ButtonLink/ButtonLink';
+import Paragraph from './Paragraph/Paragraph';
 
 export default {
     Header: Header,
@@ -35,5 +37,7 @@ export default {
     PageLevelErrorContainer: PageLevelErrorContainer,
     CreateNewPassword: CreateNewPassword,
     DateOfBirth: DateOfBirth,
-    TermsAndConditions: TermsAndConditions
+    TermsAndConditions: TermsAndConditions,
+    ButtonLink: ButtonLink,
+    Paragraph: Paragraph
 }

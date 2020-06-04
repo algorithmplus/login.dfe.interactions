@@ -83,7 +83,8 @@ class App extends React.Component {
     if (this.matchesPath(location, 'B2C_1A_findEmail')) {
       return <ForgottenEmail />;
     }
-    if (this.matchesPath(location, 'B2C_1A_signup_invitation/api')) {
+    if (this.matchesPath(location, 'B2C_1A_signup_confirmation') ||
+        this.matchesPath(location, 'B2C_1A_signup_invitation/api')) {
       return <AccountActivated />;
     }
     if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {

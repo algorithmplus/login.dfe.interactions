@@ -2,20 +2,21 @@ import React from 'react';
 
 class DateOfBirth extends React.Component {
 
+    state = {
+        dobDay: null,
+        dobMonth: null,
+        dobYear: null,
+        errors: {
+            dob: {
+                currentMessage: 'Enter date of birth',
+                visibleMessage: '',
+                id: 'dobFieldset'
+            }
+        }
+    }
+
     constructor(props) {
         super(props);
-        this.state = {
-            dobDay: null,
-            dobMonth: null,
-            dobYear: null,
-            errors: {
-                dob: {
-                    currentMessage: 'Enter date of birth',
-                    visibleMessage: '',
-                    id: 'dobFieldset'
-                }
-            }
-        };
         this.handleChange = this.handleChange.bind(this);
         this.isValidDob = this.isValidDob.bind(this);
 
