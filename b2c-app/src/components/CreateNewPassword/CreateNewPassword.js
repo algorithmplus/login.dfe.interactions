@@ -4,25 +4,24 @@ import components from '..';
 
 class CreateNewPassword extends React.Component {
 
-    state = {
-        newPassword: null,
-        reenteredPassword: null,
-        errors: {
-            newPassword: {
-                currentMessage: 'Enter your password',
-                visibleMessage: '',
-                id: 'newPasswordCustom'
-            },
-            reenteredPassword: {
-                currentMessage: '',
-                visibleMessage: '',
-                id: 'reenteredPasswordCustom'
-            }
-        }
-    }
-
     constructor(props) {
         super(props);
+        this.state = {
+            newPassword: null,
+            reenteredPassword: null,
+            errors: {
+                newPassword: {
+                    currentMessage: 'Enter your password',
+                    visibleMessage: '',
+                    id: 'newPasswordCustom'
+                },
+                reenteredPassword: {
+                    currentMessage: '',
+                    visibleMessage: '',
+                    id: 'reenteredPasswordCustom'
+                }
+            }
+        };
         this.handleChange = this.handleChange.bind(this);
         this.isValidPassword = this.isValidPassword.bind(this);
 
