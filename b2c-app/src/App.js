@@ -37,6 +37,19 @@ class App extends React.Component {
     console.log('Current location object:');    
     console.log(location);
 
+    try{
+      if(document){
+        console.log('API element from B2C:');
+        console.log(document.getElementById('api'));
+      }
+      else{
+        console.log('Document still not available');      
+      }
+    }
+    catch(e){
+      console.log(e);
+    }
+
     if (this.matchesPath(location, 'B2C_1A_signin_invitation')) {
       return <Login />;
     }
