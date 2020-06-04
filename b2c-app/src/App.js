@@ -18,7 +18,7 @@ import ActivateAccount from './pages/AidedRegistration/ActivateAccount';
 
 import components from './components';
 
-import B2CObserver from './services/B2CObserver';
+// import B2CObserver from './services/B2CObserver';
 
 import {
   Switch,
@@ -30,7 +30,7 @@ import { withRouter } from "react-router";
 class App extends React.Component {
 
   componentDidMount() {
-    new B2CObserver().setB2CErrorObservers();
+    //new B2CObserver().setB2CErrorObservers();
   }
 
   matchesPath(location, path) {
