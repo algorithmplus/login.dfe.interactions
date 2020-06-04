@@ -36,9 +36,13 @@ class App extends React.Component {
 
     console.log('Current location object:');    
     console.log(location);
-    console.log('API element from B2C:');    
-    console.log(document.getElementById('api'));
-    
+    if(document){
+      console.log('API element from B2C:');
+      console.log(document.getElementById('api'));
+    }
+    else{
+      console.log('Document still not available');      
+    }
 
     if (this.matchesPath(location, 'B2C_1A_signin_invitation')) {
       return <Login />;
@@ -73,7 +77,7 @@ class App extends React.Component {
     if (this.matchesPath(location, 'B2C_1A_findEmail')) {
       return <ForgottenEmail />;
     }
-    if (this.matchesPath(location, '/B2C_1A_signup_invitation/api')) {
+    if (this.matchesPath(location, 'B2C_1A_signup_invitation/api')) {
       return <AccountActivated />;
     }
     if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {
