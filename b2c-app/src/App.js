@@ -76,16 +76,27 @@ class App extends React.Component {
     if (this.matchesPath(location, '/password-changed')) {
       return <PasswordChanged />;
     }
+    //Results for forgotten email page
     if (this.matchesPath(location, 'B2C_1A_findEmail/api')) {
-      return (domHasElementWithId('foundEmailMessageWithEmail') ? <AccountFound /> : <AccountNotFound />);
+      //Success - account was found
+      if(domHasElementWithId('successMessage')){
+        return <AccountFound />;
+      }
+      //Error - account was not found
+      if(domHasElementWithId('errorMessage')){
+        return <AccountNotFound />;
+      }
     }
+    //Forgotten email
     if (this.matchesPath(location, 'B2C_1A_findEmail')) {
       return <ForgottenEmail />;
     }
+    //Account activated from Self Registration and Aided Registration
     if (this.matchesPath(location, 'B2C_1A_signup_confirmation') ||
       this.matchesPath(location, 'B2C_1A_signup_invitation/api')) {
       return <AccountActivated />;
     }
+    //Activate account from Aided Registration
     if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {
       return <ActivateAccount />;
     }

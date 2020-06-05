@@ -10,9 +10,11 @@ function getElementById(id){
 
 export function domHasElementWithId(id) {
     return getElementById(id);
-
 }
 
 export function getInnerTextById(id) {
-    return getElementById(id).innerText;
+    let elem = getElementById(id);
+    if(elem){
+        return elem.innerText;
+    }
 }
