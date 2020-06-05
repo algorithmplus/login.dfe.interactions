@@ -2,6 +2,8 @@ import React from 'react';
 
 import { ACTIONS } from './constants/actions';
 
+import { b2cHasElementWithId } from './helpers/b2c';
+
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import EmailSent from './pages/EmailSent';
@@ -34,19 +36,19 @@ class App extends React.Component {
   getComponentByLocation() {
     const { location } = this.props;
 
-    console.log('Current location object:');    
+    console.log('Current location object:');
     console.log(location);
 
-    try{
-      if(document){
+    try {
+      if (document) {
         console.log('API element from B2C:');
         console.log(document.getElementById('api'));
       }
-      else{
-        console.log('Document still not available');      
+      else {
+        console.log('Document still not available');
       }
     }
-    catch(e){
+    catch (e) {
       console.log(e);
     }
 
@@ -74,17 +76,14 @@ class App extends React.Component {
     if (this.matchesPath(location, '/password-changed')) {
       return <PasswordChanged />;
     }
-    if (this.matchesPath(location, '/account-not-found')) {
-      return <AccountNotFound />;
-    }
     if (this.matchesPath(location, 'B2C_1A_findEmail/api')) {
-      return <AccountFound />;
+      return (b2cHasElementWithId('foundEmailMessageWithEmail') ? <AccountFound /> : <AccountNotFound />);
     }
     if (this.matchesPath(location, 'B2C_1A_findEmail')) {
       return <ForgottenEmail />;
     }
     if (this.matchesPath(location, 'B2C_1A_signup_confirmation') ||
-        this.matchesPath(location, 'B2C_1A_signup_invitation/api')) {
+      this.matchesPath(location, 'B2C_1A_signup_invitation/api')) {
       return <AccountActivated />;
     }
     if (this.matchesPath(location, 'B2C_1A_signup_invitation')) {
@@ -97,9 +96,9 @@ class App extends React.Component {
   render() {
 
     let component = this.getComponentByLocation();
-    console.log('We are going to render the component:');    
+    console.log('We are going to render the component:');
     console.log(component);
-    
+
     return (
       <div className="App" id="app">
 

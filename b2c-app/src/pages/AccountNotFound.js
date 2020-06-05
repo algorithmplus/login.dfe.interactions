@@ -25,14 +25,11 @@ export default function AccountNotFound() {
                                 <a href={getB2CLink(ACTIONS.SIGNUP)} className="govuk-link">create a new account</a>
                                 .
                             </p>
-                            <components.B2C />
                         </div>
                     </div>
                 </main>
 
             </div>
-
-            <script src="__--b2cPath--__/b2c/assets/js-static/pages/accountNotFound.js"></script>
 
         </div>
     )

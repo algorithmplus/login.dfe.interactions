@@ -16,7 +16,6 @@ export default function AccountFound() {
                     <div className="govuk-grid-row">
                         <div className="govuk-grid-column-two-thirds">
                             <components.PageTitle size='xl' title='We&apos;ve found your email address'/>
-                            <components.B2C />
                             <a href={getB2CLink(ACTIONS.LOGIN)} role="button" draggable="false" className="govuk-button govuk-button--start" data-module="govuk-button">
                                 Sign in to your account
                             </a>
@@ -25,8 +24,6 @@ export default function AccountFound() {
                 </main>
 
             </div>
-
-            <script src="__--b2cPath--__/b2c/assets/js-static/pages/accountFound.js"></script>
 
         </div>
     )
