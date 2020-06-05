@@ -116,8 +116,18 @@ class PageLevelErrorContainer extends React.Component {
             ) :
             null;
 
+        const showErrorContainer = this.state.b2cErrors.length > 0 || this.hasErrorItems();
+        console.log('show error items? ' + showErrorContainer);
+        
+        let containerClassName = 'pageLevelErrorContainer';
+        if(!showErrorContainer){
+            containerClassName = containerClassName + ' hide';
+        }
+
+        console.log('Page level error container class name: ' + containerClassName);
+
         return (
-            <div className={`pageLevelErrorContainer ${this.state.b2cErrors.length > 0 || this.hasErrorItems() ? "show" : "hide"}`}>
+            <div className={containerClassName}>
                 <div className="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabIndex="-1" data-module="govuk-error-summary">
                     <h2 className="govuk-error-summary__title" id="error-summary-title">
                         There is a problem
