@@ -98,6 +98,7 @@ class App extends React.Component {
       return <ActivateAccount />;
     }
     //default
+    console.log('no matches, loading placeholder');    
     return <Placeholder />;
   }
 
