@@ -27,7 +27,11 @@ class TermsAndConditions extends React.Component {
         const { name, checked } = e.target;
 
         this.setState({ [name]: checked }, () => {
-            this.isValidTsAndCs() ? this.props.onChange(checked) : this.props.onChange(null);
+            //validate and update value in any case
+            this.isValidTsAndCs();
+            this.props.onChange({
+                tsAndCsAccepted: checked
+            });
         });
     }
 

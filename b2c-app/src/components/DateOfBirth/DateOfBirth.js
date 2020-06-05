@@ -29,17 +29,12 @@ class DateOfBirth extends React.Component {
         const { name, value } = e.target;
 
         this.setState({ [name]: value }, () => {
-            this.isValidDob() ?
-                this.props.onChange({
-                    day: this.state.dobDay,
-                    month: this.state.dobMonth,
-                    year: this.state.dobYear
-                }) : 
-                this.props.onChange({
-                    day: null,
-                    month: null,
-                    year: null
-                });
+            let isValid = this.isValidDob();
+            this.props.onChange({
+                day: isValid ? this.state.dobDay : null,
+                month: isValid ? this.state.dobMonth : null,
+                year: isValid ? this.state.dobYear : null
+            });
         });
     }
 

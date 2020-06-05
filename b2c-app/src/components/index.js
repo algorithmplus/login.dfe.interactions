@@ -19,6 +19,8 @@ import TermsAndConditions from './TermsAndConditions/TermsAndConditions';
 import ButtonLink from './ButtonLink/ButtonLink';
 import Link from './Link/Link';
 import Paragraph from './Paragraph/Paragraph';
+import Postcode from './Postcode/Postcode';
+import InputField from './InputField/InputField';
 
 export default {
     Header: Header,
@@ -41,5 +43,7 @@ export default {
     TermsAndConditions: TermsAndConditions,
     ButtonLink: ButtonLink,
     Link: Link,
-    Paragraph: Paragraph
+    Paragraph: Paragraph,
+    Postcode: Postcode,
+    InputField: InputField
 }
