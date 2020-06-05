@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ACTIONS } from './constants/actions';
 
-import { b2cHasElementWithId } from './helpers/b2c';
+import { domHasElementWithId } from './helpers/dom';
 
 import Signup from './pages/Signup';
 import Login from './pages/Login';
@@ -77,7 +77,7 @@ class App extends React.Component {
       return <PasswordChanged />;
     }
     if (this.matchesPath(location, 'B2C_1A_findEmail/api')) {
-      return (b2cHasElementWithId('foundEmailMessageWithEmail') ? <AccountFound /> : <AccountNotFound />);
+      return (domHasElementWithId('foundEmailMessageWithEmail') ? <AccountFound /> : <AccountNotFound />);
     }
     if (this.matchesPath(location, 'B2C_1A_findEmail')) {
       return <ForgottenEmail />;

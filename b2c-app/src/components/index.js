@@ -17,6 +17,7 @@ import CreateNewPassword from './CreateNewPassword/CreateNewPassword';
 import DateOfBirth from './DateOfBirth/DateOfBirth';
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions';
 import ButtonLink from './ButtonLink/ButtonLink';
+import Link from './Link/Link';
 import Paragraph from './Paragraph/Paragraph';
 
 export default {
@@ -39,5 +40,6 @@ export default {
     DateOfBirth: DateOfBirth,
     TermsAndConditions: TermsAndConditions,
     ButtonLink: ButtonLink,
+    Link: Link,
     Paragraph: Paragraph
 }
