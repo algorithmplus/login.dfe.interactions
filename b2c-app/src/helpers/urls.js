@@ -1,6 +1,6 @@
 import { ACTIONS } from '../constants/actions';
 
-export function getB2CLink (action) {        
+export function getB2CLink(action) {
 
     const clientId = '488c321f-10e4-48f2-b9c2-261e2add2f8d';
 
@@ -11,7 +11,7 @@ export function getB2CLink (action) {
 
     let actionURL;
 
-    switch(action){
+    switch (action) {
         case ACTIONS.SIGNUP:
             actionURL = 'B2C_1A_account_signup';
             break;
@@ -31,9 +31,17 @@ export function getB2CLink (action) {
     }
 
     let absolutePath = `https://${b2cTenant}.b2clogin.com/${b2cTenant}.onmicrosoft.com/oauth2/v2.0/` +
-        `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` + 
+        `authorize?p=${actionURL}&client_id=${clientId}&nonce=defaultNonce` +
         `&redirect_uri=${redirectURI}&scope=openid&response_type=id_token&prompt=login`;
 
     return absolutePath;
 
+}
+
+export function matchesPath(location, path) {
+    return location.pathname.search(path) !== -1;
+}
+
+export function hasSearchParam(search, param, value) {
+    return new URLSearchParams(search).get(param) === value;
 }
