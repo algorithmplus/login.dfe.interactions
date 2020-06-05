@@ -9,7 +9,7 @@ function getElementById(id){
 }
 
 export function domHasElementWithId(id) {
-    return getElementById(id);
+    return !!getElementById(id);
 }
 
 export function getInnerTextById(id) {

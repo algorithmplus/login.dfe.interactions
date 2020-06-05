@@ -116,15 +116,10 @@ class PageLevelErrorContainer extends React.Component {
             ) :
             null;
 
-        const showErrorContainer = this.state.b2cErrors.length > 0 || this.hasErrorItems();
-        console.log('show error items? ' + showErrorContainer);
-        
-        let containerClassName = 'pageLevelErrorContainer';
-        if(!showErrorContainer){
-            containerClassName = containerClassName + ' hide';
-        }
+        const containerClassName = `pageLevelErrorContainer ${this.state.b2cErrors.length > 0 || this.hasErrorItems() ? "show" : "hide"}`;
 
-        console.log('Page level error container class name: ' + containerClassName);
+        console.log('Page level error container class name:');        
+        console.log(containerClassName);
 
         return (
             <div className={containerClassName}>
