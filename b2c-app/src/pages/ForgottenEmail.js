@@ -92,7 +92,7 @@ class ForgottenEmail extends React.Component {
                                     <components.InputField
                                         inputId='firstName'
                                         inputLabel='First name'
-                                        defaultErrorMessage='Enter your first name'
+                                        errorMessagePlaceholder='first name'
                                         onChange={this.onChange}
                                         onError={this.onError}
                                         showErrors={this.state.showErrors}
@@ -100,7 +100,7 @@ class ForgottenEmail extends React.Component {
                                     <components.InputField
                                         inputId='lastName'
                                         inputLabel='Last name'
-                                        defaultErrorMessage='Enter your last name'
+                                        errorMessagePlaceholder='last name'
                                         onChange={this.onChange}
                                         onError={this.onError}
                                         showErrors={this.state.showErrors}

@@ -49,7 +49,7 @@ class App extends React.Component {
       console.log(e);
     }
 
-    if (matchesPath(location, 'B2C_1A_signin_invitation')) {
+    if (matchesPath(location, 'B2C_1A_signin_invitation') || hasSearchParam(location.search, 'p', 'B2C_1A_signin_invitation')) {
       return <Login />;
     }
     if (matchesPath(location, '/signup')) {

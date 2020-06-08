@@ -4,16 +4,20 @@ class InputField extends React.Component {
 
     constructor(props) {
         super(props);
+        this.defaultErrorMessage = `Enter your ${this.props.errorMessagePlaceholder}`;
         this.state = {
             [this.props.inputId]: null,
             errors: {
                 [this.props.inputId]: {
-                    currentMessage: this.props.defaultErrorMessage,
+                    currentMessage: this.defaultErrorMessage,
                     visibleMessage: '',
                     id: this.props.inputId
                 }
             }
         };
+        //get input type to use it to define the input element and its validation
+        this.inputType = this.props.type || 'text'; //set to text by default
+
         this.handleChange = this.handleChange.bind(this);
         this.isValidInput = this.isValidInput.bind(this);
 
@@ -40,10 +44,19 @@ class InputField extends React.Component {
         //clear errors
         this.errors.currentMessage = '';
 
-        //the only validation done is check that the input field is not empty
+        //the only validation done by default is check that the input field is not empty
         if (!this.state[this.props.inputId]) {
             isValid = false;
-            this.errors.currentMessage = this.props.defaultErrorMessage;
+            this.errors.currentMessage = this.defaultErrorMessage;
+        }
+
+        if (this.inputType === 'email') {
+            // eslint-disable-next-line
+            const pattern = /[A-Za-z0-9_\-\+\/{\t\n\r}#$%^\\&\[\]*=()|?'~`! :]+([.][A-Za-z0-9_\-\+\/{\t\n\r}#$%^\\&\[\]*=()|?'~`! :]+)*@[A-Za-z0-9\[\]:]+([.-][A-Za-z0-9\[\]:]+)*\.[A-Za-z0-9\[\]:]+([-.][A-Za-z0-9\[\]:]+)*/;
+            if (!this.state[this.props.inputId].match(pattern)) {
+                isValid = false;
+                this.errors.currentMessage = `Invalid ${this.props.errorMessagePlaceholder}`;
+            }
         }
 
         this.setState({ errors: this.errors });
@@ -70,6 +83,30 @@ class InputField extends React.Component {
             ) :
             null;
 
+        const inputField = this.inputType === 'email' ?
+            (
+                <input
+                    className="govuk-input govuk-input--width-10"
+                    id={this.props.inputId}
+                    name={this.props.inputId}
+                    type={this.inputType}
+                    spellCheck='false'
+                    autoComplete='email'
+                    onChange={this.handleChange}
+                    noValidate
+                />
+            ) :
+            (
+                <input
+                    className="govuk-input govuk-input--width-10"
+                    id={this.props.inputId}
+                    name={this.props.inputId}
+                    type={this.inputType}
+                    onChange={this.handleChange}
+                    noValidate
+                />
+            )
+
         return (
 
             <div className={`govuk-form-group ${this.props.showErrors && this.errors.visibleMessage.length > 0 ? "govuk-form-group--error" : ""}`}>
@@ -78,7 +115,7 @@ class InputField extends React.Component {
                 </label>
                 {inputErrorElement}
                 {inputHint}
-                <input className="govuk-input govuk-input--width-10" id={this.props.inputId} name={this.props.inputId} type="text" onChange={this.handleChange} noValidate />
+                {inputField}
             </div>
         )
     }
