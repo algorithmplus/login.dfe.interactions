@@ -61,7 +61,7 @@ class App extends React.Component {
     if (matchesPath(location, '/locked')) {
       return <AccountLocked />;
     }
-    if (matchesPath(location, '/reset-password')) {
+    if (matchesPath(location, 'B2C_1A_passwordreset') || hasSearchParam(location.search, 'p', 'B2C_1A_passwordreset')) {
       return <ResetPassword />;
     }
     if (matchesPath(location, '/reset-password-email-sent')) {
